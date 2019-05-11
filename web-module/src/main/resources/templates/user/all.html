@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Users</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <div th:replace="fragments/header :: header"></div>
+</head>
+<body>
+<div th:if="${countDeletedUsers!=null}">
+    Users delete: <span th:text="${countDeletedUsers}"></span>!
+</div>
+<div th:if="${update}">
+    User updated!
+</div>
+<table>
+    <tr>
+        <td></td>
+        <td>Surname</td>
+        <td>Name</td>
+        <td>Patronymic</td>
+        <td>Email</td>
+        <td>Role</td>
+        <td>Update user</td>
+        <td>Delete</td>
+    </tr>
+    <form action="#" th:action="@{/private/users/delete}" method="post">
+        <tr th:each="user,stat : ${users}">
+            <td><span th:text="${stat.count}"></span></td>
+            <td><span th:text="${user.surname}"></span></td>
+            <td><span th:text="${user.name}"></span></td>
+            <td><span th:text="${user.patronymic}"></span></td>
+            <td><span th:text="${user.email}"></span></td>
+            <td><span th:text="${user.roleName}"></span></td>
+            <td>
+                <a th:href="@{/private/users/{id}/update (id=${user.id})}">Edit</a>
+            </td>
+            <td>
+                <label><input type="checkbox" name="emails" th:value="${user.email}"/>delete</label>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>Delete selected users:</td>
+            <td>
+                <button type="submit">Delete</button>
+            </td>
+        </tr>
+    </form>
+</table>
+<div th:replace="fragments/paginator :: userPaginator"></div>
+</body>
+</html>

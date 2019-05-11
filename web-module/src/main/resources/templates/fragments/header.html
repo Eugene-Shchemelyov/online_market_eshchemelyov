@@ -1,0 +1,25 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<table th:fragment="header">
+    <tr sec:authorize="isAuthenticated()">
+        <td sec:authorize="hasAuthority(
+        ${T(com.gmail.eugene.shchemelyov.market.service.constant.SecurityConstant).ADMINISTRATOR})">
+            <a th:href="@{/private/users}">Users</a>
+        </td>
+        <td sec:authorize="hasAuthority(
+        ${T(com.gmail.eugene.shchemelyov.market.service.constant.SecurityConstant).ADMINISTRATOR})">
+            <a th:href="@{/private/users/add}">Add user</a>
+        </td>
+        <td sec:authorize="hasAuthority(
+        ${T(com.gmail.eugene.shchemelyov.market.service.constant.SecurityConstant).ADMINISTRATOR})">
+            <a th:href="@{/private/comments}">Comments</a>
+        </td>
+        <td>
+            <a th:href="@{/logout}">Logout</a>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

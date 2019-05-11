@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet id="e076a08c.6ed91687" author="shchemelyov.eugene@gmail.com">
+        <createTable tableName="T_ROLE">
+            <column name="F_ID" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="F_NAME" type="VARCHAR(20)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="e07a71b5.189374bc" author="shchemelyov.eugene@gmail.com">
+        <addAutoIncrement catalogName="project"
+                          columnDataType="BIGINT"
+                          columnName="F_ID"
+                          incrementBy="1"
+                          schemaName="public"
+                          startWith="1"
+                          tableName="T_ROLE"/>
+    </changeSet>
+    <changeSet id="e07a7202.e9ba5e35" author="shchemelyov.eugene@gmail.com">
+        <createTable tableName="T_USER">
+            <column name="F_ID" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="F_SURNAME" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="F_NAME" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="F_PATRONYMIC" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="F_EMAIL" type="VARCHAR(50)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="F_PASSWORD" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="F_ROLE_ID" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="F_DELETED" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="e07a720f.f1a9fbe7" author="shchemelyov.eugene@gmail.com">
+        <addAutoIncrement catalogName="project"
+                          columnDataType="BIGINT"
+                          columnName="F_ID"
+                          incrementBy="1"
+                          schemaName="public"
+                          startWith="1"
+                          tableName="T_USER"/>
+    </changeSet>
+    <changeSet id="e07a721b.9db22d0e" author="shchemelyov.eugene@gmail.com">
+        <addForeignKeyConstraint baseColumnNames="F_ROLE_ID"
+                                 baseTableName="T_USER"
+                                 constraintName="FK_T_USER_T_ROLE"
+                                 referencedColumnNames="F_ID"
+                                 referencedTableName="T_ROLE"/>
+    </changeSet>
+    <changeSet id="e07a7228.27ef9db2" author="shchemelyov.eugene@gmail.com">
+        <createTable tableName="T_COMMENT">
+            <column name="F_ID" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="F_USER_ID" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="F_TEXT" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="F_DATE" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="F_DISPLAY" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="F_DELETED" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="e07a7236.9810624d" author="shchemelyov.eugene@gmail.com">
+        <addAutoIncrement catalogName="project"
+                          columnDataType="BIGINT"
+                          columnName="F_ID"
+                          incrementBy="1"
+                          schemaName="public"
+                          startWith="1"
+                          tableName="T_COMMENT"/>
+    </changeSet>
+    <changeSet id="e07a7243.9ae147ae" author="shchemelyov.eugene@gmail.com">
+        <addForeignKeyConstraint baseColumnNames="F_USER_ID"
+                                 baseTableName="T_COMMENT"
+                                 constraintName="FK_T_COMMENT_T_USER"
+                                 referencedColumnNames="F_ID"
+                                 referencedTableName="T_USER"/>
+    </changeSet>
+    <changeSet id="e076a09f.25604189" author="shchemelyov.eugene@gmail.com">
+        <insert tableName="T_ROLE">
+            <column name="F_ID" value="1"/>
+            <column name="F_NAME" value="Administrator"/>
+        </insert>
+    </changeSet>
+    <changeSet id="e076a1dd.e2d0e560" author="shchemelyov.eugene@gmail.com">
+        <insert tableName="T_USER">
+            <column name="F_ID" value="1"/>
+            <column name="F_SURNAME" value="adminus"/>
+            <column name="F_NAME" value="admin"/>
+            <column name="F_PATRONYMIC" value="adminov"/>
+            <column name="F_EMAIL" value="admin"/>
+            <column name="F_PASSWORD" value="$2a$12$kImkjwU/naRANbTpC914LOJxduNREMw4gUz0EsDxeqywyf6xBdRF2"/>
+            <column name="F_ROLE_ID" value="1"/>
+            <column name="F_DELETED" valueBoolean="false"/>
+        </insert>
+    </changeSet>
+    <changeSet id="e07d1c92.1b22d0e5" author="shchemelyov.eugene@gmail.com">
+        <insert tableName="T_ROLE">
+            <column name="F_ID" value="2"/>
+            <column name="F_NAME" value="Sale User"/>
+        </insert>
+    </changeSet>
+    <changeSet id="e07d1ca2.75c28f5c" author="shchemelyov.eugene@gmail.com">
+        <insert tableName="T_ROLE">
+            <column name="F_ID" value="3"/>
+            <column name="F_NAME" value="Customer User"/>
+        </insert>
+    </changeSet>
+    <changeSet id="e07d1cb0.a4dd2f1a" author="shchemelyov.eugene@gmail.com">
+        <insert tableName="T_ROLE">
+            <column name="F_ID" value="4"/>
+            <column name="F_NAME" value="Secure API User"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
