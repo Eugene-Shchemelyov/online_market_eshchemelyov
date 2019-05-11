@@ -117,7 +117,7 @@
             <column name="F_SURNAME" value="adminus"/>
             <column name="F_NAME" value="admin"/>
             <column name="F_PATRONYMIC" value="adminov"/>
-            <column name="F_EMAIL" value="admin"/>
+            <column name="F_EMAIL" value="admin@mail.ru"/>
             <column name="F_PASSWORD" value="$2a$12$kImkjwU/naRANbTpC914LOJxduNREMw4gUz0EsDxeqywyf6xBdRF2"/>
             <column name="F_ROLE_ID" value="1"/>
             <column name="F_DELETED" valueBoolean="false"/>

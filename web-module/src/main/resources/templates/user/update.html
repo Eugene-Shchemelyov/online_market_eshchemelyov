@@ -48,6 +48,7 @@
                 <button type="submit">Update user</button>
             </td>
         </tr>
+        <input type="hidden" th:field="*{email}" th:value="*{email}"/>
     </form>
     <form action="#" th:action="@{/private/users/{id}/message (id=${user.id})}" method="post">
         <tr>

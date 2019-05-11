@@ -1,21 +1,24 @@
 package com.gmail.eugene.shchemelyov.market.service.model;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class UserDTO {
     private Long id;
     @NotNull
-    @Size(max = 40)
+    @Pattern(regexp = "[a-zA-Z]{0,40}")
     private String surname;
     @NotNull
-    @Size(max = 20)
+    @Pattern(regexp = "[a-zA-Z]{0,20}")
     private String name;
     @NotNull
-    @Size(max = 40)
+    @Pattern(regexp = "[a-zA-Z]{0,40}")
     private String patronymic;
     @NotNull
     @Size(max = 50)
+    @Email
     private String email;
     private String password;
     @NotNull

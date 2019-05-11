@@ -48,7 +48,7 @@ public class UserControllerTest {
         userDTO.setSurname("Surname");
         userDTO.setName("Name");
         userDTO.setPatronymic("Patronymic");
-        userDTO.setEmail("Email");
+        userDTO.setEmail("Email@mail.ru");
         userDTO.setPassword("1");
         userDTO.setRoleName(ADMINISTRATOR);
         userDTO.setDeleted(false);
@@ -112,8 +112,8 @@ public class UserControllerTest {
     @WithMockUser(authorities = ADMINISTRATOR)
     @Test
     public void shouldRedirectToUrlAfterDeletingWithCountDeletedUsers() throws Exception {
-        String email = "Admin";
-        List<String> emails = asList("Admin", "Admin");
+        String email = "Admin@mail.ru";
+        List<String> emails = asList(email, email);
         when(userService.deleteUsersByEmail(emails)).thenReturn(2);
         this.mockMvc.perform(post("/private/users/delete")
                 .param("emails", email)
@@ -149,7 +149,24 @@ public class UserControllerTest {
     public void shouldReturnToPageAddUserIfHasErrorsTheSurnameMoreThanMax() throws Exception {
         List<String> roles = asList("Admin", "Admin2");
         when(roleService.getAllRoles()).thenReturn(roles);
-        userDTO.setSurname("1111111111111111111111111111111111111111111111111111111111111111111111111111");
+        userDTO.setSurname("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        this.mockMvc.perform(post("/private/users/add")
+                .param("surname", userDTO.getSurname())
+                .param("name", userDTO.getName())
+                .param("patronymic", userDTO.getPatronymic())
+                .param("email", userDTO.getEmail())
+                .param("roleName", userDTO.getRoleName()))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("roles", roles))
+                .andExpect(forwardedUrl("user/add"));
+    }
+
+    @WithMockUser(authorities = ADMINISTRATOR)
+    @Test
+    public void shouldReturnToPageAddUserIfHasErrorsTheSurnameContainNonLatinLetters() throws Exception {
+        List<String> roles = asList("Admin", "Admin2");
+        when(roleService.getAllRoles()).thenReturn(roles);
+        userDTO.setSurname("111111111");
         this.mockMvc.perform(post("/private/users/add")
                 .param("surname", userDTO.getSurname())
                 .param("name", userDTO.getName())
@@ -183,7 +200,24 @@ public class UserControllerTest {
     public void shouldReturnToThePageUserAddIfHasErrorsTheNameMoreThanMax() throws Exception {
         List<String> roles = asList("Admin", "Admin2");
         when(roleService.getAllRoles()).thenReturn(roles);
-        userDTO.setName("1111111111111111111111111111111111111111111111111111111111111111111111111111");
+        userDTO.setName("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        this.mockMvc.perform(post("/private/users/add")
+                .param("surname", userDTO.getSurname())
+                .param("name", userDTO.getName())
+                .param("patronymic", userDTO.getPatronymic())
+                .param("email", userDTO.getEmail())
+                .param("roleName", userDTO.getRoleName()))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("roles", roles))
+                .andExpect(forwardedUrl("user/add"));
+    }
+
+    @WithMockUser(authorities = ADMINISTRATOR)
+    @Test
+    public void shouldReturnToThePageUserAddIfHasErrorsTheNameContainNonLatinLetters() throws Exception {
+        List<String> roles = asList("Admin", "Admin2");
+        when(roleService.getAllRoles()).thenReturn(roles);
+        userDTO.setName("123");
         this.mockMvc.perform(post("/private/users/add")
                 .param("surname", userDTO.getSurname())
                 .param("name", userDTO.getName())
@@ -217,7 +251,24 @@ public class UserControllerTest {
     public void shouldReturnToThePageUserAddIfHasErrorsThePatronymicMoreThanMax() throws Exception {
         List<String> roles = asList("Admin", "Admin2");
         when(roleService.getAllRoles()).thenReturn(roles);
-        userDTO.setPatronymic("1111111111111111111111111111111111111111111111111111111111111111111111111111");
+        userDTO.setPatronymic("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        this.mockMvc.perform(post("/private/users/add")
+                .param("surname", userDTO.getSurname())
+                .param("name", userDTO.getName())
+                .param("patronymic", userDTO.getPatronymic())
+                .param("email", userDTO.getEmail())
+                .param("roleName", userDTO.getRoleName()))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("roles", roles))
+                .andExpect(forwardedUrl("user/add"));
+    }
+
+    @WithMockUser(authorities = ADMINISTRATOR)
+    @Test
+    public void shouldReturnToThePageUserAddIfHasErrorsThePatronymicContainNonLatinLetters() throws Exception {
+        List<String> roles = asList("Admin", "Admin2");
+        when(roleService.getAllRoles()).thenReturn(roles);
+        userDTO.setPatronymic("123");
         this.mockMvc.perform(post("/private/users/add")
                 .param("surname", userDTO.getSurname())
                 .param("name", userDTO.getName())
@@ -251,7 +302,24 @@ public class UserControllerTest {
     public void shouldReturnToThePageUserAddIfHasErrorsTheEmailMoreThanMax() throws Exception {
         List<String> roles = asList("Admin", "Admin2");
         when(roleService.getAllRoles()).thenReturn(roles);
-        userDTO.setEmail("1111111111111111111111111111111111111111111111111111111111111111111111111111");
+        userDTO.setEmail("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@mail.ru");
+        this.mockMvc.perform(post("/private/users/add")
+                .param("surname", userDTO.getSurname())
+                .param("name", userDTO.getName())
+                .param("patronymic", userDTO.getPatronymic())
+                .param("email", userDTO.getEmail())
+                .param("roleName", userDTO.getRoleName()))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("roles", roles))
+                .andExpect(forwardedUrl("user/add"));
+    }
+
+    @WithMockUser(authorities = ADMINISTRATOR)
+    @Test
+    public void shouldReturnToThePageUserAddIfHasErrorsTheEmailDoesNotMatchThePattern() throws Exception {
+        List<String> roles = asList("Admin", "Admin2");
+        when(roleService.getAllRoles()).thenReturn(roles);
+        userDTO.setEmail("aaaaaaaaaaaaaaaa");
         this.mockMvc.perform(post("/private/users/add")
                 .param("surname", userDTO.getSurname())
                 .param("name", userDTO.getName())
@@ -341,7 +409,24 @@ public class UserControllerTest {
     public void shouldReturnToTheUserUpdatePageIfHasErrorsTheSurnameMoreThanMax() throws Exception {
         List<String> roles = asList("Admin", "Admin2");
         when(roleService.getAllRoles()).thenReturn(roles);
-        userDTO.setSurname("1111111111111111111111111111111111111111111111111111111111111111111111111111");
+        userDTO.setSurname("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        this.mockMvc.perform(post("/private/users/{id}/update", "1")
+                .param("surname", userDTO.getSurname())
+                .param("name", userDTO.getName())
+                .param("patronymic", userDTO.getPatronymic())
+                .param("email", userDTO.getEmail())
+                .param("roleName", userDTO.getRoleName()))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("roles", roles))
+                .andExpect(forwardedUrl("user/update"));
+    }
+
+    @WithMockUser(authorities = ADMINISTRATOR)
+    @Test
+    public void shouldReturnToTheUserUpdatePageIfHasErrorsTheSurnameContainNonLatinLetters() throws Exception {
+        List<String> roles = asList("Admin", "Admin2");
+        when(roleService.getAllRoles()).thenReturn(roles);
+        userDTO.setSurname("111111111");
         this.mockMvc.perform(post("/private/users/{id}/update", "1")
                 .param("surname", userDTO.getSurname())
                 .param("name", userDTO.getName())
@@ -375,7 +460,24 @@ public class UserControllerTest {
     public void shouldReturnToTheUserUpdatePageIfHasErrorsTheNameMoreThanMax() throws Exception {
         List<String> roles = asList("Admin", "Admin2");
         when(roleService.getAllRoles()).thenReturn(roles);
-        userDTO.setName("1111111111111111111111111111111111111111111111111111111111111111111111111111");
+        userDTO.setName("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        this.mockMvc.perform(post("/private/users/{id}/update", "1")
+                .param("surname", userDTO.getSurname())
+                .param("name", userDTO.getName())
+                .param("patronymic", userDTO.getPatronymic())
+                .param("email", userDTO.getEmail())
+                .param("roleName", userDTO.getRoleName()))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("roles", roles))
+                .andExpect(forwardedUrl("user/update"));
+    }
+
+    @WithMockUser(authorities = ADMINISTRATOR)
+    @Test
+    public void shouldReturnToTheUserUpdatePageIfHasErrorsTheNameMoreContainNonLatinLetters() throws Exception {
+        List<String> roles = asList("Admin", "Admin2");
+        when(roleService.getAllRoles()).thenReturn(roles);
+        userDTO.setName("123");
         this.mockMvc.perform(post("/private/users/{id}/update", "1")
                 .param("surname", userDTO.getSurname())
                 .param("name", userDTO.getName())
@@ -409,7 +511,24 @@ public class UserControllerTest {
     public void shouldReturnToTheUserUpdatePageIfHasErrorsThePatronymicMoreThanMax() throws Exception {
         List<String> roles = asList("Admin", "Admin2");
         when(roleService.getAllRoles()).thenReturn(roles);
-        userDTO.setPatronymic("1111111111111111111111111111111111111111111111111111111111111111111111111111");
+        userDTO.setPatronymic("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        this.mockMvc.perform(post("/private/users/{id}/update", "1")
+                .param("surname", userDTO.getSurname())
+                .param("name", userDTO.getName())
+                .param("patronymic", userDTO.getPatronymic())
+                .param("email", userDTO.getEmail())
+                .param("roleName", userDTO.getRoleName()))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("roles", roles))
+                .andExpect(forwardedUrl("user/update"));
+    }
+
+    @WithMockUser(authorities = ADMINISTRATOR)
+    @Test
+    public void shouldReturnToTheUserUpdatePageIfHasErrorsThePatronymicContainNonLatinLetters() throws Exception {
+        List<String> roles = asList("Admin", "Admin2");
+        when(roleService.getAllRoles()).thenReturn(roles);
+        userDTO.setPatronymic("123");
         this.mockMvc.perform(post("/private/users/{id}/update", "1")
                 .param("surname", userDTO.getSurname())
                 .param("name", userDTO.getName())
@@ -427,40 +546,6 @@ public class UserControllerTest {
         List<String> roles = asList("Admin", "Admin2");
         when(roleService.getAllRoles()).thenReturn(roles);
         userDTO.setPatronymic(null);
-        this.mockMvc.perform(post("/private/users/{id}/update", "1")
-                .param("surname", userDTO.getSurname())
-                .param("name", userDTO.getName())
-                .param("patronymic", userDTO.getPatronymic())
-                .param("email", userDTO.getEmail())
-                .param("roleName", userDTO.getRoleName()))
-                .andExpect(status().isOk())
-                .andExpect(model().attribute("roles", roles))
-                .andExpect(forwardedUrl("user/update"));
-    }
-
-    @WithMockUser(authorities = ADMINISTRATOR)
-    @Test
-    public void shouldReturnToTheUserUpdatePageIfHasErrorsTheEmailMoreThanMax() throws Exception {
-        List<String> roles = asList("Admin", "Admin2");
-        when(roleService.getAllRoles()).thenReturn(roles);
-        userDTO.setEmail("1111111111111111111111111111111111111111111111111111111111111111111111111111");
-        this.mockMvc.perform(post("/private/users/{id}/update", "1")
-                .param("surname", userDTO.getSurname())
-                .param("name", userDTO.getName())
-                .param("patronymic", userDTO.getPatronymic())
-                .param("email", userDTO.getEmail())
-                .param("roleName", userDTO.getRoleName()))
-                .andExpect(status().isOk())
-                .andExpect(model().attribute("roles", roles))
-                .andExpect(forwardedUrl("user/update"));
-    }
-
-    @WithMockUser(authorities = ADMINISTRATOR)
-    @Test
-    public void shouldReturnToTheUserUpdatePageIfHasErrorsTheEmailIsNull() throws Exception {
-        List<String> roles = asList("Admin", "Admin2");
-        when(roleService.getAllRoles()).thenReturn(roles);
-        userDTO.setEmail(null);
         this.mockMvc.perform(post("/private/users/{id}/update", "1")
                 .param("surname", userDTO.getSurname())
                 .param("name", userDTO.getName())
