@@ -17,30 +17,23 @@ public class GeneratorServiceImpl implements GeneratorService {
     private static final Logger logger = LoggerFactory.getLogger(GeneratorServiceImpl.class);
     private final PasswordEncoder passwordEncoder;
     private final Random random;
-    private final StringBuffer stringBuffer;
 
     @Autowired
     public GeneratorServiceImpl(
             PasswordEncoder passwordEncoder,
-            Random random,
-            StringBuffer stringBuffer
+            Random random
     ) {
         this.passwordEncoder = passwordEncoder;
         this.random = random;
-        this.stringBuffer = stringBuffer;
     }
 
     @Override
     public String getRandomPassword(Integer length) {
-        if (stringBuffer.length() != 0) {
-            stringBuffer.setLength(0);
-        }
-        IntStream.range(0, length).forEach(number -> {
-            stringBuffer.append(SYMBOLS.charAt(random.nextInt(SYMBOLS.length())));
-        });
+        StringBuffer stringBuffer = new StringBuffer();
+        IntStream.range(0, length).forEach(number ->
+                stringBuffer.append(SYMBOLS.charAt(random.nextInt(SYMBOLS.length()))));
         String password = stringBuffer.toString();
         logger.info(password);
-        stringBuffer.setLength(0);
         return passwordEncoder.encode(password);
     }
 }

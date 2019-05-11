@@ -22,7 +22,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) {
         UserDTO userDTO = userService.loadUserByEmail(email);
         if (userDTO == null) {
-            throw new UsernameNotFoundException(String.format("%s %s %s", "User ", email, " isn't found."));
+            throw new UsernameNotFoundException(String.format("%s %s %s", "User", email, "isn't found."));
         }
         return new AppUserPrincipal(userDTO);
     }

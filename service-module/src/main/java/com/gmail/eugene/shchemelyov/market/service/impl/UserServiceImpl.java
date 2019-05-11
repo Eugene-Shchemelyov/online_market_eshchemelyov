@@ -21,7 +21,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.gmail.eugene.shchemelyov.market.repository.constant.UserConstant.DELETED;
 import static com.gmail.eugene.shchemelyov.market.service.constant.ExceptionMessageConstant.SERVICE_ERROR_MESSAGE;
 import static com.gmail.eugene.shchemelyov.market.service.constant.ExceptionMessageConstant.TRANSACTION_ERROR_MESSAGE;
 import static com.gmail.eugene.shchemelyov.market.service.constant.GeneratorServiceConstant.PASSWORD_LENGTH;
@@ -184,7 +183,7 @@ public class UserServiceImpl implements UserService {
             connection.setAutoCommit(false);
             try {
                 User user = getUser(connection, userDTO);
-                user.setDeleted(DELETED);
+                user.setDeleted(false);
                 user.setPassword(generatorService.getRandomPassword(PASSWORD_LENGTH));
                 userRepository.add(connection, user);
                 connection.commit();
@@ -226,14 +225,14 @@ public class UserServiceImpl implements UserService {
         Integer countDeletedUsers = 0;
         for (String email : emails) {
             if (roleRepository.getRoleNameByUserEmail(connection, email).equals(ADMINISTRATOR)) {
-                if (userRepository.getCountUsersWithRole(connection, ADMINISTRATOR, DELETED) > COUNT_ADMINISTRATORS) {
-                    countDeletedUsers += userRepository.deleteByEmail(connection, email, !DELETED);
+                if (userRepository.getCountUsersWithRole(connection, ADMINISTRATOR, false) > COUNT_ADMINISTRATORS) {
+                    countDeletedUsers += userRepository.deleteByEmail(connection, email, true);
                 } else {
                     logger.error("You can't delete the last administrator.");
                     throw new ExpectedException("You can't delete the last administrator.");
                 }
             } else {
-                countDeletedUsers += userRepository.deleteByEmail(connection, email, !DELETED);
+                countDeletedUsers += userRepository.deleteByEmail(connection, email, true);
             }
         }
         return countDeletedUsers;
@@ -243,7 +242,7 @@ public class UserServiceImpl implements UserService {
         User user = getUser(connection, userDTO);
         String roleName = roleRepository.getRoleNameByUserId(connection, user.getId());
         if (roleName.equals(ADMINISTRATOR) && !userDTO.getRoleName().equals(ADMINISTRATOR)) {
-            if (userRepository.getCountUsersWithRole(connection, ADMINISTRATOR, DELETED) > COUNT_ADMINISTRATORS) {
+            if (userRepository.getCountUsersWithRole(connection, ADMINISTRATOR, false) > COUNT_ADMINISTRATORS) {
                 userRepository.update(connection, user);
             } else {
                 logger.error("You can't lower privileges to the last administrator.");

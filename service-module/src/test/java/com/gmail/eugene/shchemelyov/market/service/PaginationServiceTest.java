@@ -13,7 +13,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.sql.Connection;
 
 import static com.gmail.eugene.shchemelyov.market.repository.constant.PaginationConstant.LIMIT_ON_PAGE;
-import static com.gmail.eugene.shchemelyov.market.repository.constant.UserConstant.DELETED;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -34,7 +33,7 @@ public class PaginationServiceTest {
 
     @Test
     public void shouldGetPaginationWithOnePage() {
-        when(paginationRepository.getCountRaws(connection, "T_USER", DELETED)).thenReturn(9);
+        when(paginationRepository.getCountRaws(connection, "T_USER", false)).thenReturn(9);
         pagination.setCurrentPage(1);
         pagination.setCountPages(1);
 
@@ -45,7 +44,7 @@ public class PaginationServiceTest {
 
     @Test
     public void shouldGetPaginationWithOnePageIfZeroRaws() {
-        when(paginationRepository.getCountRaws(connection, "T_USER", DELETED)).thenReturn(0);
+        when(paginationRepository.getCountRaws(connection, "T_USER", false)).thenReturn(0);
         pagination.setCurrentPage(1);
         pagination.setCountPages(1);
 
@@ -56,7 +55,7 @@ public class PaginationServiceTest {
 
     @Test
     public void shouldGetPaginationWithOnePageIfCountRawsEqualsLimit() {
-        when(paginationRepository.getCountRaws(connection, "T_USER", DELETED)).thenReturn(LIMIT_ON_PAGE);
+        when(paginationRepository.getCountRaws(connection, "T_USER", false)).thenReturn(LIMIT_ON_PAGE);
         pagination.setCurrentPage(1);
         pagination.setCountPages(1);
 
@@ -67,7 +66,7 @@ public class PaginationServiceTest {
 
     @Test
     public void shouldGetPaginationWithOnePageIfPageIsNull() {
-        when(paginationRepository.getCountRaws(connection, "T_USER", DELETED)).thenReturn(1);
+        when(paginationRepository.getCountRaws(connection, "T_USER", false)).thenReturn(1);
         pagination.setCurrentPage(1);
         pagination.setCountPages(1);
 
@@ -78,7 +77,7 @@ public class PaginationServiceTest {
 
     @Test
     public void shouldGetPaginationWithOnePageIfPageMoreThanCountPages() {
-        when(paginationRepository.getCountRaws(connection, "T_USER", DELETED)).thenReturn(1);
+        when(paginationRepository.getCountRaws(connection, "T_USER", false)).thenReturn(1);
         pagination.setCurrentPage(1);
         pagination.setCountPages(1);
 

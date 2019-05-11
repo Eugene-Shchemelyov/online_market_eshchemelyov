@@ -1,16 +1,11 @@
-package com.gmail.eugene.shchemelyov.market.service.model;
+package com.gmail.eugene.shchemelyov.market.repository.model;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
-public class CommentDTO {
+public class Review {
     private Long id;
-    private UserDTO user;
-    @NotNull
-    @Size(max = 255)
+    private User user;
     private String text;
     private String date;
-    private Boolean display;
+    private Boolean isDisplay;
     private Boolean isDeleted;
 
     public Long getId() {
@@ -21,11 +16,11 @@ public class CommentDTO {
         this.id = id;
     }
 
-    public UserDTO getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(UserDTO user) {
+    public void setUser(User user) {
         this.user = user;
     }
 
@@ -46,11 +41,11 @@ public class CommentDTO {
     }
 
     public Boolean isDisplay() {
-        return display;
+        return isDisplay;
     }
 
     public void setDisplay(Boolean display) {
-        this.display = display;
+        isDisplay = display;
     }
 
     public Boolean isDeleted() {

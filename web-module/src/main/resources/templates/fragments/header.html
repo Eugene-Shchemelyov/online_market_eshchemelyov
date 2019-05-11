@@ -6,15 +6,15 @@
     <tr sec:authorize="isAuthenticated()">
         <td sec:authorize="hasAuthority(
         ${T(com.gmail.eugene.shchemelyov.market.service.constant.SecurityConstant).ADMINISTRATOR})">
-            <a th:href="@{/private/users}">Users</a>
+            <a th:href="@{/private/administrator/users}">Users</a>
         </td>
         <td sec:authorize="hasAuthority(
         ${T(com.gmail.eugene.shchemelyov.market.service.constant.SecurityConstant).ADMINISTRATOR})">
-            <a th:href="@{/private/users/add}">Add user</a>
+            <a th:href="@{/private/administrator/users/add}">Add user</a>
         </td>
         <td sec:authorize="hasAuthority(
         ${T(com.gmail.eugene.shchemelyov.market.service.constant.SecurityConstant).ADMINISTRATOR})">
-            <a th:href="@{/private/comments}">Comments</a>
+            <a th:href="@{/private/administrator/reviews}">Reviews</a>
         </td>
         <td>
             <a th:href="@{/logout}">Logout</a>

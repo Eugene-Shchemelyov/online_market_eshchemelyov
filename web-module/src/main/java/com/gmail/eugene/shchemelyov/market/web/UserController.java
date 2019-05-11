@@ -11,11 +11,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -36,28 +34,23 @@ public class UserController {
         this.roleService = roleService;
     }
 
-    @GetMapping(value = {"/private/users", "/private/users/{page}"})
+    @GetMapping("/private/administrator/users")
     public String getUsers(
             Model model,
-            HttpServletRequest httpServletRequest,
-            @PathVariable(required = false) Integer page
+            @RequestParam(value = "page", defaultValue = "1", required = false) Integer page,
+            @RequestParam(value = "countDeletedUsers", required = false) Integer countDeletedUsers,
+            @RequestParam(value = "update", required = false) Boolean update
     ) {
         Pagination pagination = paginationService.getUserPagination(page);
         List<UserDTO> users = userService.getUsers(pagination);
         model.addAttribute("pagination", pagination);
         model.addAttribute("users", users);
-        String numberDeletedUsers = httpServletRequest.getParameter("countDeletedUsers");
-        if (numberDeletedUsers != null) {
-            model.addAttribute("countDeletedUsers", Integer.parseInt(numberDeletedUsers));
-        }
-        String update = httpServletRequest.getParameter("update");
-        if (update != null) {
-            model.addAttribute("update", Boolean.parseBoolean(update));
-        }
+        model.addAttribute("countDeletedUsers", countDeletedUsers);
+        model.addAttribute("update", update);
         return "user/all";
     }
 
-    @PostMapping("/private/users/delete")
+    @PostMapping("/private/administrator/users/delete")
     public String deleteUsers(
             @RequestParam(value = "emails", required = false) List<String> emails
     ) {
@@ -65,10 +58,10 @@ public class UserController {
         if (emails != null) {
             countDeletedUsers = userService.deleteUsersByEmail(emails);
         }
-        return "redirect:/private/users?countDeletedUsers=" + countDeletedUsers;
+        return "redirect:/private/administrator/users?countDeletedUsers=" + countDeletedUsers;
     }
 
-    @GetMapping("/private/users/add")
+    @GetMapping("/private/administrator/users/add")
     public String showPageAddUser(
             Model model
     ) {
@@ -78,7 +71,7 @@ public class UserController {
         return "user/add";
     }
 
-    @PostMapping("/private/users/add")
+    @PostMapping("/private/administrator/users/add")
     public String addUser(
             Model model,
             @Valid @ModelAttribute("user") UserDTO userDTO,
@@ -90,30 +83,27 @@ public class UserController {
             return "user/add";
         }
         userService.add(userDTO);
-        return "redirect:/private/users";
+        return "redirect:/private/administrator/users";
     }
 
-    @GetMapping("/private/users/{id}/update")
+    @GetMapping("/private/administrator/users/update")
     public String showPageUpdateUser(
             Model model,
-            HttpServletRequest httpServletRequest,
-            @PathVariable("id") Long id
+            @RequestParam(value = "message", required = false) Boolean message,
+            @RequestParam(value = "id") Long id
     ) {
         UserDTO userDTO = userService.loadUserById(id);
         List<String> roles = roleService.getAllRoles();
         model.addAttribute("user", userDTO);
         model.addAttribute("roles", roles);
-        String message = httpServletRequest.getParameter("message");
-        if (message != null) {
-            model.addAttribute("message", Boolean.parseBoolean(message));
-        }
+        model.addAttribute("message", message);
         return "user/update";
     }
 
-    @PostMapping("/private/users/{id}/update")
+    @PostMapping("/private/administrator/users/update")
     public String updateUser(
             Model model,
-            @PathVariable("id") Long id,
+            @RequestParam(value = "id") Long id,
             @Valid @ModelAttribute("user") UserDTO userDTO,
             BindingResult bindingResult
     ) {
@@ -124,14 +114,14 @@ public class UserController {
             return "user/update";
         }
         userService.update(userDTO);
-        return "redirect:/private/users?update=true";
+        return "redirect:/private/administrator/users?update=true";
     }
 
-    @PostMapping("/private/users/{id}/message")
+    @PostMapping("/private/administrator/users/message")
     public String sendMessageToChangePassword(
-            @PathVariable("id") Long id
+            @RequestParam(value = "id") Long id
     ) {
         userService.changePassword(id);
-        return "redirect:/private/users/" + id + "/update?message=true";
+        return "redirect:/private/administrator/users/update?id=" + id + "&message=true";
     }
 }

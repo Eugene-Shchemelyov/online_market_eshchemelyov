@@ -13,7 +13,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import static com.gmail.eugene.shchemelyov.market.repository.constant.PaginationConstant.LIMIT_ON_PAGE;
-import static com.gmail.eugene.shchemelyov.market.repository.constant.UserConstant.DELETED;
 import static com.gmail.eugene.shchemelyov.market.service.constant.ExceptionMessageConstant.SERVICE_ERROR_MESSAGE;
 import static com.gmail.eugene.shchemelyov.market.service.constant.ExceptionMessageConstant.TRANSACTION_ERROR_MESSAGE;
 
@@ -34,8 +33,8 @@ public class PaginationServiceImpl implements PaginationService {
     }
 
     @Override
-    public Pagination getCommentPagination(Integer page) {
-        Integer countPages = getCountPages("T_COMMENT");
+    public Pagination getReviewPagination(Integer page) {
+        Integer countPages = getCountPages("T_REVIEW");
         return getPagination(countPages, page);
     }
 
@@ -43,7 +42,7 @@ public class PaginationServiceImpl implements PaginationService {
         try (Connection connection = paginationRepository.getConnection()) {
             connection.setAutoCommit(false);
             try {
-                Integer countRaws = paginationRepository.getCountRaws(connection, table, DELETED);
+                Integer countRaws = paginationRepository.getCountRaws(connection, table, false);
                 connection.commit();
                 if (countRaws % LIMIT_ON_PAGE == 0 && countRaws != 0) {
                     return countRaws / LIMIT_ON_PAGE;
@@ -54,12 +53,12 @@ public class PaginationServiceImpl implements PaginationService {
                 connection.rollback();
                 logger.error(e.getMessage(), e);
                 throw new ServiceException(String.format(
-                        "%s %s: %s", TRANSACTION_ERROR_MESSAGE, "When getting pagination for table", table), e);
+                        "%s. %s: %s.", TRANSACTION_ERROR_MESSAGE, "When getting pagination for table", table), e);
             }
         } catch (SQLException e) {
             logger.error(e.getMessage(), e);
             throw new ServiceException(String.format(
-                    "%s %s: %s", SERVICE_ERROR_MESSAGE, "When getting pagination for table", table), e);
+                    "%s. %s: %s.", SERVICE_ERROR_MESSAGE, "When getting pagination for table", table), e);
         }
     }
 

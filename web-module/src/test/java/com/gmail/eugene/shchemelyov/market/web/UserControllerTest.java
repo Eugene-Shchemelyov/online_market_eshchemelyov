@@ -62,21 +62,9 @@ public class UserControllerTest {
     @WithMockUser(authorities = ADMINISTRATOR)
     @Test
     public void shouldGetUsersPage() throws Exception {
-        when(paginationService.getUserPagination(null)).thenReturn(pagination);
-        when(userService.getUsers(pagination)).thenReturn(users);
-        this.mockMvc.perform(get("/private/users"))
-                .andExpect(status().isOk())
-                .andExpect(model().attribute("pagination", pagination))
-                .andExpect(model().attribute("users", users))
-                .andExpect(forwardedUrl("user/all"));
-    }
-
-    @WithMockUser(authorities = ADMINISTRATOR)
-    @Test
-    public void shouldGetUsersPageWithPageInUrl() throws Exception {
         when(paginationService.getUserPagination(1)).thenReturn(pagination);
         when(userService.getUsers(pagination)).thenReturn(users);
-        this.mockMvc.perform(get("/private/users/{page}", "1"))
+        this.mockMvc.perform(get("/private/administrator/users"))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("pagination", pagination))
                 .andExpect(model().attribute("users", users))
@@ -86,9 +74,9 @@ public class UserControllerTest {
     @WithMockUser(authorities = ADMINISTRATOR)
     @Test
     public void shouldAddAttributeCountDeletedUsersToModel() throws Exception {
-        when(paginationService.getUserPagination(null)).thenReturn(pagination);
+        when(paginationService.getUserPagination(1)).thenReturn(pagination);
         when(userService.getUsers(pagination)).thenReturn(users);
-        this.mockMvc.perform(get("/private/users?countDeletedUsers=3"))
+        this.mockMvc.perform(get("/private/administrator/users?countDeletedUsers=3"))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("pagination", pagination))
                 .andExpect(model().attribute("users", users))
@@ -99,9 +87,9 @@ public class UserControllerTest {
     @WithMockUser(authorities = ADMINISTRATOR)
     @Test
     public void shouldAddAttributeUpdateToModel() throws Exception {
-        when(paginationService.getUserPagination(null)).thenReturn(pagination);
+        when(paginationService.getUserPagination(1)).thenReturn(pagination);
         when(userService.getUsers(pagination)).thenReturn(users);
-        this.mockMvc.perform(get("/private/users?update=true"))
+        this.mockMvc.perform(get("/private/administrator/users?update=true"))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("pagination", pagination))
                 .andExpect(model().attribute("users", users))
@@ -115,10 +103,10 @@ public class UserControllerTest {
         String email = "Admin@mail.ru";
         List<String> emails = asList(email, email);
         when(userService.deleteUsersByEmail(emails)).thenReturn(2);
-        this.mockMvc.perform(post("/private/users/delete")
+        this.mockMvc.perform(post("/private/administrator/users/delete")
                 .param("emails", email)
                 .param("emails", email))
-                .andExpect(redirectedUrl("/private/users?countDeletedUsers=2"));
+                .andExpect(redirectedUrl("/private/administrator/users?countDeletedUsers=2"));
     }
 
     @WithMockUser(authorities = ADMINISTRATOR)
@@ -126,7 +114,7 @@ public class UserControllerTest {
     public void shouldGetAddUserPage() throws Exception {
         List<String> roles = asList("Admin", "Admin2");
         when(roleService.getAllRoles()).thenReturn(roles);
-        this.mockMvc.perform(get("/private/users/add"))
+        this.mockMvc.perform(get("/private/administrator/users/add"))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("roles", roles))
                 .andExpect(forwardedUrl("user/add"));
@@ -135,13 +123,13 @@ public class UserControllerTest {
     @WithMockUser(authorities = ADMINISTRATOR)
     @Test
     public void shouldRedirectToUrlAfterAdding() throws Exception {
-        this.mockMvc.perform(post("/private/users/add")
+        this.mockMvc.perform(post("/private/administrator/users/add")
                 .param("surname", userDTO.getSurname())
                 .param("name", userDTO.getName())
                 .param("patronymic", userDTO.getPatronymic())
                 .param("email", userDTO.getEmail())
                 .param("roleName", userDTO.getRoleName()))
-                .andExpect(redirectedUrl("/private/users"));
+                .andExpect(redirectedUrl("/private/administrator/users"));
     }
 
     @WithMockUser(authorities = ADMINISTRATOR)
@@ -150,7 +138,7 @@ public class UserControllerTest {
         List<String> roles = asList("Admin", "Admin2");
         when(roleService.getAllRoles()).thenReturn(roles);
         userDTO.setSurname("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-        this.mockMvc.perform(post("/private/users/add")
+        this.mockMvc.perform(post("/private/administrator/users/add")
                 .param("surname", userDTO.getSurname())
                 .param("name", userDTO.getName())
                 .param("patronymic", userDTO.getPatronymic())
@@ -167,7 +155,7 @@ public class UserControllerTest {
         List<String> roles = asList("Admin", "Admin2");
         when(roleService.getAllRoles()).thenReturn(roles);
         userDTO.setSurname("111111111");
-        this.mockMvc.perform(post("/private/users/add")
+        this.mockMvc.perform(post("/private/administrator/users/add")
                 .param("surname", userDTO.getSurname())
                 .param("name", userDTO.getName())
                 .param("patronymic", userDTO.getPatronymic())
@@ -184,7 +172,7 @@ public class UserControllerTest {
         List<String> roles = asList("Admin", "Admin2");
         when(roleService.getAllRoles()).thenReturn(roles);
         userDTO.setSurname(null);
-        this.mockMvc.perform(post("/private/users/add")
+        this.mockMvc.perform(post("/private/administrator/users/add")
                 .param("surname", userDTO.getSurname())
                 .param("name", userDTO.getName())
                 .param("patronymic", userDTO.getPatronymic())
@@ -201,7 +189,7 @@ public class UserControllerTest {
         List<String> roles = asList("Admin", "Admin2");
         when(roleService.getAllRoles()).thenReturn(roles);
         userDTO.setName("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-        this.mockMvc.perform(post("/private/users/add")
+        this.mockMvc.perform(post("/private/administrator/users/add")
                 .param("surname", userDTO.getSurname())
                 .param("name", userDTO.getName())
                 .param("patronymic", userDTO.getPatronymic())
@@ -218,7 +206,7 @@ public class UserControllerTest {
         List<String> roles = asList("Admin", "Admin2");
         when(roleService.getAllRoles()).thenReturn(roles);
         userDTO.setName("123");
-        this.mockMvc.perform(post("/private/users/add")
+        this.mockMvc.perform(post("/private/administrator/users/add")
                 .param("surname", userDTO.getSurname())
                 .param("name", userDTO.getName())
                 .param("patronymic", userDTO.getPatronymic())
@@ -235,7 +223,7 @@ public class UserControllerTest {
         List<String> roles = asList("Admin", "Admin2");
         when(roleService.getAllRoles()).thenReturn(roles);
         userDTO.setName(null);
-        this.mockMvc.perform(post("/private/users/add")
+        this.mockMvc.perform(post("/private/administrator/users/add")
                 .param("surname", userDTO.getSurname())
                 .param("name", userDTO.getName())
                 .param("patronymic", userDTO.getPatronymic())
@@ -252,7 +240,7 @@ public class UserControllerTest {
         List<String> roles = asList("Admin", "Admin2");
         when(roleService.getAllRoles()).thenReturn(roles);
         userDTO.setPatronymic("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-        this.mockMvc.perform(post("/private/users/add")
+        this.mockMvc.perform(post("/private/administrator/users/add")
                 .param("surname", userDTO.getSurname())
                 .param("name", userDTO.getName())
                 .param("patronymic", userDTO.getPatronymic())
@@ -269,7 +257,7 @@ public class UserControllerTest {
         List<String> roles = asList("Admin", "Admin2");
         when(roleService.getAllRoles()).thenReturn(roles);
         userDTO.setPatronymic("123");
-        this.mockMvc.perform(post("/private/users/add")
+        this.mockMvc.perform(post("/private/administrator/users/add")
                 .param("surname", userDTO.getSurname())
                 .param("name", userDTO.getName())
                 .param("patronymic", userDTO.getPatronymic())
@@ -286,7 +274,7 @@ public class UserControllerTest {
         List<String> roles = asList("Admin", "Admin2");
         when(roleService.getAllRoles()).thenReturn(roles);
         userDTO.setPatronymic(null);
-        this.mockMvc.perform(post("/private/users/add")
+        this.mockMvc.perform(post("/private/administrator/users/add")
                 .param("surname", userDTO.getSurname())
                 .param("name", userDTO.getName())
                 .param("patronymic", userDTO.getPatronymic())
@@ -303,7 +291,7 @@ public class UserControllerTest {
         List<String> roles = asList("Admin", "Admin2");
         when(roleService.getAllRoles()).thenReturn(roles);
         userDTO.setEmail("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@mail.ru");
-        this.mockMvc.perform(post("/private/users/add")
+        this.mockMvc.perform(post("/private/administrator/users/add")
                 .param("surname", userDTO.getSurname())
                 .param("name", userDTO.getName())
                 .param("patronymic", userDTO.getPatronymic())
@@ -320,7 +308,7 @@ public class UserControllerTest {
         List<String> roles = asList("Admin", "Admin2");
         when(roleService.getAllRoles()).thenReturn(roles);
         userDTO.setEmail("aaaaaaaaaaaaaaaa");
-        this.mockMvc.perform(post("/private/users/add")
+        this.mockMvc.perform(post("/private/administrator/users/add")
                 .param("surname", userDTO.getSurname())
                 .param("name", userDTO.getName())
                 .param("patronymic", userDTO.getPatronymic())
@@ -337,7 +325,7 @@ public class UserControllerTest {
         List<String> roles = asList("Admin", "Admin2");
         when(roleService.getAllRoles()).thenReturn(roles);
         userDTO.setEmail(null);
-        this.mockMvc.perform(post("/private/users/add")
+        this.mockMvc.perform(post("/private/administrator/users/add")
                 .param("surname", userDTO.getSurname())
                 .param("name", userDTO.getName())
                 .param("patronymic", userDTO.getPatronymic())
@@ -354,7 +342,7 @@ public class UserControllerTest {
         List<String> roles = asList("Admin", "Admin2");
         when(roleService.getAllRoles()).thenReturn(roles);
         userDTO.setRoleName(null);
-        this.mockMvc.perform(post("/private/users/add")
+        this.mockMvc.perform(post("/private/administrator/users/add")
                 .param("surname", userDTO.getSurname())
                 .param("name", userDTO.getName())
                 .param("patronymic", userDTO.getPatronymic())
@@ -371,7 +359,7 @@ public class UserControllerTest {
         when(userService.loadUserById(1L)).thenReturn(userDTO);
         List<String> roles = asList("Admin", "Admin2");
         when(roleService.getAllRoles()).thenReturn(roles);
-        this.mockMvc.perform(get("/private/users/{id}/update", "1"))
+        this.mockMvc.perform(get("/private/administrator/users/update?id=1"))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("user", userDTO))
                 .andExpect(model().attribute("roles", roles))
@@ -384,7 +372,7 @@ public class UserControllerTest {
         when(userService.loadUserById(1L)).thenReturn(userDTO);
         List<String> roles = asList("Admin", "Admin2");
         when(roleService.getAllRoles()).thenReturn(roles);
-        this.mockMvc.perform(get("/private/users/{id}/update?message=true", "1"))
+        this.mockMvc.perform(get("/private/administrator/users/update?message=true&id=1"))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("user", userDTO))
                 .andExpect(model().attribute("roles", roles))
@@ -395,13 +383,13 @@ public class UserControllerTest {
     @WithMockUser(authorities = ADMINISTRATOR)
     @Test
     public void shouldRedirectToUsersPageAfterUpdateUser() throws Exception {
-        this.mockMvc.perform(post("/private/users/{id}/update", "1")
+        this.mockMvc.perform(post("/private/administrator/users/update?id=1")
                 .param("surname", userDTO.getSurname())
                 .param("name", userDTO.getName())
                 .param("patronymic", userDTO.getPatronymic())
                 .param("email", userDTO.getEmail())
                 .param("roleName", userDTO.getRoleName()))
-                .andExpect(redirectedUrl("/private/users?update=true"));
+                .andExpect(redirectedUrl("/private/administrator/users?update=true"));
     }
 
     @WithMockUser(authorities = ADMINISTRATOR)
@@ -410,7 +398,7 @@ public class UserControllerTest {
         List<String> roles = asList("Admin", "Admin2");
         when(roleService.getAllRoles()).thenReturn(roles);
         userDTO.setSurname("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-        this.mockMvc.perform(post("/private/users/{id}/update", "1")
+        this.mockMvc.perform(post("/private/administrator/users/update?id=1")
                 .param("surname", userDTO.getSurname())
                 .param("name", userDTO.getName())
                 .param("patronymic", userDTO.getPatronymic())
@@ -427,7 +415,7 @@ public class UserControllerTest {
         List<String> roles = asList("Admin", "Admin2");
         when(roleService.getAllRoles()).thenReturn(roles);
         userDTO.setSurname("111111111");
-        this.mockMvc.perform(post("/private/users/{id}/update", "1")
+        this.mockMvc.perform(post("/private/administrator/users/update?id=1")
                 .param("surname", userDTO.getSurname())
                 .param("name", userDTO.getName())
                 .param("patronymic", userDTO.getPatronymic())
@@ -444,7 +432,7 @@ public class UserControllerTest {
         List<String> roles = asList("Admin", "Admin2");
         when(roleService.getAllRoles()).thenReturn(roles);
         userDTO.setSurname(null);
-        this.mockMvc.perform(post("/private/users/{id}/update", "1")
+        this.mockMvc.perform(post("/private/administrator/users/update?id=1")
                 .param("surname", userDTO.getSurname())
                 .param("name", userDTO.getName())
                 .param("patronymic", userDTO.getPatronymic())
@@ -461,7 +449,7 @@ public class UserControllerTest {
         List<String> roles = asList("Admin", "Admin2");
         when(roleService.getAllRoles()).thenReturn(roles);
         userDTO.setName("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-        this.mockMvc.perform(post("/private/users/{id}/update", "1")
+        this.mockMvc.perform(post("/private/administrator/users/update?id=1")
                 .param("surname", userDTO.getSurname())
                 .param("name", userDTO.getName())
                 .param("patronymic", userDTO.getPatronymic())
@@ -478,7 +466,7 @@ public class UserControllerTest {
         List<String> roles = asList("Admin", "Admin2");
         when(roleService.getAllRoles()).thenReturn(roles);
         userDTO.setName("123");
-        this.mockMvc.perform(post("/private/users/{id}/update", "1")
+        this.mockMvc.perform(post("/private/administrator/users/update?id=1")
                 .param("surname", userDTO.getSurname())
                 .param("name", userDTO.getName())
                 .param("patronymic", userDTO.getPatronymic())
@@ -495,7 +483,7 @@ public class UserControllerTest {
         List<String> roles = asList("Admin", "Admin2");
         when(roleService.getAllRoles()).thenReturn(roles);
         userDTO.setName(null);
-        this.mockMvc.perform(post("/private/users/{id}/update", "1")
+        this.mockMvc.perform(post("/private/administrator/users/update?id=1")
                 .param("surname", userDTO.getSurname())
                 .param("name", userDTO.getName())
                 .param("patronymic", userDTO.getPatronymic())
@@ -512,7 +500,7 @@ public class UserControllerTest {
         List<String> roles = asList("Admin", "Admin2");
         when(roleService.getAllRoles()).thenReturn(roles);
         userDTO.setPatronymic("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-        this.mockMvc.perform(post("/private/users/{id}/update", "1")
+        this.mockMvc.perform(post("/private/administrator/users/update?id=1")
                 .param("surname", userDTO.getSurname())
                 .param("name", userDTO.getName())
                 .param("patronymic", userDTO.getPatronymic())
@@ -529,7 +517,7 @@ public class UserControllerTest {
         List<String> roles = asList("Admin", "Admin2");
         when(roleService.getAllRoles()).thenReturn(roles);
         userDTO.setPatronymic("123");
-        this.mockMvc.perform(post("/private/users/{id}/update", "1")
+        this.mockMvc.perform(post("/private/administrator/users/update?id=1")
                 .param("surname", userDTO.getSurname())
                 .param("name", userDTO.getName())
                 .param("patronymic", userDTO.getPatronymic())
@@ -546,7 +534,7 @@ public class UserControllerTest {
         List<String> roles = asList("Admin", "Admin2");
         when(roleService.getAllRoles()).thenReturn(roles);
         userDTO.setPatronymic(null);
-        this.mockMvc.perform(post("/private/users/{id}/update", "1")
+        this.mockMvc.perform(post("/private/administrator/users/update?id=1")
                 .param("surname", userDTO.getSurname())
                 .param("name", userDTO.getName())
                 .param("patronymic", userDTO.getPatronymic())
@@ -563,7 +551,7 @@ public class UserControllerTest {
         List<String> roles = asList("Admin", "Admin2");
         when(roleService.getAllRoles()).thenReturn(roles);
         userDTO.setRoleName(null);
-        this.mockMvc.perform(post("/private/users/{id}/update", "1")
+        this.mockMvc.perform(post("/private/administrator/users/update?id=1")
                 .param("surname", userDTO.getSurname())
                 .param("name", userDTO.getName())
                 .param("patronymic", userDTO.getPatronymic())
@@ -578,7 +566,7 @@ public class UserControllerTest {
     @Test
     public void shouldRedirectToTheUsersPageAfterChangingUserPassword() throws Exception {
         doNothing().when(userService).changePassword(1L);
-        this.mockMvc.perform(post("/private/users/{id}/message", "1"))
-                .andExpect(redirectedUrl("/private/users/1/update?message=true"));
+        this.mockMvc.perform(post("/private/administrator/users/message?id=1"))
+                .andExpect(redirectedUrl("/private/administrator/users/update?id=1&message=true"));
     }
 }

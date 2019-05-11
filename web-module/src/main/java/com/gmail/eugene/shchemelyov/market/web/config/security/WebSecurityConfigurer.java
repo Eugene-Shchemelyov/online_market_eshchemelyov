@@ -54,18 +54,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers(
-                        "/private/users",
-                        "/private/users/{page}",
-                        "/private/users/delete",
-                        "/private/users/add",
-                        "/private/users/{id}/update",
-                        "/private/users/{id}/message",
-                        "/private/comments",
-                        "/private/comments/{page}",
-                        "/private/comments/display",
-                        "/private/comments/{id}/delete"
-                )
+                .antMatchers("/private/administrator/**")
                 .hasAuthority(ADMINISTRATOR)
                 .antMatchers("/", "/403", "/login", "/public/**")
                 .permitAll()

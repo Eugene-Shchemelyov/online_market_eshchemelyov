@@ -11,7 +11,7 @@
     Message send to email!
 </div>
 <table>
-    <form action="#" th:action="@{/private/users/{id}/update (id=${user.id})}" th:object="${user}" method="post">
+    <form action="#" th:action="@{/private/administrator/users/update (id=${user.id})}" th:object="${user}" method="post">
         <tr>
             <td>Surname:</td>
             <td><span th:text="${user.surname}"></span></td>
@@ -50,7 +50,7 @@
         </tr>
         <input type="hidden" th:field="*{email}" th:value="*{email}"/>
     </form>
-    <form action="#" th:action="@{/private/users/{id}/message (id=${user.id})}" method="post">
+    <form action="#" th:action="@{/private/administrator/users/message (id=${user.id})}" method="post">
         <tr>
             <td>
                 <button type="submit">Change password</button>

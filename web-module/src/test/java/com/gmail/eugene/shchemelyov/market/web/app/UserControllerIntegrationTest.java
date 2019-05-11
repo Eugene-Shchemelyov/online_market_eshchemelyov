@@ -23,23 +23,21 @@ public class UserControllerIntegrationTest {
     @Test
     @WithMockUser(authorities = {ADMINISTRATOR})
     public void shouldGetUsersPage() throws Exception {
-        this.mockMvc.perform(get("/private/users"))
-                .andExpect(status().isOk());
-        this.mockMvc.perform(get("/private/users/1"))
+        this.mockMvc.perform(get("/private/administrator/users"))
                 .andExpect(status().isOk());
     }
 
     @Test
     @WithMockUser(authorities = {ADMINISTRATOR})
     public void shouldGetAddPage() throws Exception {
-        this.mockMvc.perform(get("/private/users/add"))
+        this.mockMvc.perform(get("/private/administrator/users/add"))
                 .andExpect(status().isOk());
     }
 
     @Test
     @WithMockUser(authorities = {ADMINISTRATOR})
     public void shouldGetUpdatePage() throws Exception {
-        this.mockMvc.perform(get("/private/users/1/update"))
+        this.mockMvc.perform(get("/private/administrator/users/update?id=1"))
                 .andExpect(status().isOk());
     }
 }

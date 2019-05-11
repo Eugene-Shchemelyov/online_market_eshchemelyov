@@ -37,12 +37,12 @@ public class RoleServiceImpl implements RoleService {
                 connection.rollback();
                 logger.error(e.getMessage(), e);
                 throw new ServiceException(String.format(
-                        "%s %s.", TRANSACTION_ERROR_MESSAGE, "When getting roles"), e);
+                        "%s. %s.", TRANSACTION_ERROR_MESSAGE, "When getting roles"), e);
             }
         } catch (SQLException e) {
             logger.error(e.getMessage(), e);
             throw new ServiceException(String.format(
-                    "%s %s.", SERVICE_ERROR_MESSAGE, "When getting roles"), e);
+                    "%s. %s.", SERVICE_ERROR_MESSAGE, "When getting roles"), e);
         }
     }
 }

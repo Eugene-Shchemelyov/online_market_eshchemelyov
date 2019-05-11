@@ -16,16 +16,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class CommentControllerIntegrationTest {
+public class ReviewControllerIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
 
     @Test
     @WithMockUser(authorities = {ADMINISTRATOR})
-    public void shouldGetCommentPage() throws Exception {
-        this.mockMvc.perform(get("/private/comments"))
-                .andExpect(status().isOk());
-        this.mockMvc.perform(get("/private/comments/1"))
+    public void shouldGetReviewsPage() throws Exception {
+        this.mockMvc.perform(get("/private/administrator/reviews"))
                 .andExpect(status().isOk());
     }
 }

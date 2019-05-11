@@ -53,7 +53,7 @@ public class AppUrlAuthenticationSuccessHandler implements AuthenticationSuccess
         for (GrantedAuthority grantedAuthority : authorities) {
             switch (grantedAuthority.getAuthority()) {
                 case ADMINISTRATOR:
-                    return "/private/users";
+                    return "/private/administrator/users";
             }
         }
         throw new IllegalStateException();

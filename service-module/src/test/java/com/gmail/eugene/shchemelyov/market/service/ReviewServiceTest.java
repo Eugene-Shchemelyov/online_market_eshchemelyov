@@ -1,15 +1,15 @@
 package com.gmail.eugene.shchemelyov.market.service;
 
-import com.gmail.eugene.shchemelyov.market.repository.CommentRepository;
+import com.gmail.eugene.shchemelyov.market.repository.ReviewRepository;
 import com.gmail.eugene.shchemelyov.market.repository.UserRepository;
-import com.gmail.eugene.shchemelyov.market.repository.model.Comment;
 import com.gmail.eugene.shchemelyov.market.repository.model.Pagination;
+import com.gmail.eugene.shchemelyov.market.repository.model.Review;
 import com.gmail.eugene.shchemelyov.market.repository.model.Role;
 import com.gmail.eugene.shchemelyov.market.repository.model.User;
-import com.gmail.eugene.shchemelyov.market.service.converter.CommentConverter;
+import com.gmail.eugene.shchemelyov.market.service.converter.ReviewConverter;
 import com.gmail.eugene.shchemelyov.market.service.converter.UserConverter;
-import com.gmail.eugene.shchemelyov.market.service.impl.CommentServiceImpl;
-import com.gmail.eugene.shchemelyov.market.service.model.CommentDTO;
+import com.gmail.eugene.shchemelyov.market.service.impl.ReviewServiceImpl;
+import com.gmail.eugene.shchemelyov.market.service.model.ReviewDTO;
 import com.gmail.eugene.shchemelyov.market.service.model.UserDTO;
 import org.junit.Assert;
 import org.junit.Before;
@@ -27,12 +27,12 @@ import static java.util.Arrays.asList;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CommentServiceTest {
-    private CommentService commentService;
+public class ReviewServiceTest {
+    private ReviewService reviewService;
     @Mock
-    private CommentRepository commentRepository;
+    private ReviewRepository reviewRepository;
     @Mock
-    private CommentConverter commentConverter;
+    private ReviewConverter reviewConverter;
     @Mock
     private UserRepository userRepository;
     @Mock
@@ -43,10 +43,10 @@ public class CommentServiceTest {
     private Pagination pagination = new Pagination();
     private User user = new User();
     private UserDTO userDTO = new UserDTO();
-    private Comment comment = new Comment();
-    private CommentDTO commentDTO = new CommentDTO();
-    private List<Comment> comments = new ArrayList<>();
-    private List<CommentDTO> commentDTOs = new ArrayList<>();
+    private Review review = new Review();
+    private ReviewDTO reviewDTO = new ReviewDTO();
+    private List<Review> reviews = new ArrayList<>();
+    private List<ReviewDTO> reviewDTOS = new ArrayList<>();
 
     @Before
     public void initialize() {
@@ -73,35 +73,35 @@ public class CommentServiceTest {
         userDTO.setRoleName(ADMINISTRATOR);
         userDTO.setDeleted(false);
 
-        comment.setId(1L);
-        comment.setUser(user);
-        comment.setText("Text");
-        comment.setDate("Date");
-        comment.setDisplay(true);
-        comment.setDeleted(false);
+        review.setId(1L);
+        review.setUser(user);
+        review.setText("Text");
+        review.setDate("Date");
+        review.setDisplay(true);
+        review.setDeleted(false);
 
-        commentDTO.setId(1L);
-        commentDTO.setUser(userDTO);
-        commentDTO.setText("Text");
-        commentDTO.setDate("Date");
-        commentDTO.setDisplay(true);
-        commentDTO.setDeleted(false);
+        reviewDTO.setId(1L);
+        reviewDTO.setUser(userDTO);
+        reviewDTO.setText("Text");
+        reviewDTO.setDate("Date");
+        reviewDTO.setDisplay(true);
+        reviewDTO.setDeleted(false);
 
-        comments = asList(comment, comment, comment);
-        commentDTOs = asList(commentDTO, commentDTO, commentDTO);
+        reviews = asList(review, review, review);
+        reviewDTOS = asList(reviewDTO, reviewDTO, reviewDTO);
 
-        commentService = new CommentServiceImpl(commentRepository, commentConverter, userRepository, userConverter);
-        when(commentRepository.getConnection()).thenReturn(connection);
+        reviewService = new ReviewServiceImpl(reviewRepository, reviewConverter, userRepository, userConverter);
+        when(reviewRepository.getConnection()).thenReturn(connection);
     }
 
     @Test
-    public void shouldGetComments() {
-        when(commentRepository.getLimitComments(connection, pagination)).thenReturn(comments);
+    public void shouldGetReviews() {
+        when(reviewRepository.getLimitReviews(connection, pagination)).thenReturn(reviews);
         when(userRepository.loadUserById(connection, 2L)).thenReturn(user);
         when(userConverter.toUserDTO(user)).thenReturn(userDTO);
-        when(commentConverter.toCommentDTO(comment, userDTO)).thenReturn(commentDTO);
+        when(reviewConverter.toReviewDTO(review, userDTO)).thenReturn(reviewDTO);
 
-        List<CommentDTO> loadedComments = commentService.getComments(pagination);
-        Assert.assertEquals(commentDTOs, loadedComments);
+        List<ReviewDTO> loadedReviews = reviewService.getReviews(pagination);
+        Assert.assertEquals(reviewDTOS, loadedReviews);
     }
 }

@@ -1,6 +1,5 @@
 package com.gmail.eugene.shchemelyov.market.web;
 
-import com.gmail.eugene.shchemelyov.market.web.PublicController;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

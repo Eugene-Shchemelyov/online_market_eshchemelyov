@@ -68,7 +68,7 @@
                                  referencedTableName="T_ROLE"/>
     </changeSet>
     <changeSet id="e07a7228.27ef9db2" author="shchemelyov.eugene@gmail.com">
-        <createTable tableName="T_COMMENT">
+        <createTable tableName="T_REVIEW">
             <column name="F_ID" type="BIGINT">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -96,12 +96,12 @@
                           incrementBy="1"
                           schemaName="public"
                           startWith="1"
-                          tableName="T_COMMENT"/>
+                          tableName="T_REVIEW"/>
     </changeSet>
     <changeSet id="e07a7243.9ae147ae" author="shchemelyov.eugene@gmail.com">
         <addForeignKeyConstraint baseColumnNames="F_USER_ID"
-                                 baseTableName="T_COMMENT"
-                                 constraintName="FK_T_COMMENT_T_USER"
+                                 baseTableName="T_REVIEW"
+                                 constraintName="FK_T_REVIEW_T_USER"
                                  referencedColumnNames="F_ID"
                                  referencedTableName="T_USER"/>
     </changeSet>

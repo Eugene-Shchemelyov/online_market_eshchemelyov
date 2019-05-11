@@ -4,14 +4,14 @@
 <table th:fragment="userPaginator">
     <tr>
         <td th:each="page : ${#numbers.sequence(1, pagination.countPages)}">
-            <a th:href="@{/private/users/{page}(page=${page})}" th:text="${page}"></a>
+            <a th:href="@{/private/administrator/users(page=${page})}" th:text="${page}"></a>
         </td>
     </tr>
 </table>
-<table th:fragment="commentPaginator">
+<table th:fragment="reviewPaginator">
     <tr>
         <td th:each="page : ${#numbers.sequence(1, pagination.countPages)}">
-            <a th:href="@{/private/comments/{page}(page=${page})}" th:text="${page}"></a>
+            <a th:href="@{/private/administrator/reviews(page=${page})}" th:text="${page}"></a>
         </td>
     </tr>
 </table>

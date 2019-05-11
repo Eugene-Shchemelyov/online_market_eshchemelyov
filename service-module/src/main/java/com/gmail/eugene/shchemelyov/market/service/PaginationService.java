@@ -5,5 +5,5 @@ import com.gmail.eugene.shchemelyov.market.repository.model.Pagination;
 public interface PaginationService {
     Pagination getUserPagination(Integer page);
 
-    Pagination getCommentPagination(Integer page);
+    Pagination getReviewPagination(Integer page);
 }

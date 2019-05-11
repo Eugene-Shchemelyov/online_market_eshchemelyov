@@ -19,7 +19,6 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.gmail.eugene.shchemelyov.market.repository.constant.UserConstant.DELETED;
 import static com.gmail.eugene.shchemelyov.market.service.constant.SecurityConstant.ADMINISTRATOR;
 import static java.util.Arrays.asList;
 import static org.mockito.Mockito.doNothing;
@@ -115,7 +114,7 @@ public class UserServiceTest {
     @Test
     public void shouldDeleteUserIfHeIsNotAnAdministrator() {
         when(roleRepository.getRoleNameByUserEmail(connection, "Email")).thenReturn("testFalse");
-        when(userRepository.deleteByEmail(connection, "Email", !DELETED)).thenReturn(1);
+        when(userRepository.deleteByEmail(connection, "Email", true)).thenReturn(1);
 
         Integer count = userService.deleteUsersByEmail(asList("Email", "Email", "Email"));
         Integer expected = 3;
@@ -125,8 +124,8 @@ public class UserServiceTest {
     @Test
     public void shouldDeleteUserIfHeIsNotTheLastAdministrator() {
         when(roleRepository.getRoleNameByUserEmail(connection, "Email")).thenReturn(ADMINISTRATOR);
-        when(userRepository.getCountUsersWithRole(connection, ADMINISTRATOR, DELETED)).thenReturn(2);
-        when(userRepository.deleteByEmail(connection, "Email", !DELETED)).thenReturn(1);
+        when(userRepository.getCountUsersWithRole(connection, ADMINISTRATOR, false)).thenReturn(2);
+        when(userRepository.deleteByEmail(connection, "Email", true)).thenReturn(1);
 
         Integer count = userService.deleteUsersByEmail(asList("Email", "Email", "Email"));
         Integer expected = 3;
@@ -136,7 +135,7 @@ public class UserServiceTest {
     @Test(expected = RuntimeException.class)
     public void shouldNotDeleteUserWhoIsTheLastAdministrator() {
         when(roleRepository.getRoleNameByUserEmail(connection, "Email")).thenReturn(ADMINISTRATOR);
-        when(userRepository.getCountUsersWithRole(connection, ADMINISTRATOR, DELETED)).thenReturn(1);
+        when(userRepository.getCountUsersWithRole(connection, ADMINISTRATOR, false)).thenReturn(1);
 
         userService.deleteUsersByEmail(asList("Email", "Email", "Email"));
     }
@@ -160,7 +159,7 @@ public class UserServiceTest {
         user.setRole(role);
         when(userConverter.toUser(userDTO, role)).thenReturn(user);
         when(roleRepository.getRoleNameByUserId(connection, user.getId())).thenReturn(ADMINISTRATOR);
-        when(userRepository.getCountUsersWithRole(connection, ADMINISTRATOR, DELETED)).thenReturn(2);
+        when(userRepository.getCountUsersWithRole(connection, ADMINISTRATOR, false)).thenReturn(2);
         doNothing().when(userRepository).update(connection, user);
 
         userService.update(userDTO);
@@ -173,7 +172,7 @@ public class UserServiceTest {
         user.setRole(role);
         when(userConverter.toUser(userDTO, role)).thenReturn(user);
         when(roleRepository.getRoleNameByUserId(connection, user.getId())).thenReturn(ADMINISTRATOR);
-        when(userRepository.getCountUsersWithRole(connection, ADMINISTRATOR, DELETED)).thenReturn(1);
+        when(userRepository.getCountUsersWithRole(connection, ADMINISTRATOR, false)).thenReturn(1);
 
         userService.update(userDTO);
     }

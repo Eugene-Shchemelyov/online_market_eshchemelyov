@@ -1,14 +1,13 @@
 package com.gmail.eugene.shchemelyov.market.repository.model;
 
 import static com.gmail.eugene.shchemelyov.market.repository.constant.PaginationConstant.LIMIT_ON_PAGE;
-import static com.gmail.eugene.shchemelyov.market.repository.constant.UserConstant.DELETED;
 
 public class Pagination {
     private Integer currentPage;
     private Integer countPages;
     private Integer limitOnPage = LIMIT_ON_PAGE;
     private Integer startLimitPosition;
-    private Boolean isDeleted = DELETED;
+    private Boolean isDeleted = false;
 
     public Integer getCurrentPage() {
         return currentPage;

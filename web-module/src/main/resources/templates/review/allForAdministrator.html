@@ -2,16 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Comments</title>
+    <title>Review</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <div th:replace="fragments/header :: header"></div>
 </head>
 <body>
 <div th:if="${message}">
-    Comment deleted!
+    Review deleted!
 </div>
-<form action="#" th:action="@{/private/comments/display}" method="post">
-    <table th:each="comment,stat : ${comments}">
+<form action="#" th:action="@{/private/administrator/reviews/display}" method="post">
+    <table th:each="review,stat : ${reviews}">
         <tr>
             <td></td>
             <td>Surname</td>
@@ -24,21 +24,21 @@
         </tr>
         <tr>
             <td><span th:text="${stat.count}"></span></td>
-            <td><span th:text="${comment.user.surname}"></span></td>
-            <td><span th:text="${comment.user.name}"></span></td>
-            <td><span th:text="${comment.user.patronymic}"></span></td>
-            <td><span th:text="${comment.date}"></span></td>
-            <td><span th:text="${comment.display}"></span></td>
+            <td><span th:text="${review.user.surname}"></span></td>
+            <td><span th:text="${review.user.name}"></span></td>
+            <td><span th:text="${review.user.patronymic}"></span></td>
+            <td><span th:text="${review.date}"></span></td>
+            <td><span th:text="${review.display}"></span></td>
             <td>
-                <label><input type="checkbox" name="commentsId" th:value="${comment.id}"/>change</label>
+                <label><input type="checkbox" name="reviewsId" th:value="${review.id}"/>change</label>
             </td>
             <td>
-                <a th:href="@{/private/comments/{id}/delete (id=${comment.id})}">delete</a>
+                <a th:href="@{/private/administrator/reviews/delete (id=${review.id})}">delete</a>
             </td>
         </tr>
         <tr>
             <td></td>
-            <td><span th:text="${comment.text}"></span></td>
+            <td><span th:text="${review.text}"></span></td>
         </tr>
     </table>
     <table>
@@ -49,13 +49,13 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>Change view comments:</td>
+            <td>Change display selected reviews:</td>
             <td>
                 <button type="submit">Change</button>
             </td>
         </tr>
     </table>
 </form>
-<div th:replace="fragments/paginator :: commentPaginator"></div>
+<div th:replace="fragments/paginator :: reviewPaginator"></div>
 </body>
 </html>
