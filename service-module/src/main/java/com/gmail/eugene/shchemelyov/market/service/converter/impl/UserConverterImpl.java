@@ -1,38 +1,52 @@
 package com.gmail.eugene.shchemelyov.market.service.converter.impl;
 
-import com.gmail.eugene.shchemelyov.market.repository.model.Role;
 import com.gmail.eugene.shchemelyov.market.repository.model.User;
+import com.gmail.eugene.shchemelyov.market.service.converter.ProfileConverter;
+import com.gmail.eugene.shchemelyov.market.service.converter.RoleConverter;
 import com.gmail.eugene.shchemelyov.market.service.converter.UserConverter;
 import com.gmail.eugene.shchemelyov.market.service.model.UserDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserConverterImpl implements UserConverter {
+    private final RoleConverter roleConverter;
+    private final ProfileConverter profileConverter;
+
+    @Autowired
+    public UserConverterImpl(
+            RoleConverter roleConverter,
+            ProfileConverter profileConverter
+    ) {
+        this.roleConverter = roleConverter;
+        this.profileConverter = profileConverter;
+    }
+
     @Override
-    public UserDTO toUserDTO(User user) {
+    public UserDTO toDTO(User user) {
         UserDTO userDTO = new UserDTO();
         userDTO.setId(user.getId());
         userDTO.setSurname(user.getSurname());
         userDTO.setName(user.getName());
-        userDTO.setPatronymic(user.getPatronymic());
         userDTO.setEmail(user.getEmail());
         userDTO.setPassword(user.getPassword());
-        userDTO.setRoleName(user.getRole().getName());
+        userDTO.setRole(roleConverter.toDTO(user.getRole()));
         userDTO.setDeleted(user.isDeleted());
+        userDTO.setProfile(profileConverter.toDTO(user.getProfile(), userDTO));
         return userDTO;
     }
 
     @Override
-    public User toUser(UserDTO userDTO, Role role) {
+    public User toEntity(UserDTO userDTO) {
         User user = new User();
         user.setId(userDTO.getId());
         user.setSurname(userDTO.getSurname());
         user.setName(userDTO.getName());
-        user.setPatronymic(userDTO.getPatronymic());
         user.setEmail(userDTO.getEmail());
         user.setPassword(userDTO.getPassword());
-        user.setRole(role);
+        user.setRole(roleConverter.toEntity(userDTO.getRole()));
         user.setDeleted(userDTO.isDeleted());
+        user.setProfile(profileConverter.toEntity(userDTO.getProfile(), user));
         return user;
     }
 }

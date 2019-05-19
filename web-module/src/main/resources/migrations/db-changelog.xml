@@ -34,9 +34,6 @@
             <column name="F_NAME" type="VARCHAR(20)">
                 <constraints nullable="false"/>
             </column>
-            <column name="F_PATRONYMIC" type="VARCHAR(40)">
-                <constraints nullable="false"/>
-            </column>
             <column name="F_EMAIL" type="VARCHAR(50)">
                 <constraints unique="true" nullable="false"/>
             </column>
@@ -46,7 +43,7 @@
             <column name="F_ROLE_ID" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
-            <column name="F_DELETED" type="BOOLEAN">
+            <column name="F_IS_DELETED" type="BOOLEAN" defaultValueBoolean="false">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -81,10 +78,10 @@
             <column name="F_DATE" type="DATETIME">
                 <constraints nullable="false"/>
             </column>
-            <column name="F_DISPLAY" type="BOOLEAN">
+            <column name="F_IS_DISPLAY" type="BOOLEAN" defaultValueBoolean="true">
                 <constraints nullable="false"/>
             </column>
-            <column name="F_DELETED" type="BOOLEAN">
+            <column name="F_IS_DELETED" type="BOOLEAN" defaultValueBoolean="false">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -107,38 +104,204 @@
     </changeSet>
     <changeSet id="e076a09f.25604189" author="shchemelyov.eugene@gmail.com">
         <insert tableName="T_ROLE">
-            <column name="F_ID" value="1"/>
             <column name="F_NAME" value="Administrator"/>
         </insert>
     </changeSet>
     <changeSet id="e076a1dd.e2d0e560" author="shchemelyov.eugene@gmail.com">
         <insert tableName="T_USER">
-            <column name="F_ID" value="1"/>
             <column name="F_SURNAME" value="adminus"/>
             <column name="F_NAME" value="admin"/>
-            <column name="F_PATRONYMIC" value="adminov"/>
             <column name="F_EMAIL" value="admin@mail.ru"/>
             <column name="F_PASSWORD" value="$2a$12$kImkjwU/naRANbTpC914LOJxduNREMw4gUz0EsDxeqywyf6xBdRF2"/>
-            <column name="F_ROLE_ID" value="1"/>
-            <column name="F_DELETED" valueBoolean="false"/>
+            <column name="F_ROLE_ID" valueComputed="(SELECT (F_ID) FROM T_ROLE WHERE F_NAME = 'Administrator')"/>
+            <column name="F_IS_DELETED" valueBoolean="false"/>
         </insert>
     </changeSet>
     <changeSet id="e07d1c92.1b22d0e5" author="shchemelyov.eugene@gmail.com">
         <insert tableName="T_ROLE">
-            <column name="F_ID" value="2"/>
             <column name="F_NAME" value="Sale User"/>
         </insert>
     </changeSet>
     <changeSet id="e07d1ca2.75c28f5c" author="shchemelyov.eugene@gmail.com">
         <insert tableName="T_ROLE">
-            <column name="F_ID" value="3"/>
             <column name="F_NAME" value="Customer User"/>
         </insert>
     </changeSet>
     <changeSet id="e07d1cb0.a4dd2f1a" author="shchemelyov.eugene@gmail.com">
         <insert tableName="T_ROLE">
-            <column name="F_ID" value="4"/>
-            <column name="F_NAME" value="Secure API User"/>
+            <column name="F_NAME" value="Secure REST API"/>
+        </insert>
+    </changeSet>
+    <changeSet id="e0881d54.153f7ced" author="shchemelyov.eugene@gmail.com">
+        <createTable tableName="T_ARTICLE">
+            <column name="F_ID" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="F_USER_ID" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="F_DATE" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="F_NAME" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="F_ANNOTATION" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="F_TEXT" type="VARCHAR(1000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="F_COUNT_VIEW" type="BIGINT" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="F_IS_DELETED" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="e0881da0.7db22d0e" author="shchemelyov.eugene@gmail.com">
+        <addAutoIncrement catalogName="project"
+                          columnDataType="BIGINT"
+                          columnName="F_ID"
+                          incrementBy="1"
+                          schemaName="public"
+                          startWith="1"
+                          tableName="T_ARTICLE"/>
+    </changeSet>
+    <changeSet id="e0881da0.7df3b645" author="shchemelyov.eugene@gmail.com">
+        <addForeignKeyConstraint baseColumnNames="F_USER_ID"
+                                 baseTableName="T_ARTICLE"
+                                 constraintName="FK_T_ARTICLE_T_USER"
+                                 referencedColumnNames="F_ID"
+                                 referencedTableName="T_USER"/>
+    </changeSet>
+    <changeSet id="e0881dc7.3020c49b" author="shchemelyov.eugene@gmail.com">
+        <createTable tableName="T_COMMENT">
+            <column name="F_ID" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="F_USER_ID" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="F_ARTICLE_ID" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="F_DATE" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="F_TEXT" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="F_IS_DELETED" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="e0881dc7.30624dd2" author="shchemelyov.eugene@gmail.com">
+        <addAutoIncrement catalogName="project"
+                          columnDataType="BIGINT"
+                          columnName="F_ID"
+                          incrementBy="1"
+                          schemaName="public"
+                          startWith="1"
+                          tableName="T_COMMENT"/>
+    </changeSet>
+    <changeSet id="e0881dc7.30a3d70a" author="shchemelyov.eugene@gmail.com">
+        <addForeignKeyConstraint baseColumnNames="F_USER_ID"
+                                 baseTableName="T_COMMENT"
+                                 constraintName="FK_T_COMMENT_T_USER"
+                                 referencedColumnNames="F_ID"
+                                 referencedTableName="T_USER"/>
+    </changeSet>
+    <changeSet id="e0881de9.3810624d" author="shchemelyov.eugene@gmail.com">
+        <addForeignKeyConstraint baseColumnNames="F_ARTICLE_ID"
+                                 baseTableName="T_COMMENT"
+                                 constraintName="FK_T_COMMENT_T_ARTICLE"
+                                 referencedColumnNames="F_ID"
+                                 referencedTableName="T_ARTICLE"/>
+    </changeSet>
+    <changeSet id="e0881dfc.ac49ba5e" author="shchemelyov.eugene@gmail.com">
+        <createTable tableName="T_PROFILE">
+            <column name="F_USER_ID" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="F_ADDRESS" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="F_PHONE" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="F_IS_DELETED" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="e076a1dd.e2d0e561" author="shchemelyov.eugene@gmail.com">
+        <insert tableName="T_PROFILE">
+            <column name="F_USER_ID" valueComputed="(SELECT (F_ID) FROM T_USER WHERE F_EMAIL = 'admin@mail.ru')"/>
+            <column name="F_ADDRESS" value="admin"/>
+            <column name="F_PHONE" value="+37555555555"/>
+        </insert>
+    </changeSet>
+    <changeSet id="e0881e10.df3b645a" author="shchemelyov.eugene@gmail.com">
+        <addForeignKeyConstraint baseColumnNames="F_USER_ID"
+                                 baseTableName="T_PROFILE"
+                                 constraintName="FK_T_PROFILE_T_USER"
+                                 referencedColumnNames="F_ID"
+                                 referencedTableName="T_USER"/>
+    </changeSet>
+    <changeSet id="e0881e10.df7ced91" author="shchemelyov.eugene@gmail.com">
+        <insert tableName="T_USER">
+            <column name="F_SURNAME" value="securen"/>
+            <column name="F_NAME" value="secure"/>
+            <column name="F_EMAIL" value="secure@mail.ru"/>
+            <column name="F_PASSWORD" value="$2a$12$kImkjwU/naRANbTpC914LOJxduNREMw4gUz0EsDxeqywyf6xBdRF2"/>
+            <column name="F_ROLE_ID" valueComputed="(SELECT (F_ID) FROM T_ROLE WHERE F_NAME = 'Secure REST API')"/>
+            <column name="F_IS_DELETED" valueBoolean="false"/>
+        </insert>
+    </changeSet>
+    <changeSet id="e076a1dd.e2d0e564" author="shchemelyov.eugene@gmail.com">
+        <insert tableName="T_PROFILE">
+            <column name="F_USER_ID" valueComputed="(SELECT (F_ID) FROM T_USER WHERE F_EMAIL = 'secure@mail.ru')"/>
+            <column name="F_ADDRESS" value="admin"/>
+            <column name="F_PHONE" value="+37555555555"/>
+        </insert>
+    </changeSet>
+    <changeSet id="e0881e2c.9e353f7c" author="shchemelyov.eugene@gmail.com">
+        <insert tableName="T_USER">
+            <column name="F_SURNAME" value="adminus"/>
+            <column name="F_NAME" value="admin"/>
+            <column name="F_EMAIL" value="customer@mail.ru"/>
+            <column name="F_PASSWORD" value="$2a$12$kImkjwU/naRANbTpC914LOJxduNREMw4gUz0EsDxeqywyf6xBdRF2"/>
+            <column name="F_ROLE_ID" valueComputed="(SELECT (F_ID) FROM T_ROLE WHERE F_NAME = 'Customer User')"/>
+            <column name="F_IS_DELETED" valueBoolean="false"/>
+        </insert>
+    </changeSet>
+    <changeSet id="e076a1dd.e2d0e563" author="shchemelyov.eugene@gmail.com">
+        <insert tableName="T_PROFILE">
+            <column name="F_USER_ID" valueComputed="(SELECT (F_ID) FROM T_USER WHERE F_EMAIL = 'customer@mail.ru')"/>
+            <column name="F_ADDRESS" value="admin"/>
+            <column name="F_PHONE" value="+37555555555"/>
+        </insert>
+    </changeSet>
+    <changeSet id="e0881e2c.9e363f7c" author="shchemelyov.eugene@gmail.com">
+        <insert tableName="T_ARTICLE">
+            <column name="F_USER_ID" valueComputed="(SELECT (F_ID) FROM T_USER WHERE F_EMAIL = 'admin@mail.ru')"/>
+            <column name="F_DATE" value="2019-05-19 18:42:47"/>
+            <column name="F_NAME" value="Article name"/>
+            <column name="F_ANNOTATION" value="Annotation of article"/>
+            <column name="F_TEXT" value="Article text here"/>
+            <column name="F_COUNT_VIEW" value="1"/>
+        </insert>
+    </changeSet>
+    <changeSet id="e0811e2c.9e363f7c" author="shchemelyov.eugene@gmail.com">
+        <insert tableName="T_COMMENT">
+            <column name="F_ID" value="1"/>
+            <column name="F_USER_ID" valueComputed="(SELECT (F_ID) FROM T_USER WHERE F_EMAIL = 'admin@mail.ru')"/>
+            <column name="F_ARTICLE_ID" valueComputed="(SELECT (F_ID) FROM T_ARTICLE WHERE F_DATE = '2019-05-19 18:42:47')"/>
+            <column name="F_DATE" value="2019-05-19 18:42:47"/>
+            <column name="F_TEXT" value="Comment of article"/>
         </insert>
     </changeSet>
 </databaseChangeLog>

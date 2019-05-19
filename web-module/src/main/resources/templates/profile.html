@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Profile</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <div th:replace="fragments/header :: header"></div>
+</head>
+<body>
+<form action="#" th:action="@{/private/profile/update}" th:object="${user}" method="post">
+    <table>
+        <tr>
+            <td>Name:</td>
+            <td><input type="text" th:field="*{name}"/></td>
+            <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</td>
+        </tr>
+        <tr>
+            <td>Surname:</td>
+            <td><input type="text" th:field="*{surname}"/></td>
+            <td th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}">Surname Error</td>
+        </tr>
+        <tr>
+            <td>Email:</td>
+            <td><span th:text="*{email}"></span></td>
+            <input type="hidden" th:field="*{email}" th:value="*{email}"/>
+            <input type="hidden" th:field="*{id}" th:value="*{id}"/>
+            <input type="hidden" th:field="*{role.id}" th:value="*{role.id}"/>
+        </tr>
+        <tr>
+            <td>Address:</td>
+            <td><input type="text" th:field="*{profile.address}"/></td>
+        </tr>
+        <tr>
+            <td>Phone:</td>
+            <td><input type="text" th:field="${user.profile.phone}"/></td>
+        </tr>
+        <tr>
+            <td>Old password:</td>
+            <td><input type="password" name="oldPassword"/></td>
+        </tr>
+        <tr>
+            <td>New password:</td>
+            <td><input type="password" name="newPassword"/></td>
+            <td th:if="${passwordError}">Password error or incorrect validation:
+                Only latin characters and numbers, min 8, max 30</td>
+        </tr>
+        <tr>
+            <td>
+                <button type="submit">Change</button>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

@@ -8,15 +8,15 @@ import java.util.List;
 public interface UserService {
     UserDTO loadUserByEmail(String email);
 
-    UserDTO loadUserById(Long id);
+    UserDTO getById(Long id);
 
-    List<UserDTO> getUsers(Pagination pagination);
+    Pagination getLimitUsers(Integer page);
 
-    Integer deleteUsersByEmail(List<String> emails);
+    void deleteUsersById(List<Long> usersIds);
 
     void update(UserDTO userDTO);
 
-    void changePassword(Long id);
+    void changePasswordById(Long id);
 
     void add(UserDTO userDTO);
 }

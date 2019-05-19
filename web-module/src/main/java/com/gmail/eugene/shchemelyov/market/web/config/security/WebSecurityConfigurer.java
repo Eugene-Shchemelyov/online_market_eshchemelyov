@@ -15,11 +15,13 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import static com.gmail.eugene.shchemelyov.market.service.constant.SecurityConstant.ADMINISTRATOR;
+import static com.gmail.eugene.shchemelyov.market.service.constant.SecurityConstant.CUSTOMER_USER;
+import static com.gmail.eugene.shchemelyov.market.service.constant.SecurityConstant.SECURE_REST_API;
 
 @Configuration
 public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public WebSecurityConfigurer(
@@ -56,6 +58,13 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/private/administrator/**")
                 .hasAuthority(ADMINISTRATOR)
+                .antMatchers(
+                        "/private/article",
+                        "/private/articles/**",
+                        "/private/profile",
+                        "/private/profile/**"
+                )
+                .hasAuthority(CUSTOMER_USER)
                 .antMatchers("/", "/403", "/login", "/public/**")
                 .permitAll()
                 .and()

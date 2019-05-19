@@ -11,12 +11,11 @@
     Review deleted!
 </div>
 <form action="#" th:action="@{/private/administrator/reviews/display}" method="post">
-    <table th:each="review,stat : ${reviews}">
+    <table th:each="review,stat : ${pagination.entities}">
         <tr>
             <td></td>
-            <td>Surname</td>
             <td>Name</td>
-            <td>Patronymic</td>
+            <td>Surname</td>
             <td>Date</td>
             <td>Display</td>
             <td>Change display</td>
@@ -24,9 +23,8 @@
         </tr>
         <tr>
             <td><span th:text="${stat.count}"></span></td>
-            <td><span th:text="${review.user.surname}"></span></td>
             <td><span th:text="${review.user.name}"></span></td>
-            <td><span th:text="${review.user.patronymic}"></span></td>
+            <td><span th:text="${review.user.surname}"></span></td>
             <td><span th:text="${review.date}"></span></td>
             <td><span th:text="${review.display}"></span></td>
             <td>
@@ -37,19 +35,12 @@
             </td>
         </tr>
         <tr>
-            <td></td>
-            <td><span th:text="${review.text}"></span></td>
+            <td colspan="7"><span th:text="${review.text}"></span></td>
         </tr>
     </table>
     <table>
         <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>Change display selected reviews:</td>
+            <td colspan="6" align="right">Change display selected reviews:</td>
             <td>
                 <button type="submit">Change</button>
             </td>

@@ -1,0 +1,23 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<body>
+<table th:fragment="sortArticles">
+    <form action="#" th:action="@{/private/articles}" method="get">
+        <tr>
+            <td>Sort by:</td>
+            <td>
+                <select name="sort">
+                    <option th:each="sort : ${T(com.gmail.eugene.shchemelyov.market.repository.model.enums.SortEnum).values()}"
+                            th:value="${sort}" th:text="${sort.name}"
+                            th:selected="${sort==pagination.sort}">
+                    </option>
+                </select>
+            </td>
+            <td>
+                <button type="submit">Change sort</button>
+            </td>
+        </tr>
+    </form>
+</table>
+</body>
+</html>

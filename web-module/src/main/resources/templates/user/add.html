@@ -10,19 +10,14 @@
 <form action="#" th:action="@{/private/administrator/users/add}" th:object="${user}" method="post">
     <table>
         <tr>
-            <td>Surname:</td>
-            <td><input type="text" th:field="*{surname}"/></td>
-            <td th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}">Surname Error</td>
-        </tr>
-        <tr>
             <td>Name:</td>
             <td><input type="text" th:field="*{name}"/></td>
             <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</td>
         </tr>
         <tr>
-            <td>Patronymic:</td>
-            <td><input type="text" th:field="*{patronymic}"/></td>
-            <td th:if="${#fields.hasErrors('patronymic')}" th:errors="*{patronymic}">Patronymic Error</td>
+            <td>Surname:</td>
+            <td><input type="text" th:field="*{surname}"/></td>
+            <td th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}">Surname Error</td>
         </tr>
         <tr>
             <td>Email:</td>
@@ -30,16 +25,24 @@
             <td th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</td>
         </tr>
         <tr>
+            <td>Address:</td>
+            <td><input type="text" th:field="*{profile.address}"/></td>
+            <td th:if="${#fields.hasErrors('profile.address')}" th:errors="*{profile.address}">Address Error</td>
+        </tr>
+        <tr>
+            <td>Phone:</td>
+            <td><input type="text" th:field="*{profile.phone}"/></td>
+            <td th:if="${#fields.hasErrors('profile.phone')}" th:errors="*{profile.phone}">Phone Error</td>
+        </tr>
+        <tr>
             <td>Role:</td>
             <td>
-                <select name="roleName">
-                    <option disabled selected>Choose role from list</option>
-                    <option th:each="roleName : ${roles}"
-                            th:value="${roleName}" th:text="${roleName}">
+                <select th:field="*{role.id}">
+                    <option th:each="role : ${roles}"
+                            th:value="${role.id}" th:text="${role.name}">
                     </option>
                 </select>
             </td>
-            <td th:if="${#fields.hasErrors('roleName')}" th:errors="*{roleName}">Role Error</td>
         </tr>
         <tr>
             <td>

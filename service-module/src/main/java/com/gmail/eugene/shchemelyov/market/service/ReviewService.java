@@ -6,7 +6,7 @@ import com.gmail.eugene.shchemelyov.market.service.model.ReviewDTO;
 import java.util.List;
 
 public interface ReviewService {
-    List<ReviewDTO> getReviews(Pagination pagination);
+    Pagination getLimitReviews(Integer page);
 
     void changeReviewsDisplay(List<Long> reviewsId);
 

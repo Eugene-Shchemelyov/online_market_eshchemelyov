@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Article</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <div th:replace="fragments/header :: header"></div>
+</head>
+<body>
+<table>
+    <tr>
+        <td>Article name:</td>
+        <td colspan="3"><span th:text="${article.name}"></span></td>
+    </tr>
+    <tr>
+        <td>Date</td>
+        <td>Author name</td>
+        <td>Author surname</td>
+        <td>Count views</td>
+    </tr>
+    <tr>
+        <td><span th:text="${article.date}"></span></td>
+        <td><span th:text="${article.user.name}"></span></td>
+        <td><span th:text="${article.user.surname}"></span></td>
+        <td><span th:text="${article.countViews}"></span></td>
+    </tr>
+    <tr>
+        <td>Article text:</td>
+        <td colspan="3"><span th:text="${article.text}"></span></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td colspan="3"><label>=======Comments=======</label></td>
+    </tr>
+    <tr th:each="comment,stat : ${article.comments}">
+        <td></td>
+        <td colspan="3">
+            <span th:text="${comment.user.name}"></span>
+            <span th:text="${comment.user.surname}"></span>
+            <span th:text="${comment.date}"></span><br>
+            <p><span th:text="${comment.text}"></span></p>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

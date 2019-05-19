@@ -4,17 +4,20 @@
 <body>
 <table th:fragment="header">
     <tr sec:authorize="isAuthenticated()">
-        <td sec:authorize="hasAuthority(
-        ${T(com.gmail.eugene.shchemelyov.market.service.constant.SecurityConstant).ADMINISTRATOR})">
+        <td sec:authorize="hasAuthority('Administrator')">
             <a th:href="@{/private/administrator/users}">Users</a>
         </td>
-        <td sec:authorize="hasAuthority(
-        ${T(com.gmail.eugene.shchemelyov.market.service.constant.SecurityConstant).ADMINISTRATOR})">
+        <td sec:authorize="hasAuthority('Administrator')">
             <a th:href="@{/private/administrator/users/add}">Add user</a>
         </td>
-        <td sec:authorize="hasAuthority(
-        ${T(com.gmail.eugene.shchemelyov.market.service.constant.SecurityConstant).ADMINISTRATOR})">
+        <td sec:authorize="hasAuthority('Administrator')">
             <a th:href="@{/private/administrator/reviews}">Reviews</a>
+        </td>
+        <td sec:authorize="hasAuthority('Customer User')">
+            <a th:href="@{/private/articles}">Articles</a>
+        </td>
+        <td sec:authorize="hasAuthority('Customer User')">
+            <a th:href="@{/private/profile}">Profile</a>
         </td>
         <td>
             <a th:href="@{/logout}">Logout</a>

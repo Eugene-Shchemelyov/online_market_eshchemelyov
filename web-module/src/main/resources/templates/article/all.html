@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Articles</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <div th:replace="fragments/header :: header"></div>
+</head>
+<body>
+<div th:replace="fragments/sort :: sortArticles"></div>
+<table th:each="article,stat : ${pagination.entities}">
+    <tr>
+        <td></td>
+        <td>Date</td>
+        <td>Article name</td>
+        <td>Author name</td>
+        <td>Author surname</td>
+        <td>Count views</td>
+        <td>Count comments</td>
+    </tr>
+    <tr>
+        <td><span th:text="${stat.count}"></span></td>
+        <td><span th:text="${article.date}"></span></td>
+        <td><span th:text="${article.name}"></span></td>
+        <td><span th:text="${article.user.name}"></span></td>
+        <td><span th:text="${article.user.surname}"></span></td>
+        <td><span th:text="${article.countViews}"></span></td>
+        <td><span th:text="${article.comments.size()}"></span></td>
+    </tr>
+    <tr>
+        <td colspan="7">
+            <a th:href="@{/private/articles/{id} (id=${article.id})}">
+                <span th:text="${article.annotation}"></span>
+            </a>
+        </td>
+    </tr>
+</table>
+<div th:replace="fragments/paginator :: articlePaginator"></div>
+</body>
+</html>

@@ -16,36 +16,29 @@
 <table>
     <tr>
         <td></td>
-        <td>Surname</td>
         <td>Name</td>
-        <td>Patronymic</td>
+        <td>Surname</td>
         <td>Email</td>
         <td>Role</td>
         <td>Update user</td>
         <td>Delete</td>
     </tr>
     <form action="#" th:action="@{/private/administrator/users/delete}" method="post">
-        <tr th:each="user,stat : ${users}">
+        <tr th:each="user,stat : ${pagination.entities}">
             <td><span th:text="${stat.count}"></span></td>
-            <td><span th:text="${user.surname}"></span></td>
             <td><span th:text="${user.name}"></span></td>
-            <td><span th:text="${user.patronymic}"></span></td>
+            <td><span th:text="${user.surname}"></span></td>
             <td><span th:text="${user.email}"></span></td>
-            <td><span th:text="${user.roleName}"></span></td>
+            <td><span th:text="${user.role.name}"></span></td>
             <td>
                 <a th:href="@{/private/administrator/users/update (id=${user.id})}">Edit</a>
             </td>
             <td>
-                <label><input type="checkbox" name="emails" th:value="${user.email}"/>delete</label>
+                <label><input type="checkbox" name="usersIds" th:value="${user.id}"/>delete</label>
             </td>
         </tr>
         <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td colspan="5"></td>
             <td>Delete selected users:</td>
             <td>
                 <button type="submit">Delete</button>

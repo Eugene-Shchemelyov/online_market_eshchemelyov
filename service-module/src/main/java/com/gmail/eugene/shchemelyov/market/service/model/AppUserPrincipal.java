@@ -15,12 +15,16 @@ public class AppUserPrincipal implements UserDetails {
     public AppUserPrincipal(UserDTO userDTO) {
         this.userDTO = userDTO;
         this.grantedAuthorities = new HashSet<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority(userDTO.getRoleName()));
+        grantedAuthorities.add(new SimpleGrantedAuthority(userDTO.getRole().getName()));
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return grantedAuthorities;
+    }
+
+    public Long getId() {
+        return userDTO.getId();
     }
 
     @Override

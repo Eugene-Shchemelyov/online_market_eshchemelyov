@@ -14,15 +14,13 @@ public class UserDTO {
     @Pattern(regexp = "[a-zA-Z]{0,20}")
     private String name;
     @NotNull
-    @Pattern(regexp = "[a-zA-Z]{0,40}")
-    private String patronymic;
-    @NotNull
     @Size(max = 50)
     @Email
     private String email;
+    @Pattern(regexp = "[a-zA-Z0-9]{8,30}")
     private String password;
-    @NotNull
-    private String roleName;
+    private RoleDTO role;
+    private ProfileDTO profile;
     private Boolean isDeleted;
 
     public Long getId() {
@@ -49,14 +47,6 @@ public class UserDTO {
         this.name = name;
     }
 
-    public String getPatronymic() {
-        return patronymic;
-    }
-
-    public void setPatronymic(String patronymic) {
-        this.patronymic = patronymic;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -73,12 +63,20 @@ public class UserDTO {
         this.password = password;
     }
 
-    public String getRoleName() {
-        return roleName;
+    public RoleDTO getRole() {
+        return role;
     }
 
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
+    public void setRole(RoleDTO role) {
+        this.role = role;
+    }
+
+    public ProfileDTO getProfile() {
+        return profile;
+    }
+
+    public void setProfile(ProfileDTO profile) {
+        this.profile = profile;
     }
 
     public Boolean isDeleted() {

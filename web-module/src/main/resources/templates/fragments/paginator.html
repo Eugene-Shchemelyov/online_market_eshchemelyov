@@ -15,5 +15,12 @@
         </td>
     </tr>
 </table>
+<table th:fragment="articlePaginator">
+    <tr>
+        <td th:each="page : ${#numbers.sequence(1, pagination.countPages)}">
+            <a th:href="@{/private/articles(page=${page}, sort=${pagination.sort})}" th:text="${page}"></a>
+        </td>
+    </tr>
+</table>
 </body>
 </html>

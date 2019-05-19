@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.Collection;
 
 import static com.gmail.eugene.shchemelyov.market.service.constant.SecurityConstant.ADMINISTRATOR;
+import static com.gmail.eugene.shchemelyov.market.service.constant.SecurityConstant.CUSTOMER_USER;
 
 public class AppUrlAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     private static final Logger logger = LoggerFactory.getLogger(AppUrlAuthenticationSuccessHandler.class);
@@ -54,6 +55,8 @@ public class AppUrlAuthenticationSuccessHandler implements AuthenticationSuccess
             switch (grantedAuthority.getAuthority()) {
                 case ADMINISTRATOR:
                     return "/private/administrator/users";
+                case CUSTOMER_USER:
+                    return "/private/articles";
             }
         }
         throw new IllegalStateException();

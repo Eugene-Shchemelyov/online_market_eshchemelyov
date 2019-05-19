@@ -1,16 +1,20 @@
 package com.gmail.eugene.shchemelyov.market.repository.model;
 
+import com.gmail.eugene.shchemelyov.market.repository.model.enums.SortEnum;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.gmail.eugene.shchemelyov.market.repository.constant.PaginationConstant.LIMIT_ON_PAGE;
 
-public class Pagination {
+public class Pagination<T> {
     private Integer currentPage;
     private Integer countPages;
     private Integer limitOnPage = LIMIT_ON_PAGE;
     private Integer startLimitPosition;
-   /* private List<ArticleDTO> articleDTOList = new Array
-    private List<UserDTO> articleDTOList = new Array
-    private List<ReviewDTO> articleDTOList = new Array*/
-    private Boolean isDeleted = false;
+    private List<T> entities = new ArrayList<>();
+    private SortEnum sort;
+    private boolean isDeleted = false;
 
     public Integer getCurrentPage() {
         return currentPage;
@@ -44,11 +48,27 @@ public class Pagination {
         this.startLimitPosition = startLimitPosition;
     }
 
-    public Boolean isDeleted() {
+    public List<T> getEntities() {
+        return entities;
+    }
+
+    public void setEntities(List<T> entities) {
+        this.entities = entities;
+    }
+
+    public SortEnum getSort() {
+        return sort;
+    }
+
+    public void setSort(SortEnum sort) {
+        this.sort = sort;
+    }
+
+    public boolean isDeleted() {
         return isDeleted;
     }
 
-    public void setDeleted(Boolean deleted) {
+    public void setDeleted(boolean deleted) {
         isDeleted = deleted;
     }
 }

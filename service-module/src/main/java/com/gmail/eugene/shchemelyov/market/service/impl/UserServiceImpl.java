@@ -7,6 +7,7 @@ import com.gmail.eugene.shchemelyov.market.repository.model.Pagination;
 import com.gmail.eugene.shchemelyov.market.repository.model.Role;
 import com.gmail.eugene.shchemelyov.market.repository.model.User;
 import com.gmail.eugene.shchemelyov.market.service.GeneratorService;
+import com.gmail.eugene.shchemelyov.market.service.PaginationService;
 import com.gmail.eugene.shchemelyov.market.service.UserService;
 import com.gmail.eugene.shchemelyov.market.service.converter.UserConverter;
 import com.gmail.eugene.shchemelyov.market.service.exception.ServiceException;
@@ -15,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -34,18 +36,21 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
     private final UserConverter userConverter;
     private final GeneratorService generatorService;
+    private final PaginationService paginationService;
 
     @Autowired
     public UserServiceImpl(
             UserRepository userRepository,
             RoleRepository roleRepository,
             UserConverter userConverter,
-            GeneratorService generatorService
+            GeneratorService generatorService,
+            PaginationService paginationService
     ) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.userConverter = userConverter;
         this.generatorService = generatorService;
+        this.paginationService = paginationService;
     }
 
     @Override
@@ -54,7 +59,7 @@ public class UserServiceImpl implements UserService {
             connection.setAutoCommit(false);
             try {
                 User user = userRepository.loadUserByEmail(connection, email);
-                UserDTO userDTO = getUserDTO(connection, user);
+                UserDTO userDTO = userConverter.toDTO(user);
                 connection.commit();
                 return userDTO;
             } catch (Exception e) {
@@ -71,185 +76,110 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO loadUserById(Long id) {
-        try (Connection connection = userRepository.getConnection()) {
-            connection.setAutoCommit(false);
-            try {
-                User user = userRepository.loadUserById(connection, id);
-                UserDTO userDTO = getUserDTO(connection, user);
-                connection.commit();
-                return userDTO;
-            } catch (Exception e) {
-                connection.rollback();
-                logger.error(e.getMessage(), e);
-                throw new ServiceException(String.format(
-                        "%s. %s: %d.", TRANSACTION_ERROR_MESSAGE, "When found the user with id", id), e);
-            }
-        } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw new ServiceException(String.format(
-                    "%s. %s: %d.", SERVICE_ERROR_MESSAGE, "When found the user with id", id), e);
-        }
+    @Transactional
+    public UserDTO getById(Long id) {
+        User user = userRepository.getById(id);
+        return userConverter.toDTO(user);
     }
 
     @Override
-    public List<UserDTO> getUsers(Pagination pagination) {
-        try (Connection connection = userRepository.getConnection()) {
-            connection.setAutoCommit(false);
-            try {
-                List<UserDTO> userDTOs = getUserDTOs(connection, pagination);
-                connection.commit();
-                return userDTOs;
-            } catch (Exception e) {
-                connection.rollback();
-                logger.error(e.getMessage(), e);
-                throw new ServiceException(String.format(
-                        "%s. %s.", TRANSACTION_ERROR_MESSAGE, "When found limit users"), e);
-            }
-        } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw new ServiceException(String.format(
-                    "%s. %s.", SERVICE_ERROR_MESSAGE, "When found limit users"), e);
-        }
-    }
-
-    @Override
-    public Integer deleteUsersByEmail(List<String> emails) {
-        try (Connection connection = userRepository.getConnection()) {
-            connection.setAutoCommit(false);
-            try {
-                Integer countDelete = deleteUsers(connection, emails);
-                connection.commit();
-                return countDelete;
-            } catch (Exception e) {
-                connection.rollback();
-                logger.error(e.getMessage(), e);
-                throw new ServiceException(String.format(
-                        "%s. %s: %s.", TRANSACTION_ERROR_MESSAGE, "When deleting users", emails.toString()), e);
-            }
-        } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw new ServiceException(String.format(
-                    "%s. %s: %s.", SERVICE_ERROR_MESSAGE, "When deleting users", emails.toString()), e);
-        }
-    }
-
-    @Override
-    public void update(UserDTO userDTO) {
-        try (Connection connection = userRepository.getConnection()) {
-            connection.setAutoCommit(false);
-            try {
-                updateUser(connection, userDTO);
-                connection.commit();
-            } catch (Exception e) {
-                connection.rollback();
-                logger.error(e.getMessage(), e);
-                throw new ServiceException(String.format("%s. %s: %d.",
-                        TRANSACTION_ERROR_MESSAGE, "When updating the user with id", userDTO.getId()), e);
-            }
-        } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw new ServiceException(String.format("%s. %s: %d.",
-                    SERVICE_ERROR_MESSAGE, "When updating the user with id", userDTO.getId()), e);
-        }
-    }
-
-    @Override
-    public void changePassword(Long id) {
-        try (Connection connection = userRepository.getConnection()) {
-            connection.setAutoCommit(false);
-            try {
-                User user = new User();
-                user.setId(id);
-                user.setPassword(generatorService.getRandomPassword(PASSWORD_LENGTH));
-                userRepository.updatePassword(connection, user);
-                connection.commit();
-            } catch (Exception e) {
-                connection.rollback();
-                logger.error(e.getMessage(), e);
-                throw new ServiceException(String.format(
-                        "%s. %s: %d.", TRANSACTION_ERROR_MESSAGE, "When changing the user password with id", id), e);
-            }
-        } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw new ServiceException(String.format(
-                    "%s. %s: %d.", SERVICE_ERROR_MESSAGE, "When changing the user password with id", id), e);
-        }
-    }
-
-    @Override
-    public void add(UserDTO userDTO) {
-        try (Connection connection = userRepository.getConnection()) {
-            connection.setAutoCommit(false);
-            try {
-                User user = getUser(connection, userDTO);
-                user.setDeleted(false);
-                user.setPassword(generatorService.getRandomPassword(PASSWORD_LENGTH));
-                userRepository.add(connection, user);
-                connection.commit();
-            } catch (Exception e) {
-                connection.rollback();
-                logger.error(e.getMessage(), e);
-                throw new ServiceException(String.format(
-                        "%s. %s.", TRANSACTION_ERROR_MESSAGE, "When adding the user"), e);
-            }
-        } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw new ServiceException(String.format(
-                    "%s. %s.", SERVICE_ERROR_MESSAGE, "When adding the user"), e);
-        }
-    }
-
-    private List<UserDTO> getUserDTOs(Connection connection, Pagination pagination) {
-        Integer startLimitPosition = (pagination.getCurrentPage() - 1) * pagination.getLimitOnPage();
-        pagination.setStartLimitPosition(startLimitPosition);
-        List<User> users = userRepository.getLimitUsers(connection, pagination);
-        return users.stream()
-                .map(user -> getUserDTO(connection, user))
+    @Transactional
+    public Pagination getLimitUsers(Integer page) {
+        Pagination pagination = paginationService.getUserPagination(page);
+        List<User> users = userRepository.getLimitUsers(pagination);
+        List<UserDTO> userDTOS = users.stream()
+                .map(userConverter::toDTO)
                 .collect(Collectors.toList());
+        pagination.setEntities(userDTOS);
+        return pagination;
     }
 
-    private UserDTO getUserDTO(Connection connection, User user) {
-        Long roleId = user.getRole().getId();
-        Role role = roleRepository.getRoleById(connection, roleId);
-        user.setRole(role);
-        return userConverter.toUserDTO(user);
-    }
-
-    private User getUser(Connection connection, UserDTO userDTO) {
-        Role role = roleRepository.getRoleByName(connection, userDTO.getRoleName());
-        return userConverter.toUser(userDTO, role);
-    }
-
-    private Integer deleteUsers(Connection connection, List<String> emails) {
-        Integer countDeletedUsers = 0;
-        for (String email : emails) {
-            if (roleRepository.getRoleNameByUserEmail(connection, email).equals(ADMINISTRATOR)) {
-                if (userRepository.getCountUsersWithRole(connection, ADMINISTRATOR, false) > COUNT_ADMINISTRATORS) {
-                    countDeletedUsers += userRepository.deleteByEmail(connection, email, true);
-                } else {
-                    logger.error("You can't delete the last administrator.");
-                    throw new ExpectedException("You can't delete the last administrator.");
-                }
+    @Override
+    @Transactional
+    public void deleteUsersById(List<Long> usersIds) {
+        Integer countDeletedAdministrators = 0;
+        for (Long userId : usersIds) {
+            User user = userRepository.getById(userId);
+            if (user.getRole().getName().equals(ADMINISTRATOR)) {
+                countDeletedAdministrators++;
+            }
+            if (user.getRole().getName().equals(ADMINISTRATOR) &&
+                    getCountUserWithRole(ADMINISTRATOR).equals(countDeletedAdministrators)) {
+                logger.error("You can't delete the last administrator.");
+                throw new ExpectedException("You can't delete the last administrator.");
             } else {
-                countDeletedUsers += userRepository.deleteByEmail(connection, email, true);
+                userRepository.delete(user);
             }
         }
-        return countDeletedUsers;
     }
 
-    private void updateUser(Connection connection, UserDTO userDTO) {
-        User user = getUser(connection, userDTO);
-        String roleName = roleRepository.getRoleNameByUserId(connection, user.getId());
-        if (roleName.equals(ADMINISTRATOR) && !userDTO.getRoleName().equals(ADMINISTRATOR)) {
-            if (userRepository.getCountUsersWithRole(connection, ADMINISTRATOR, false) > COUNT_ADMINISTRATORS) {
-                userRepository.update(connection, user);
-            } else {
-                logger.error("You can't lower privileges to the last administrator.");
-                throw new ExpectedException("You can't lower privileges to the last administrator.");
-            }
+    @Override
+    @Transactional
+    public void update(UserDTO userDTO) {
+        User user = userRepository.getById(userDTO.getId());
+        Role role = roleRepository.getById(userDTO.getRole().getId());
+        if (user.getRole().getName().equals(ADMINISTRATOR) &&
+                !role.getName().equals(ADMINISTRATOR) &&
+                (getCountUserWithRole(ADMINISTRATOR) <= COUNT_ADMINISTRATORS)) {
+            logger.error("You can't lower privileges to the last administrator.");
+            throw new ExpectedException("You can't lower privileges to the last administrator.");
         } else {
-            userRepository.update(connection, user);
+            if (userDTO.getName() != null) {
+                user.setName(userDTO.getName());
+            }
+            if (userDTO.getSurname() != null) {
+                user.setSurname(userDTO.getSurname());
+            }
+            if (userDTO.getPassword() != null) {
+                user.setPassword(userDTO.getPassword());
+            }
+            if (userDTO.getProfile().getAddress() != null) {
+                user.getProfile().setAddress(userDTO.getProfile().getAddress());
+            }
+            if (userDTO.getProfile().getPhone() != null) {
+                user.getProfile().setPhone(userDTO.getProfile().getPhone());
+            }
+            user.setRole(role);
+            userRepository.update(user);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void changePasswordById(Long id) {
+        User user = userRepository.getById(id);
+        user.setPassword(generatorService.getRandomPassword(PASSWORD_LENGTH));
+        userRepository.update(user);
+    }
+
+    @Override
+    @Transactional
+    public void add(UserDTO userDTO) {
+        userDTO.setDeleted(false);
+        User user = userConverter.toEntity(userDTO);
+        if (user.getPassword() == null) {
+            user.setPassword(generatorService.getRandomPassword(PASSWORD_LENGTH));
+        }
+        userRepository.create(user);
+    }
+
+    private Integer getCountUserWithRole(String roleName) {
+        try (Connection connection = userRepository.getConnection()) {
+            connection.setAutoCommit(false);
+            try {
+                Integer countUsersWithRole = userRepository.getCountUsersWithRole(connection, roleName, false);
+                connection.commit();
+                return countUsersWithRole;
+            } catch (Exception e) {
+                connection.rollback();
+                logger.error(e.getMessage(), e);
+                throw new ServiceException(String.format("%s. %s: %s.",
+                        TRANSACTION_ERROR_MESSAGE, "When getting count users with role", roleName), e);
+            }
+        } catch (SQLException e) {
+            logger.error(e.getMessage(), e);
+            throw new ServiceException(String.format("%s. %s %s.",
+                    SERVICE_ERROR_MESSAGE, "When getting count users with role", roleName), e);
         }
     }
 }

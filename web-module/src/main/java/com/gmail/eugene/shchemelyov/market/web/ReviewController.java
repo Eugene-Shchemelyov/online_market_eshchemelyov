@@ -1,9 +1,7 @@
 package com.gmail.eugene.shchemelyov.market.web;
 
 import com.gmail.eugene.shchemelyov.market.repository.model.Pagination;
-import com.gmail.eugene.shchemelyov.market.service.PaginationService;
 import com.gmail.eugene.shchemelyov.market.service.ReviewService;
-import com.gmail.eugene.shchemelyov.market.service.model.ReviewDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,15 +14,10 @@ import java.util.List;
 @Controller
 public class ReviewController {
     private final ReviewService reviewService;
-    private final PaginationService paginationService;
 
     @Autowired
-    public ReviewController(
-            ReviewService reviewService,
-            PaginationService paginationService
-    ) {
+    public ReviewController(ReviewService reviewService) {
         this.reviewService = reviewService;
-        this.paginationService = paginationService;
     }
 
     @GetMapping("/private/administrator/reviews")
@@ -33,9 +26,7 @@ public class ReviewController {
             @RequestParam(value = "message", required = false) Boolean message,
             @RequestParam(value = "page", defaultValue = "1", required = false) Integer page
     ) {
-        Pagination pagination = paginationService.getReviewPagination(page);
-        List<ReviewDTO> reviews = reviewService.getReviews(pagination);
-        model.addAttribute("reviews", reviews);
+        Pagination pagination = reviewService.getLimitReviews(page);
         model.addAttribute("pagination", pagination);
         model.addAttribute("message", message);
         return "review/allForAdministrator";
