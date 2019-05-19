@@ -7,6 +7,9 @@ public class Pagination {
     private Integer countPages;
     private Integer limitOnPage = LIMIT_ON_PAGE;
     private Integer startLimitPosition;
+   /* private List<ArticleDTO> articleDTOList = new Array
+    private List<UserDTO> articleDTOList = new Array
+    private List<ReviewDTO> articleDTOList = new Array*/
     private Boolean isDeleted = false;
 
     public Integer getCurrentPage() {
