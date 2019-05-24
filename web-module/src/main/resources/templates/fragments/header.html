@@ -5,19 +5,25 @@
 <table th:fragment="header">
     <tr sec:authorize="isAuthenticated()">
         <td sec:authorize="hasAuthority('Administrator')">
-            <a th:href="@{/private/administrator/users}">Users</a>
+            <a th:href="@{/private/users}">Users</a>
         </td>
         <td sec:authorize="hasAuthority('Administrator')">
-            <a th:href="@{/private/administrator/users/add}">Add user</a>
+            <a th:href="@{/private/users/new}">New user</a>
         </td>
         <td sec:authorize="hasAuthority('Administrator')">
-            <a th:href="@{/private/administrator/reviews}">Reviews</a>
+            <a th:href="@{/private/reviews}">Reviews</a>
         </td>
-        <td sec:authorize="hasAuthority('Customer User')">
+        <td sec:authorize="hasAnyAuthority('Customer User','Sale User')">
             <a th:href="@{/private/articles}">Articles</a>
         </td>
         <td sec:authorize="hasAuthority('Customer User')">
             <a th:href="@{/private/profile}">Profile</a>
+        </td>
+        <td sec:authorize="hasAuthority('Sale User')">
+            <a th:href="@{/private/articles/article/new}">New article</a>
+        </td>
+        <td sec:authorize="hasAuthority('Sale User')">
+            <a th:href="@{/private/items}">Items</a>
         </td>
         <td>
             <a th:href="@{/logout}">Logout</a>

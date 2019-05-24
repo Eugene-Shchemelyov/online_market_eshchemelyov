@@ -1,8 +1,8 @@
 package com.gmail.eugene.shchemelyov.market.web;
 
-import com.gmail.eugene.shchemelyov.market.service.UserService;
+import com.gmail.eugene.shchemelyov.market.service.AddUpdateUserService;
+import com.gmail.eugene.shchemelyov.market.service.model.AddUpdateUserDTO;
 import com.gmail.eugene.shchemelyov.market.service.model.AppUserPrincipal;
-import com.gmail.eugene.shchemelyov.market.service.model.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,15 +19,15 @@ import javax.validation.Valid;
 @Controller
 public class ProfileController {
     private final PasswordEncoder passwordEncoder;
-    private final UserService userService;
+    private final AddUpdateUserService addUpdateUserService;
 
     @Autowired
     public ProfileController(
             PasswordEncoder passwordEncoder,
-            UserService userService
+            AddUpdateUserService addUpdateUserService
     ) {
         this.passwordEncoder = passwordEncoder;
-        this.userService = userService;
+        this.addUpdateUserService = addUpdateUserService;
     }
 
     @GetMapping("/private/profile")
@@ -37,8 +37,8 @@ public class ProfileController {
         AppUserPrincipal appUserPrincipal =
                 (AppUserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long userId = appUserPrincipal.getId();
-        UserDTO userDTO = userService.getById(userId);
-        model.addAttribute("user", userDTO);
+        AddUpdateUserDTO addUpdateUserDTO = addUpdateUserService.getById(userId);
+        model.addAttribute("user", addUpdateUserDTO);
         return "profile";
     }
 
@@ -47,7 +47,7 @@ public class ProfileController {
             Model model,
             @RequestParam(value = "oldPassword", required = false) String oldPassword,
             @RequestParam(value = "newPassword", required = false) String newPassword,
-            @Valid @ModelAttribute("user") UserDTO userDTO,
+            @Valid @ModelAttribute("user") AddUpdateUserDTO addUpdateUserDTO,
             BindingResult bindingResult
     ) {
         if (bindingResult.hasErrors()) {
@@ -58,13 +58,13 @@ public class ProfileController {
         if (!(oldPassword.trim().isEmpty() && newPassword.trim().isEmpty())) {
             if (newPassword.matches("[a-zA-Z0-9]{8,30}") &&
                     passwordEncoder.matches(oldPassword, appUserPrincipal.getPassword())) {
-                userDTO.setPassword(passwordEncoder.encode(newPassword));
+                addUpdateUserDTO.setPassword(passwordEncoder.encode(newPassword));
             } else {
                 model.addAttribute("passwordError", true);
                 return "profile";
             }
         }
-        userService.update(userDTO);
+        addUpdateUserService.update(addUpdateUserDTO);
         return "redirect:/private/profile";
     }
 }

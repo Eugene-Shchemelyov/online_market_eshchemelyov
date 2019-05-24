@@ -7,9 +7,6 @@
     <div th:replace="fragments/header :: header"></div>
 </head>
 <body>
-<div th:if="${countDeletedUsers!=null}">
-    Users delete: <span th:text="${countDeletedUsers}"></span>!
-</div>
 <div th:if="${update}">
     User updated!
 </div>
@@ -23,7 +20,7 @@
         <td>Update user</td>
         <td>Delete</td>
     </tr>
-    <form action="#" th:action="@{/private/administrator/users/delete}" method="post">
+    <form action="#" th:action="@{/private/users/delete}" method="post">
         <tr th:each="user,stat : ${pagination.entities}">
             <td><span th:text="${stat.count}"></span></td>
             <td><span th:text="${user.name}"></span></td>
@@ -31,7 +28,7 @@
             <td><span th:text="${user.email}"></span></td>
             <td><span th:text="${user.role.name}"></span></td>
             <td>
-                <a th:href="@{/private/administrator/users/update (id=${user.id})}">Edit</a>
+                <a th:href="@{/private/users/{id}/update (id=${user.id})}">Edit</a>
             </td>
             <td>
                 <label><input type="checkbox" name="usersIds" th:value="${user.id}"/>delete</label>

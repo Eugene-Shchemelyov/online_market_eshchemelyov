@@ -1,6 +1,5 @@
 package com.gmail.eugene.shchemelyov.market.repository;
 
-import java.sql.Connection;
 import java.util.List;
 
 public interface GenericRepository<I, T> {
@@ -10,6 +9,8 @@ public interface GenericRepository<I, T> {
 
     void delete(T entity);
 
+    void detach(T entity);
+
     T getById(I id);
 
     void deleteById(I id);
@@ -17,6 +18,4 @@ public interface GenericRepository<I, T> {
     List<T> getAllEntities();
 
     Integer getCountOfEntities();
-
-    Connection getConnection();
 }

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Item</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <div th:replace="fragments/header :: header"></div>
+</head>
+<body>
+<table>
+    <tr>
+        <td>Name</td>
+        <td>Unique number</td>
+        <td>Price</td>
+    </tr>
+    <tr>
+        <td><span th:text="${item.name}"></span></td>
+        <td><span th:text="${item.uniqueNumber}"></span></td>
+        <td><span th:text="${item.price}"></span></td>
+    </tr>
+    <tr>
+        <td>Description:</td>
+        <td colspan="2"><span th:text="${item.description}"></span></td>
+    </tr>
+</table>
+</body>
+</html>

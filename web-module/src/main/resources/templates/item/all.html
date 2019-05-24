@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Items</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <div th:replace="fragments/header :: header"></div>
+</head>
+<body>
+<table>
+    <tr>
+        <td></td>
+        <td>Name</td>
+        <td>Unique number</td>
+        <td>Price</td>
+        <td>More</td>
+        <td>Copy</td>
+        <td>Delete</td>
+    </tr>
+    <tr th:each="item,stat : ${pagination.entities}">
+        <td><span th:text="${stat.count}"></span></td>
+        <td><span th:text="${item.name}"></span></td>
+        <td><span th:text="${item.uniqueNumber}"></span></td>
+        <td><span th:text="${item.price}"></span></td>
+        <td>
+            <a th:href="@{/private/items/{id} (id=${item.id})}">More</a>
+        </td>
+        <td>
+            <a th:href="@{/private/items/{id}/copy (id=${item.id})}">Copy</a>
+        </td>
+        <td>
+            <a th:href="@{/private/items/{id}/delete (id=${item.id})}">Delete</a>
+        </td>
+    </tr>
+</table>
+<div th:replace="fragments/paginator :: itemPaginator"></div>
+</body>
+</html>

@@ -11,7 +11,12 @@ import static org.mockito.Mockito.when;
 public class PaginationServiceTest extends GenericServiceTest {
     @Before
     public void initialize() {
-        paginationService = new PaginationServiceImpl(userRepository, reviewRepository, articleRepository);
+        paginationService = new PaginationServiceImpl(
+                userRepository,
+                reviewRepository,
+                articleRepository,
+                itemRepository
+        );
         pagination.setCurrentPage(1);
         pagination.setCountPages(5);
         pagination.setStartLimitPosition(0);

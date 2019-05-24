@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
 public class ExpectedExceptionHandler {
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(ExpectedException.class)
     public String defaultErrorHandler(
             HttpServletRequest httpServletRequest,
             ExpectedException e

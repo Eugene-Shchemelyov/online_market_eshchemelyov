@@ -24,7 +24,6 @@ public class ReviewConverterImpl implements ReviewConverter {
         reviewDTO.setText(review.getText());
         reviewDTO.setDate(review.getDate());
         reviewDTO.setDisplay(review.isDisplay());
-        reviewDTO.setDeleted(review.isDeleted());
         return reviewDTO;
     }
 
@@ -36,7 +35,6 @@ public class ReviewConverterImpl implements ReviewConverter {
         review.setText(reviewDTO.getText());
         review.setDate(reviewDTO.getDate());
         review.setDisplay(reviewDTO.isDisplay());
-        review.setDeleted(reviewDTO.isDeleted());
         return review;
     }
 }

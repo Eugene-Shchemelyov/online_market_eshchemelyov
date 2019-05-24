@@ -9,4 +9,6 @@ public interface PaginationService {
     Pagination getReviewPagination(Integer page);
 
     Pagination getArticlePagination(Integer page, SortEnum sort);
+
+    Pagination getItemPagination(Integer page);
 }

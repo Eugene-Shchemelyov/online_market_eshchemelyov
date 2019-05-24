@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title>Article</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -27,13 +28,18 @@
     <tr>
         <td>Article text:</td>
         <td colspan="3"><span th:text="${article.text}"></span></td>
+        <td sec:authorize="hasAuthority('Sale User')">
+            <a th:href="@{/private/articles/{id}/update (id=${article.id})}">Edit</a>
+        </td>
     </tr>
     <tr>
         <td></td>
         <td colspan="3"><label>=======Comments=======</label></td>
     </tr>
     <tr th:each="comment,stat : ${article.comments}">
-        <td></td>
+        <td sec:authorize="hasAuthority('Sale User')" align="middle" valign="top">
+            <a th:href="@{/private/comments/{id}/delete (id=${comment.id}, articleId=${article.id})}">Delete</a>
+        </td>
         <td colspan="3">
             <span th:text="${comment.user.name}"></span>
             <span th:text="${comment.user.surname}"></span>

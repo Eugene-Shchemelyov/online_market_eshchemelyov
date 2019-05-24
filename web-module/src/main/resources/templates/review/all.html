@@ -10,7 +10,7 @@
 <div th:if="${message}">
     Review deleted!
 </div>
-<form action="#" th:action="@{/private/administrator/reviews/display}" method="post">
+<form action="#" th:action="@{/private/reviews/display}" method="post">
     <table th:each="review,stat : ${pagination.entities}">
         <tr>
             <td></td>
@@ -31,7 +31,7 @@
                 <label><input type="checkbox" name="reviewsId" th:value="${review.id}"/>change</label>
             </td>
             <td>
-                <a th:href="@{/private/administrator/reviews/delete (id=${review.id})}">delete</a>
+                <a th:href="@{/private/reviews/{id}/delete (id=${review.id})}">delete</a>
             </td>
         </tr>
         <tr>

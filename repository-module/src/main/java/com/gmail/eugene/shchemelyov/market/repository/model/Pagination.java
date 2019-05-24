@@ -14,7 +14,6 @@ public class Pagination<T> {
     private Integer startLimitPosition;
     private List<T> entities = new ArrayList<>();
     private SortEnum sort;
-    private boolean isDeleted = false;
 
     public Integer getCurrentPage() {
         return currentPage;
@@ -62,13 +61,5 @@ public class Pagination<T> {
 
     public void setSort(SortEnum sort) {
         this.sort = sort;
-    }
-
-    public boolean isDeleted() {
-        return isDeleted;
-    }
-
-    public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
     }
 }

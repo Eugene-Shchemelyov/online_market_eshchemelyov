@@ -38,7 +38,7 @@ public class Article {
     private String annotation;
     @Column(name = "F_TEXT")
     private String text;
-    @Column(name = "F_COUNT_VIEW")
+    @Column(name = "F_COUNT_VIEWS")
     private Long countViews;
     @OneToMany(
             fetch = FetchType.LAZY,

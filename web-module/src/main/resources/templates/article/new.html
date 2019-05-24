@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>New article</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <div th:replace="fragments/header :: header"></div>
+</head>
+<body>
+<form action="#" th:action="@{/private/articles/article/new}" th:object="${article}" method="post">
+    <table>
+        <tr>
+            <td>Article name:</td>
+            <td colspan="3"><textarea cols="50" rows="2" th:field="*{name}"></textarea></td>
+            <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</td>
+        </tr>
+        <tr>
+            <td>Date:</td>
+            <td colspan="3">
+                <input type="datetime-local" th:field="*{date}">
+            </td>
+        </tr>
+        <tr>
+            <td>Article annotation:</td>
+            <td colspan="3"><textarea cols="50" rows="4" th:field="*{annotation}">max</textarea></td>
+            <td th:if="${#fields.hasErrors('annotation')}" th:errors="*{annotation}">Annotation Error</td>
+        </tr>
+        <tr>
+            <td>Article text:</td>
+            <td colspan="3"><textarea cols="50" rows="20" th:field="*{text}" text="max"></textarea></td>
+            <td th:if="${#fields.hasErrors('text')}" th:errors="*{text}">Text Error</td>
+        </tr>
+        <tr>
+            <td colspan="4" align="middle">
+                <button type="submit">Create article</button>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

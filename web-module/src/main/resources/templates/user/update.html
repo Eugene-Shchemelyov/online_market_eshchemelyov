@@ -11,7 +11,7 @@
     Message send to email!
 </div>
 <table>
-    <form action="#" th:action="@{/private/administrator/users/update (id=*{id})}" th:object="${user}" method="post">
+    <form action="#" th:action="@{/private/users/{id}/update (id=*{id})}" th:object="${user}" method="post">
         <tr>
             <td>Name:</td>
             <td><span th:text="*{name}"></span></td>
@@ -25,14 +25,21 @@
             <td th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}">Surname Error</td>
         </tr>
         <tr>
+            <td>Email:</td>
+            <td><span th:text="*{email}"></span></td>
+            <input type="hidden" th:field="*{email}" th:value="*{email}"/>
+        </tr>
+        <tr>
             <td>Address:</td>
-            <td><span th:text="*{profile.address}"></span></td>
-            <td><input type="text" th:field="*{profile.address}" th:value="*{profile.address}"/></td>
+            <td><span th:text="*{address}"></span></td>
+            <td><input type="text" th:field="*{address}" th:value="*{address}"/></td>
+            <td th:if="${#fields.hasErrors('address')}" th:errors="*{address}">Address Error</td>
         </tr>
         <tr>
             <td>Phone:</td>
-            <td><span th:text="*{profile.phone}"></span></td>
-            <td><input type="text" th:field="*{profile.phone}" th:value="*{profile.phone}"/></td>
+            <td><span th:text="*{phone}"></span></td>
+            <td><input type="text" th:field="*{phone}" th:value="*{phone}"/></td>
+            <td th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}">Phone Error</td>
         </tr>
         <tr>
             <td>Role:</td>
@@ -50,9 +57,8 @@
                 <button type="submit">Update user</button>
             </td>
         </tr>
-        <input type="hidden" th:field="*{email}" th:value="*{email}"/>
     </form>
-    <form action="#" th:action="@{/private/administrator/users/message (id=${user.id})}" method="post">
+    <form action="#" th:action="@{/private/users/{id}/password (id=${user.id})}" method="post">
         <tr>
             <td>
                 <button type="submit">Change password</button>

@@ -18,8 +18,10 @@ public class RoleConverterImpl implements RoleConverter {
     @Override
     public Role toEntity(RoleDTO roleDTO) {
         Role role = new Role();
-        role.setId(roleDTO.getId());
-        role.setName(roleDTO.getName());
+        if (roleDTO != null) {
+            role.setId(roleDTO.getId());
+            role.setName(roleDTO.getName());
+        }
         return role;
     }
 }

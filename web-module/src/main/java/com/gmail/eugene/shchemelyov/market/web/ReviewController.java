@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -20,7 +21,7 @@ public class ReviewController {
         this.reviewService = reviewService;
     }
 
-    @GetMapping("/private/administrator/reviews")
+    @GetMapping("/private/reviews")
     public String showReviews(
             Model model,
             @RequestParam(value = "message", required = false) Boolean message,
@@ -29,24 +30,24 @@ public class ReviewController {
         Pagination pagination = reviewService.getLimitReviews(page);
         model.addAttribute("pagination", pagination);
         model.addAttribute("message", message);
-        return "review/allForAdministrator";
+        return "review/all";
     }
 
-    @PostMapping("/private/administrator/reviews/display")
+    @PostMapping("/private/reviews/display")
     public String changeViewReviews(
             @RequestParam(value = "reviewsId", required = false) List<Long> reviewsId
     ) {
         if (reviewsId != null) {
             reviewService.changeReviewsDisplay(reviewsId);
         }
-        return "redirect:/private/administrator/reviews";
+        return "redirect:/private/reviews";
     }
 
-    @GetMapping("/private/administrator/reviews/delete")
+    @GetMapping("/private/reviews/{id}/delete")
     public String deleteReviews(
-            @RequestParam(value = "id") Long id
+            @PathVariable(value = "id") Long id
     ) {
         reviewService.delete(id);
-        return "redirect:/private/administrator/reviews?message=true";
+        return "redirect:/private/reviews?message=true";
     }
 }

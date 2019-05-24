@@ -1,6 +1,7 @@
 package com.gmail.eugene.shchemelyov.market.service.impl;
 
 import com.gmail.eugene.shchemelyov.market.repository.ArticleRepository;
+import com.gmail.eugene.shchemelyov.market.repository.ItemRepository;
 import com.gmail.eugene.shchemelyov.market.repository.ReviewRepository;
 import com.gmail.eugene.shchemelyov.market.repository.UserRepository;
 import com.gmail.eugene.shchemelyov.market.repository.model.Pagination;
@@ -16,16 +17,19 @@ public class PaginationServiceImpl implements PaginationService {
     private final UserRepository userRepository;
     private final ReviewRepository reviewRepository;
     private final ArticleRepository articleRepository;
+    private final ItemRepository itemRepository;
 
     @Autowired
     public PaginationServiceImpl(
             UserRepository userRepository,
             ReviewRepository reviewRepository,
-            ArticleRepository articleRepository
+            ArticleRepository articleRepository,
+            ItemRepository itemRepository
     ) {
         this.userRepository = userRepository;
         this.reviewRepository = reviewRepository;
         this.articleRepository = articleRepository;
+        this.itemRepository = itemRepository;
     }
 
     @Override
@@ -46,6 +50,12 @@ public class PaginationServiceImpl implements PaginationService {
         Pagination pagination = getPagination(countEntities, page);
         pagination.setSort(sort);
         return pagination;
+    }
+
+    @Override
+    public Pagination getItemPagination(Integer page) {
+        Integer countEntities = itemRepository.getCountOfEntities();
+        return getPagination(countEntities, page);
     }
 
     private Pagination getPagination(Integer countEntities, Integer page) {

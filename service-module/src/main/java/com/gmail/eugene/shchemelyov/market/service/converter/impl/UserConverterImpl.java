@@ -1,7 +1,6 @@
 package com.gmail.eugene.shchemelyov.market.service.converter.impl;
 
 import com.gmail.eugene.shchemelyov.market.repository.model.User;
-import com.gmail.eugene.shchemelyov.market.service.converter.ProfileConverter;
 import com.gmail.eugene.shchemelyov.market.service.converter.RoleConverter;
 import com.gmail.eugene.shchemelyov.market.service.converter.UserConverter;
 import com.gmail.eugene.shchemelyov.market.service.model.UserDTO;
@@ -11,15 +10,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserConverterImpl implements UserConverter {
     private final RoleConverter roleConverter;
-    private final ProfileConverter profileConverter;
 
     @Autowired
-    public UserConverterImpl(
-            RoleConverter roleConverter,
-            ProfileConverter profileConverter
-    ) {
+    public UserConverterImpl(RoleConverter roleConverter) {
         this.roleConverter = roleConverter;
-        this.profileConverter = profileConverter;
     }
 
     @Override
@@ -32,7 +26,6 @@ public class UserConverterImpl implements UserConverter {
         userDTO.setPassword(user.getPassword());
         userDTO.setRole(roleConverter.toDTO(user.getRole()));
         userDTO.setDeleted(user.isDeleted());
-        userDTO.setProfile(profileConverter.toDTO(user.getProfile(), userDTO));
         return userDTO;
     }
 
@@ -46,7 +39,6 @@ public class UserConverterImpl implements UserConverter {
         user.setPassword(userDTO.getPassword());
         user.setRole(roleConverter.toEntity(userDTO.getRole()));
         user.setDeleted(userDTO.isDeleted());
-        user.setProfile(profileConverter.toEntity(userDTO.getProfile(), user));
         return user;
     }
 }

@@ -16,7 +16,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 
 import static com.gmail.eugene.shchemelyov.market.service.constant.SecurityConstant.ADMINISTRATOR;
 import static com.gmail.eugene.shchemelyov.market.service.constant.SecurityConstant.CUSTOMER_USER;
-import static com.gmail.eugene.shchemelyov.market.service.constant.SecurityConstant.SECURE_REST_API;
+import static com.gmail.eugene.shchemelyov.market.service.constant.SecurityConstant.SALE_USER;
 
 @Configuration
 public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
@@ -56,15 +56,17 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/private/administrator/**")
+                .antMatchers("/private/users/**", "/private/reviews/**")
                 .hasAuthority(ADMINISTRATOR)
-                .antMatchers(
-                        "/private/article",
-                        "/private/articles/**",
-                        "/private/profile",
-                        "/private/profile/**"
-                )
+                .antMatchers("/private/profile/**")
                 .hasAuthority(CUSTOMER_USER)
+                .antMatchers("/private/articles", "/private/articles/*")
+                .hasAnyAuthority(CUSTOMER_USER, SALE_USER)
+                .antMatchers(
+                        "/private/comments/**",
+                        "/private/articles/*/*",
+                        "/private/items/**")
+                .hasAuthority(SALE_USER)
                 .antMatchers("/", "/403", "/login", "/public/**")
                 .permitAll()
                 .and()

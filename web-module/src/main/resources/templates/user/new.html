@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Add user</title>
+    <title>New user</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <div th:replace="fragments/header :: header"></div>
 </head>
 <body>
-<form action="#" th:action="@{/private/administrator/users/add}" th:object="${user}" method="post">
+<form action="#" th:action="@{/private/users/new}" th:object="${user}" method="post">
     <table>
         <tr>
             <td>Name:</td>
@@ -26,13 +26,13 @@
         </tr>
         <tr>
             <td>Address:</td>
-            <td><input type="text" th:field="*{profile.address}"/></td>
-            <td th:if="${#fields.hasErrors('profile.address')}" th:errors="*{profile.address}">Address Error</td>
+            <td><input type="text" th:field="*{address}"/></td>
+            <td th:if="${#fields.hasErrors('address')}" th:errors="*{address}">Address Error</td>
         </tr>
         <tr>
             <td>Phone:</td>
-            <td><input type="text" th:field="*{profile.phone}"/></td>
-            <td th:if="${#fields.hasErrors('profile.phone')}" th:errors="*{profile.phone}">Phone Error</td>
+            <td><input type="text" th:field="*{phone}"/></td>
+            <td th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}">Phone Error</td>
         </tr>
         <tr>
             <td>Role:</td>

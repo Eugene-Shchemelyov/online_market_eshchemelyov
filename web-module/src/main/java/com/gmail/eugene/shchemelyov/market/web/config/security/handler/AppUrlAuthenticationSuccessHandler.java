@@ -17,6 +17,7 @@ import java.util.Collection;
 
 import static com.gmail.eugene.shchemelyov.market.service.constant.SecurityConstant.ADMINISTRATOR;
 import static com.gmail.eugene.shchemelyov.market.service.constant.SecurityConstant.CUSTOMER_USER;
+import static com.gmail.eugene.shchemelyov.market.service.constant.SecurityConstant.SALE_USER;
 
 public class AppUrlAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     private static final Logger logger = LoggerFactory.getLogger(AppUrlAuthenticationSuccessHandler.class);
@@ -54,8 +55,10 @@ public class AppUrlAuthenticationSuccessHandler implements AuthenticationSuccess
         for (GrantedAuthority grantedAuthority : authorities) {
             switch (grantedAuthority.getAuthority()) {
                 case ADMINISTRATOR:
-                    return "/private/administrator/users";
+                    return "/private/users";
                 case CUSTOMER_USER:
+                    return "/private/articles";
+                case SALE_USER:
                     return "/private/articles";
             }
         }

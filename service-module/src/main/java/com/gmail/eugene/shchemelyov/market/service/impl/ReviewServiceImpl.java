@@ -33,6 +33,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional
+    @SuppressWarnings("unchecked")
     public Pagination getLimitReviews(Integer page) {
         Pagination pagination = paginationService.getReviewPagination(page);
         List<Review> reviews = reviewRepository.getLimitReviews(pagination);

@@ -20,7 +20,6 @@ public class UserDTO {
     @Pattern(regexp = "[a-zA-Z0-9]{8,30}")
     private String password;
     private RoleDTO role;
-    private ProfileDTO profile;
     private Boolean isDeleted;
 
     public Long getId() {
@@ -69,14 +68,6 @@ public class UserDTO {
 
     public void setRole(RoleDTO role) {
         this.role = role;
-    }
-
-    public ProfileDTO getProfile() {
-        return profile;
-    }
-
-    public void setProfile(ProfileDTO profile) {
-        this.profile = profile;
     }
 
     public Boolean isDeleted() {
