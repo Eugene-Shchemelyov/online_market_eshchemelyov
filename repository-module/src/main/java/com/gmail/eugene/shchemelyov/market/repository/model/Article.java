@@ -29,16 +29,16 @@ public class Article {
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "F_USER_ID", nullable = false)
-    private User user = new User();
-    @Column(name = "F_DATE")
+    private User user;
+    @Column(name = "F_DATE", nullable = false)
     private String date;
-    @Column(name = "F_NAME")
+    @Column(name = "F_NAME", nullable = false)
     private String name;
-    @Column(name = "F_ANNOTATION")
+    @Column(name = "F_ANNOTATION", nullable = false)
     private String annotation;
-    @Column(name = "F_TEXT")
+    @Column(name = "F_TEXT", nullable = false)
     private String text;
-    @Column(name = "F_COUNT_VIEWS")
+    @Column(name = "F_COUNT_VIEWS", nullable = false, insertable = false)
     private Long countViews;
     @OneToMany(
             fetch = FetchType.LAZY,
@@ -47,7 +47,7 @@ public class Article {
     )
     @JoinColumn(name = "F_ARTICLE_ID")
     private List<Comment> comments = new ArrayList<>();
-    @Column(name = "F_IS_DELETED")
+    @Column(name = "F_IS_DELETED", nullable = false)
     private boolean isDeleted;
 
     public Long getId() {

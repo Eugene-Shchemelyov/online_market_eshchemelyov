@@ -28,24 +28,24 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "F_ID", updatable = false, nullable = false)
     private Long id;
-    @Column(name = "F_SURNAME")
+    @Column(name = "F_SURNAME", nullable = false)
     private String surname;
-    @Column(name = "F_NAME")
+    @Column(name = "F_NAME", nullable = false)
     private String name;
-    @Column(name = "F_EMAIL")
+    @Column(name = "F_EMAIL", nullable = false)
     private String email;
-    @Column(name = "F_PASSWORD")
+    @Column(name = "F_PASSWORD", nullable = false)
     private String password;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "F_ROLE_ID")
-    private Role role = new Role();
+    private Role role;
     @OneToOne(
             fetch = FetchType.LAZY,
             mappedBy = "user",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private Profile profile = new Profile();
+    private Profile profile;
     @OneToMany(
             mappedBy = "user",
             fetch = FetchType.LAZY,
@@ -60,8 +60,8 @@ public class User {
             orphanRemoval = true
     )
     private List<Review> reviews = new ArrayList<>();
-    @Column(name = "F_IS_DELETED")
-    private Boolean isDeleted;
+    @Column(name = "F_IS_DELETED", nullable = false)
+    private Boolean isDeleted = false;
 
     public Long getId() {
         return id;

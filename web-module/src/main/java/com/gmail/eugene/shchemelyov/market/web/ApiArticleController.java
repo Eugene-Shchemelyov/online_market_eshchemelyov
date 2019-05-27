@@ -19,6 +19,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 import static com.gmail.eugene.shchemelyov.market.service.constant.SecurityConstant.SECURE_REST_API;
+import static com.gmail.eugene.shchemelyov.market.web.constant.ApiConstant.APPLICATION_JSON;
 
 @RestController
 public class ApiArticleController {
@@ -42,13 +43,12 @@ public class ApiArticleController {
     }
 
     @Secured(value = {SECURE_REST_API})
-    @PostMapping(value = "/api/v1/articles", consumes = "application/json")
+    @PostMapping(value = "/api/v1/articles", consumes = APPLICATION_JSON)
     public ArticleDTO addArticle(@Valid @RequestBody ArticleDTO articleDTO) {
         AppUserPrincipal appUserPrincipal =
                 (AppUserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long userId = appUserPrincipal.getId();
-        articleDTO.getUser().setId(userId);
-        return articleService.add(articleDTO);
+        return articleService.add(articleDTO, userId);
     }
 
     @Secured(value = {SECURE_REST_API})

@@ -9,8 +9,6 @@ public interface GenericRepository<I, T> {
 
     void delete(T entity);
 
-    void detach(T entity);
-
     T getById(I id);
 
     void deleteById(I id);

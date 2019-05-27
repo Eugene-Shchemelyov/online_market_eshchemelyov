@@ -56,10 +56,8 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     public void copyById(Long id) {
         Item item = itemRepository.getById(id);
-        itemRepository.detach(item);
-        item.setId(null);
-        item.setUniqueNumber(UUID.randomUUID().toString());
-        itemRepository.create(item);
+        Item clonedItem = clone(item);
+        itemRepository.create(clonedItem);
     }
 
     @Override
@@ -84,8 +82,16 @@ public class ItemServiceImpl implements ItemService {
         if (item.getUniqueNumber() == null) {
             item.setUniqueNumber(UUID.randomUUID().toString());
         }
-        item.setDeleted(false);
         itemRepository.create(item);
         return itemConverter.toDTO(item);
+    }
+
+    private Item clone(Item item) {
+        Item clonedItem = new Item();
+        clonedItem.setName(item.getName());
+        clonedItem.setDescription(item.getDescription());
+        clonedItem.setUniqueNumber(UUID.randomUUID().toString());
+        clonedItem.setPrice(item.getPrice());
+        return clonedItem;
     }
 }

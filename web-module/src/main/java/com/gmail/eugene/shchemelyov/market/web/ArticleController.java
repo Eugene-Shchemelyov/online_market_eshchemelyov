@@ -90,15 +90,14 @@ public class ArticleController {
         AppUserPrincipal appUserPrincipal =
                 (AppUserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long userId = appUserPrincipal.getId();
-        articleDTO.getUser().setId(userId);
-        articleService.add(articleDTO);
+        articleService.add(articleDTO, userId);
         return "redirect:/private/articles";
     }
 
     @GetMapping("/private/articles/{id}/delete")
     public String deleteArticle(
             @PathVariable("id") Long id
-    ){
+    ) {
         articleService.deleteById(id);
         return "redirect:/private/articles";
     }

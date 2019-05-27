@@ -19,18 +19,18 @@ import java.util.Objects;
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "F_ID")
+    @Column(name = "F_ID", nullable = false, updatable = false)
     private Long id;
-    @Column(name = "F_NAME")
+    @Column(name = "F_NAME", nullable = false)
     private String name;
-    @Column(name = "F_UNIQUE_NUMBER")
+    @Column(name = "F_UNIQUE_NUMBER", nullable = false)
     private String uniqueNumber;
-    @Column(name = "F_PRICE")
+    @Column(name = "F_PRICE", nullable = false)
     private BigDecimal price;
-    @Column(name = "F_DESCRIPTION")
+    @Column(name = "F_DESCRIPTION", nullable = false)
     private String description;
-    @Column(name = "F_IS_DELETED")
-    private Boolean isDeleted;
+    @Column(name = "F_IS_DELETED", nullable = false)
+    private Boolean isDeleted = false;
 
     public Long getId() {
         return id;

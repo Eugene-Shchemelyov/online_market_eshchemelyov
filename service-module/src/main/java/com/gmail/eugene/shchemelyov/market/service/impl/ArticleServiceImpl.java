@@ -24,6 +24,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
+import static com.gmail.eugene.shchemelyov.market.service.constant.DateFormatConstant.DATABASE_DATE_FORMAT;
+import static com.gmail.eugene.shchemelyov.market.service.constant.DateFormatConstant.WEB_DATE_FORMAT;
+
 @Service
 public class ArticleServiceImpl implements ArticleService {
     private static final Logger logger = LoggerFactory.getLogger(ArticleServiceImpl.class);
@@ -82,13 +85,12 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     @Transactional
-    public ArticleDTO add(ArticleDTO articleDTO) {
+    public ArticleDTO add(ArticleDTO articleDTO, Long userId) {
         String date = getConvertedDate(articleDTO.getDate());
         articleDTO.setDate(date);
         Article article = articleConverter.toEntity(articleDTO);
-        User user = userRepository.getById(articleDTO.getUser().getId());
+        User user = userRepository.getById(userId);
         article.setUser(user);
-        article.setCountViews(0L);
         articleRepository.create(article);
         return articleConverter.toDTO(article);
     }
@@ -108,7 +110,7 @@ public class ArticleServiceImpl implements ArticleService {
         article.setName(articleDTO.getName());
         article.setAnnotation(articleDTO.getAnnotation());
         article.setText(articleDTO.getText());
-        String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        String date = new SimpleDateFormat(DATABASE_DATE_FORMAT)
                 .format(new Date().getTime());
         article.setDate(date);
         articleRepository.update(article);
@@ -116,9 +118,9 @@ public class ArticleServiceImpl implements ArticleService {
 
     private String getConvertedDate(String date) {
         try {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm", Locale.getDefault());
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(WEB_DATE_FORMAT, Locale.getDefault());
             Date converterDate = simpleDateFormat.parse(date);
-            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+            return new SimpleDateFormat(DATABASE_DATE_FORMAT)
                     .format(converterDate);
         } catch (ParseException e) {
             logger.error(e.getMessage(), e);

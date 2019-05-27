@@ -7,7 +7,7 @@ import java.util.List;
 
 public class ArticleDTO {
     private Long id;
-    private UserDTO user = new UserDTO();
+    private UserDTO user;
     private String date;
     @NotNull
     @Size(max = 100)

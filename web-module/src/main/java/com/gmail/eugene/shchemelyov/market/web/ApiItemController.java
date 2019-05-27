@@ -17,6 +17,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 import static com.gmail.eugene.shchemelyov.market.service.constant.SecurityConstant.SECURE_REST_API;
+import static com.gmail.eugene.shchemelyov.market.web.constant.ApiConstant.APPLICATION_JSON;
 
 @RestController
 public class ApiItemController {
@@ -40,7 +41,7 @@ public class ApiItemController {
     }
 
     @Secured(value = {SECURE_REST_API})
-    @PostMapping(value = "/api/v1/items", consumes = "application/json")
+    @PostMapping(value = "/api/v1/items", consumes = APPLICATION_JSON)
     public ItemDTO addItem(@Valid @RequestBody ItemDTO itemDTO) {
         return itemService.add(itemDTO);
     }

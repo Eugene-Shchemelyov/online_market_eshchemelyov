@@ -86,7 +86,6 @@ public class AddUpdateUserServiceImpl implements AddUpdateUserService {
         if (user.getPassword() == null) {
             user.setPassword(generatorService.getRandomPassword(PASSWORD_LENGTH));
         }
-        user.setDeleted(false);
         String email = addUpdateUserDTO.getEmail();
         if (userRepository.getCountUsersWithEmail(email) == 0) {
             userRepository.create(user);

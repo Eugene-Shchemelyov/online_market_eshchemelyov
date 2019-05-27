@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 import static com.gmail.eugene.shchemelyov.market.service.constant.SecurityConstant.SECURE_REST_API;
+import static com.gmail.eugene.shchemelyov.market.web.constant.ApiConstant.APPLICATION_JSON;
 
 @RestController
 public class ApiUserController {
@@ -22,7 +23,7 @@ public class ApiUserController {
     }
 
     @Secured(value = {SECURE_REST_API})
-    @PostMapping(value = "/api/v1/users", consumes = "application/json")
+    @PostMapping(value = "/api/v1/users", consumes = APPLICATION_JSON)
     public AddUpdateUserDTO addUserDTO(@Valid @RequestBody AddUpdateUserDTO addUpdateUserDTO) {
         return addUpdateUserService.add(addUpdateUserDTO);
     }

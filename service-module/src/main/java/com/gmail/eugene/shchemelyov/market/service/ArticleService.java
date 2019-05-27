@@ -15,7 +15,7 @@ public interface ArticleService {
 
     void deleteById(Long id);
 
-    ArticleDTO add(ArticleDTO articleDTO);
+    ArticleDTO add(ArticleDTO articleDTO, Long userId);
 
     void updateCountViews(Long id);
 
