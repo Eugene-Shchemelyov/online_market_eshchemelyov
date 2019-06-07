@@ -2,8 +2,12 @@ package com.gmail.eugene.shchemelyov.market.web.app;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,15 +21,18 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@RunWith(SpringRunner.class)
+@AutoConfigureMockMvc
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ArticleControllerSecureIntegrationTest extends GenericControllerSecureIntegrationTest {
     @Before
     public void initialize() throws SQLException {
         try (Connection connection = DriverManager.getConnection("jdbc:h2:~/project;user=test;password=test;");
              Statement statement = connection.createStatement()) {
             statement.executeUpdate("DELETE FROM T_ARTICLE WHERE F_ID = 1");
-            statement.executeUpdate("INSERT INTO T_ARTICLE (F_ID, F_USER_ID, F_DATE, F_NAME, F_ANNOTATION," +
+            statement.executeUpdate("INSERT INTO T_ARTICLE (F_ID, F_USER_ID, F_DATE, F_NAME," +
                     " F_TEXT, F_COUNT_VIEWS)" +
-                    " VALUES (1, 2 , '2019-05-23 16:46:12', 'Article Name', 'ANNOTA antat', 'text text', 0)");
+                    " VALUES (1, 2 , '2019-05-23 16:46:12', 'Article Name', 'text text', 0)");
         }
     }
 
@@ -94,7 +101,6 @@ public class ArticleControllerSecureIntegrationTest extends GenericControllerSec
     public void shouldRedirectToUpdateArticlePageAfterUpdateForSaleUser() throws Exception {
         this.mockMvc.perform(post("/private/articles/1/update")
                 .param("text", "text")
-                .param("annotation", "annotation")
                 .param("name", "name"))
                 .andExpect(redirectedUrl("/private/articles"));
     }
@@ -104,7 +110,6 @@ public class ArticleControllerSecureIntegrationTest extends GenericControllerSec
     public void shouldNotRedirectToUpdateArticlePageAfterUpdateForCustomerUser() throws Exception {
         this.mockMvc.perform(post("/private/articles/1/update")
                 .param("text", "text")
-                .param("annotation", "annotation")
                 .param("name", "name"))
                 .andExpect(status().isFound());
     }
@@ -113,7 +118,6 @@ public class ArticleControllerSecureIntegrationTest extends GenericControllerSec
     public void shouldNotRedirectToUpdateArticlePageAfterUpdate() throws Exception {
         this.mockMvc.perform(post("/private/articles/1/update")
                 .param("text", "text")
-                .param("annotation", "annotation")
                 .param("name", "name"))
                 .andExpect(status().isFound());
     }
@@ -144,7 +148,6 @@ public class ArticleControllerSecureIntegrationTest extends GenericControllerSec
         this.mockMvc.perform(post("/private/articles/article/new")
                 .param("date", "1111-11-11T11:11")
                 .param("text", "text")
-                .param("annotation", "annotation")
                 .param("name", "name"))
                 .andExpect(redirectedUrl("/private/articles"));
     }
@@ -155,7 +158,6 @@ public class ArticleControllerSecureIntegrationTest extends GenericControllerSec
         this.mockMvc.perform(post("/private/articles/article/new")
                 .param("date", "1111-11-11T11:11")
                 .param("text", "text")
-                .param("annotation", "annotation")
                 .param("name", "name"))
                 .andExpect(status().isFound());
     }
@@ -165,8 +167,27 @@ public class ArticleControllerSecureIntegrationTest extends GenericControllerSec
         this.mockMvc.perform(post("/private/articles/article/new")
                 .param("date", "1111-11-11T11:11")
                 .param("text", "text")
-                .param("annotation", "annotation")
                 .param("name", "name"))
+                .andExpect(status().isFound());
+    }
+
+    @WithUserDetails(value = "sale@mail.ru", userDetailsServiceBeanName = "userDetailsServiceImpl")
+    @Test
+    public void shouldRedirectToArticlesPageAfterDeletingArticle() throws Exception {
+        this.mockMvc.perform(get("/private/articles/1/delete"))
+                .andExpect(redirectedUrl("/private/articles"));
+    }
+
+    @WithUserDetails(value = "customer@mail.ru", userDetailsServiceBeanName = "userDetailsServiceImpl")
+    @Test
+    public void shouldNotRedirectToArticlesPageAfterDeletingArticleForCustomer() throws Exception {
+        this.mockMvc.perform(get("/private/articles/1/delete"))
+                .andExpect(status().isFound());
+    }
+
+    @Test
+    public void shouldNotRedirectToArticlesPageAfterDeletingArticle() throws Exception {
+        this.mockMvc.perform(get("/private/articles/1/delete"))
                 .andExpect(status().isFound());
     }
 }

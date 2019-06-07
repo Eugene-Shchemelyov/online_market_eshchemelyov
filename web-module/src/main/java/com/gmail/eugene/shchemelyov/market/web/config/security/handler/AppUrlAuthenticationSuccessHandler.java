@@ -18,6 +18,7 @@ import java.util.Collection;
 import static com.gmail.eugene.shchemelyov.market.service.constant.SecurityConstant.ADMINISTRATOR;
 import static com.gmail.eugene.shchemelyov.market.service.constant.SecurityConstant.CUSTOMER_USER;
 import static com.gmail.eugene.shchemelyov.market.service.constant.SecurityConstant.SALE_USER;
+import static com.gmail.eugene.shchemelyov.market.service.constant.SecurityConstant.SECURE_REST_API;
 
 public class AppUrlAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     private static final Logger logger = LoggerFactory.getLogger(AppUrlAuthenticationSuccessHandler.class);
@@ -60,6 +61,8 @@ public class AppUrlAuthenticationSuccessHandler implements AuthenticationSuccess
                     return "/private/articles";
                 case SALE_USER:
                     return "/private/articles";
+                case SECURE_REST_API:
+                    return "/logout";
             }
         }
         throw new IllegalStateException();

@@ -22,10 +22,10 @@ public class UserConverterImpl implements UserConverter {
         userDTO.setId(user.getId());
         userDTO.setSurname(user.getSurname());
         userDTO.setName(user.getName());
+        userDTO.setPatronymic(user.getPatronymic());
         userDTO.setEmail(user.getEmail());
         userDTO.setPassword(user.getPassword());
         userDTO.setRole(roleConverter.toDTO(user.getRole()));
-        userDTO.setDeleted(user.isDeleted());
         return userDTO;
     }
 
@@ -35,10 +35,10 @@ public class UserConverterImpl implements UserConverter {
         user.setId(userDTO.getId());
         user.setSurname(userDTO.getSurname());
         user.setName(userDTO.getName());
+        user.setPatronymic(userDTO.getPatronymic());
         user.setEmail(userDTO.getEmail());
         user.setPassword(userDTO.getPassword());
         user.setRole(roleConverter.toEntity(userDTO.getRole()));
-        user.setDeleted(userDTO.isDeleted());
         return user;
     }
 }

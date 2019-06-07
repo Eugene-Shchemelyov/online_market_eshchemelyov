@@ -56,16 +56,32 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/private/users/**", "/private/reviews/**")
+                .antMatchers(
+                        "/private/users/**",
+                        "/private/reviews",
+                        "/private/reviews/*",
+                        "/private/reviews/*/delete")
                 .hasAuthority(ADMINISTRATOR)
-                .antMatchers("/private/profile/**")
+                .antMatchers(
+                        "/private/profile/**",
+                        "/private/customer/orders/**",
+                        "/private/reviews/review/new"
+                )
                 .hasAuthority(CUSTOMER_USER)
-                .antMatchers("/private/articles", "/private/articles/*")
+                .antMatchers(
+                        "/private/articles",
+                        "/private/articles/*",
+                        "/private/items",
+                        "/private/items/*"
+                )
                 .hasAnyAuthority(CUSTOMER_USER, SALE_USER)
                 .antMatchers(
                         "/private/comments/**",
                         "/private/articles/*/*",
-                        "/private/items/**")
+                        "/private/items/*/*",
+                        "/private/seller/orders/**",
+                        "/private/upload"
+                )
                 .hasAuthority(SALE_USER)
                 .antMatchers("/", "/403", "/login", "/public/**")
                 .permitAll()

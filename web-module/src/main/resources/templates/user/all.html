@@ -7,41 +7,54 @@
     <div th:replace="fragments/header :: header"></div>
 </head>
 <body>
-<div th:if="${update}">
-    User updated!
-</div>
 <table>
     <tr>
         <td></td>
+        <td>Patronymic</td>
         <td>Name</td>
         <td>Surname</td>
         <td>Email</td>
         <td>Role</td>
-        <td>Update user</td>
+        <td>Change role</td>
         <td>Delete</td>
+        <td>Change password</td>
     </tr>
-    <form action="#" th:action="@{/private/users/delete}" method="post">
-        <tr th:each="user,stat : ${pagination.entities}">
-            <td><span th:text="${stat.count}"></span></td>
-            <td><span th:text="${user.name}"></span></td>
-            <td><span th:text="${user.surname}"></span></td>
-            <td><span th:text="${user.email}"></span></td>
-            <td><span th:text="${user.role.name}"></span></td>
+    <form id="form" action="#" th:action="@{/private/users/delete}" method="post"></form>
+    <tr th:each="user,stat : ${pagination.entities}">
+        <td><span th:text="${stat.count}"></span></td>
+        <td><span th:text="${user.patronymic}"></span></td>
+        <td><span th:text="${user.name}"></span></td>
+        <td><span th:text="${user.surname}"></span></td>
+        <td><span th:text="${user.email}"></span></td>
+        <form action="#" th:action="@{/private/users/{id}/update/role (id=${user.id})}"
+              method="post">
             <td>
-                <a th:href="@{/private/users/{id}/update (id=${user.id})}">Edit</a>
+                <select name="role">
+                    <option th:each="role : ${roles}"
+                            th:value="${role.id}" th:text="${role.name}"
+                            th:selected="${role.id == user.role.id}">
+                    </option>
+                </select>
             </td>
             <td>
-                <label><input type="checkbox" name="usersIds" th:value="${user.id}"/>delete</label>
+                <input type="submit" value="change"/>
             </td>
-        </tr>
-        <tr>
-            <td colspan="5"></td>
-            <td>Delete selected users:</td>
-            <td>
-                <button type="submit">Delete</button>
-            </td>
-        </tr>
-    </form>
+        </form>
+        <td>
+            <label><input form="form" type="checkbox" name="usersIds" th:value="${user.id}"/>delete</label>
+        </td>
+        <td>
+            <a th:href="@{/private/users/{id}/password (id=${user.id})}">Change password</a>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="6"></td>
+        <td>Delete selected users:</td>
+        <td>
+            <input form="form" type="submit" value="delete"/>
+        </td>
+    </tr>
+
 </table>
 <div th:replace="fragments/paginator :: userPaginator"></div>
 </body>

@@ -1,37 +1,31 @@
 package com.gmail.eugene.shchemelyov.market.service.model;
 
-import org.springframework.format.annotation.NumberFormat;
-
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.xml.bind.annotation.XmlElement;
 import java.math.BigDecimal;
 
+import static com.gmail.eugene.shchemelyov.market.service.constant.validate.ValidateItemConstant.COUNT_FRACTIONS;
+import static com.gmail.eugene.shchemelyov.market.service.constant.validate.ValidateItemConstant.COUNT_INTEGERS;
+import static com.gmail.eugene.shchemelyov.market.service.constant.validate.ValidateItemConstant.NAME_PATTERN;
+import static com.gmail.eugene.shchemelyov.market.service.constant.validate.ValidateItemConstant.UNIQUE_NUMBER_PATTERN;
+
 public class ItemDTO {
-    private Long id;
     @NotNull
-    @Pattern(regexp = "[a-zA-Z0-9.,!?:;\\s]{0,100}")
+    @Pattern(regexp = NAME_PATTERN)
     private String name;
-    @Pattern(regexp = "^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$")
+    @Pattern(regexp = UNIQUE_NUMBER_PATTERN)
     private String uniqueNumber;
     @NotNull
-    @NumberFormat(pattern = "#,###,###,###.##")
+    @Digits(integer = COUNT_INTEGERS, fraction = COUNT_FRACTIONS)
     private BigDecimal price;
-    @NotNull
-    @Pattern(regexp = "[a-zA-Z0-9.,!?:;\\s]{0,200}")
-    private String description;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
     }
 
+    @XmlElement(name = "name")
     public void setName(String name) {
         this.name = name;
     }
@@ -40,6 +34,7 @@ public class ItemDTO {
         return uniqueNumber;
     }
 
+    @XmlElement(name = "uniqueNumber")
     public void setUniqueNumber(String uniqueNumber) {
         this.uniqueNumber = uniqueNumber;
     }
@@ -48,15 +43,8 @@ public class ItemDTO {
         return price;
     }
 
+    @XmlElement(name = "price")
     public void setPrice(BigDecimal price) {
         this.price = price;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 }

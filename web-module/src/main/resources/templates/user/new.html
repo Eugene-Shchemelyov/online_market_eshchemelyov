@@ -10,6 +10,11 @@
 <form action="#" th:action="@{/private/users/new}" th:object="${user}" method="post">
     <table>
         <tr>
+            <td>Patronymic:</td>
+            <td><input type="text" th:field="*{patronymic}"/></td>
+            <td th:if="${#fields.hasErrors('patronymic')}" th:errors="*{patronymic}">Patronymic Error</td>
+        </tr>
+        <tr>
             <td>Name:</td>
             <td><input type="text" th:field="*{name}"/></td>
             <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</td>
@@ -23,16 +28,6 @@
             <td>Email:</td>
             <td><input type="text" th:field="*{email}"/></td>
             <td th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</td>
-        </tr>
-        <tr>
-            <td>Address:</td>
-            <td><input type="text" th:field="*{address}"/></td>
-            <td th:if="${#fields.hasErrors('address')}" th:errors="*{address}">Address Error</td>
-        </tr>
-        <tr>
-            <td>Phone:</td>
-            <td><input type="text" th:field="*{phone}"/></td>
-            <td th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}">Phone Error</td>
         </tr>
         <tr>
             <td>Role:</td>

@@ -13,13 +13,13 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Table(name = "T_PROFILE")
 @SQLDelete(sql = "UPDATE T_PROFILE SET F_IS_DELETED = 1 WHERE F_USER_ID = ?")
-@Where(clause = "F_IS_DELETED = 0")
-public class Profile {
+public class Profile implements Serializable {
     @Id
     @GenericGenerator(
             name = "generator",
@@ -36,8 +36,8 @@ public class Profile {
     private String address;
     @Column(name = "F_PHONE")
     private String phone;
-    @Column(name = "F_IS_DELETED")
-    private boolean isDeleted;
+    @Column(name = "F_IS_DELETED", nullable = false)
+    private boolean isDeleted = false;
 
     public Long getUserId() {
         return userId;

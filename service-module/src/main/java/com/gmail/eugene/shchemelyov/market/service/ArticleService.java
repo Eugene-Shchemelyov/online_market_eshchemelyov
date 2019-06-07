@@ -1,23 +1,16 @@
 package com.gmail.eugene.shchemelyov.market.service;
 
-import com.gmail.eugene.shchemelyov.market.repository.model.Pagination;
-import com.gmail.eugene.shchemelyov.market.repository.model.enums.SortEnum;
-import com.gmail.eugene.shchemelyov.market.service.model.ArticleDTO;
-
-import java.util.List;
+import com.gmail.eugene.shchemelyov.market.service.model.NewArticleDTO;
+import com.gmail.eugene.shchemelyov.market.service.model.UpdateArticleDTO;
 
 public interface ArticleService {
-    Pagination getLimitArticles(Integer page, SortEnum sort);
-
-    ArticleDTO getById(Long id);
-
-    List<ArticleDTO> getArticles();
+    UpdateArticleDTO getById(Long id);
 
     void deleteById(Long id);
 
-    ArticleDTO add(ArticleDTO articleDTO, Long userId);
+    NewArticleDTO add(NewArticleDTO newArticleDTO, Long userId);
 
     void updateCountViews(Long id);
 
-    void update(ArticleDTO articleDTO);
+    void update(UpdateArticleDTO updateArticleDTO);
 }

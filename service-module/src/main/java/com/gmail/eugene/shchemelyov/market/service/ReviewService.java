@@ -11,4 +11,6 @@ public interface ReviewService {
     void changeReviewsDisplay(List<Long> reviewsId);
 
     void delete(Long id);
+
+    void add(String review, Long userId);
 }

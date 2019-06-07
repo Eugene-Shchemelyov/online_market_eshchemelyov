@@ -5,6 +5,4 @@ import com.gmail.eugene.shchemelyov.market.service.model.CommentDTO;
 
 public interface CommentConverter {
     CommentDTO toDTO(Comment comment);
-
-    Comment toEntity(CommentDTO commentDTO);
 }

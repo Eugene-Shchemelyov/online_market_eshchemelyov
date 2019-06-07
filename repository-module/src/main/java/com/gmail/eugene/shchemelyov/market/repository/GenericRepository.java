@@ -13,7 +13,7 @@ public interface GenericRepository<I, T> {
 
     void deleteById(I id);
 
-    List<T> getAllEntities();
+    List<T> getAllEntities(boolean isDeleted);
 
-    Integer getCountOfEntities();
+    Integer getCountOfEntities(boolean isDeleted);
 }

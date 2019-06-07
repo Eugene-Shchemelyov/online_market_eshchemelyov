@@ -15,5 +15,4 @@ public class LiquibaseConfig {
         springLiquibase.setDataSource(dataSource);
         return springLiquibase;
     }
-
 }

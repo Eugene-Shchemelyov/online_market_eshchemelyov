@@ -5,12 +5,12 @@ import javax.validation.constraints.Size;
 
 public class CommentDTO {
     private Long id;
-    private UserDTO user;
+    private String userName;
+    private String userSurname;
     private String date;
     @NotNull
-    @Size(max = 100)
+    @Size(max = 200)
     private String text;
-    private boolean isDeleted = false;
 
     public Long getId() {
         return id;
@@ -20,12 +20,20 @@ public class CommentDTO {
         this.id = id;
     }
 
-    public UserDTO getUser() {
-        return user;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUser(UserDTO user) {
-        this.user = user;
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserSurname() {
+        return userSurname;
+    }
+
+    public void setUserSurname(String userSurname) {
+        this.userSurname = userSurname;
     }
 
     public String getDate() {
@@ -42,13 +50,5 @@ public class CommentDTO {
 
     public void setText(String text) {
         this.text = text;
-    }
-
-    public boolean isDeleted() {
-        return isDeleted;
-    }
-
-    public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
     }
 }

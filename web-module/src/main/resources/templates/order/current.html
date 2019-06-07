@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Order</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <div th:replace="fragments/header :: header"></div>
+</head>
+<body>
+<form action="#" th:action="@{/private/seller/orders/{uniqueNumber}/update (uniqueNumber=*{uniqueNumber})}"
+      th:object="${order}" method="post">
+    <table>
+        <tr>
+            <td>Number:</td>
+            <td><span th:text="*{uniqueNumber}"></span></td>
+            <input type="hidden" th:field="*{uniqueNumber}" th:value="*{uniqueNumber}"/>
+        </tr>
+        <tr>
+            <td>Status:</td>
+            <td><span th:text="*{status.name}"></span></td>
+            <td>
+                <select name="status">
+                    <option th:each="stat : ${T(com.gmail.eugene.shchemelyov.market
+                    .repository.model.enums.OrderStatusEnum).values()}"
+                            th:value="${stat}" th:text="${stat.name}"
+                            th:selected="${stat == order.status}">
+                    </option>
+                </select>
+            </td>
+            <td>
+                <button type="submit">Change status</button>
+            </td>
+        </tr>
+
+        <tr>
+            <td>Item name:</td>
+            <td><span th:text="*{itemName}"></span></td>
+        </tr>
+        <tr>
+            <td>Count items:</td>
+            <td><span th:text="*{countItems}"></span></td>
+        </tr>
+        <tr>
+            <td>Total price:</td>
+            <td><span th:text="*{totalPrice}"></span></td>
+        </tr>
+        <tr>
+            <td>User identifier:</td>
+            <td><span th:text="*{userSurname}"></span></td>
+        </tr>
+        <tr>
+            <td>User phone:</td>
+            <td><span th:text="*{userPhone}"></span></td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

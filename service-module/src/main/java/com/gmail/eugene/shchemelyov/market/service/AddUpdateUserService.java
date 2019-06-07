@@ -1,13 +1,16 @@
 package com.gmail.eugene.shchemelyov.market.service;
 
-import com.gmail.eugene.shchemelyov.market.service.model.AddUpdateUserDTO;
+import com.gmail.eugene.shchemelyov.market.service.model.UpdateUserDTO;
+import com.gmail.eugene.shchemelyov.market.service.model.UserDTO;
 
 public interface AddUpdateUserService {
-    void update(AddUpdateUserDTO addUpdateUserDTO);
+    void updateById(UpdateUserDTO updateUserDTO, Long userId);
 
     void changePasswordById(Long id);
 
-    AddUpdateUserDTO add(AddUpdateUserDTO addUpdateUserDTO);
+    UserDTO add(UserDTO userDTO);
 
-    AddUpdateUserDTO getById(Long id);
+    UpdateUserDTO getById(Long id);
+
+    void changeRoleById(Long userId, Long roleId);
 }

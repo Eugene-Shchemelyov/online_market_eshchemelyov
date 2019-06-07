@@ -5,13 +5,14 @@ import javax.validation.constraints.Size;
 
 public class ReviewDTO {
     private Long id;
-    private UserDTO user;
+    private String userPatronymic;
+    private String userName;
+    private String userSurname;
     @NotNull
     @Size(max = 255)
     private String text;
     private String date;
     private Boolean display;
-    private Boolean isDeleted;
 
     public Long getId() {
         return id;
@@ -21,12 +22,28 @@ public class ReviewDTO {
         this.id = id;
     }
 
-    public UserDTO getUser() {
-        return user;
+    public String getUserPatronymic() {
+        return userPatronymic;
     }
 
-    public void setUser(UserDTO user) {
-        this.user = user;
+    public void setUserPatronymic(String userPatronymic) {
+        this.userPatronymic = userPatronymic;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserSurname() {
+        return userSurname;
+    }
+
+    public void setUserSurname(String userSurname) {
+        this.userSurname = userSurname;
     }
 
     public String getText() {
@@ -51,13 +68,5 @@ public class ReviewDTO {
 
     public void setDisplay(Boolean display) {
         this.display = display;
-    }
-
-    public Boolean isDeleted() {
-        return isDeleted;
-    }
-
-    public void setDeleted(Boolean deleted) {
-        isDeleted = deleted;
     }
 }

@@ -9,14 +9,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity
 @Table(name = "T_ITEM")
 @SQLDelete(sql = "UPDATE T_ITEM SET F_IS_DELETED = 1 WHERE F_ID = ?")
-@Where(clause = "F_IS_DELETED = 0")
-public class Item {
+public class Item implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "F_ID", nullable = false, updatable = false)
@@ -30,7 +30,7 @@ public class Item {
     @Column(name = "F_DESCRIPTION", nullable = false)
     private String description;
     @Column(name = "F_IS_DELETED", nullable = false)
-    private Boolean isDeleted = false;
+    private boolean isDeleted = false;
 
     public Long getId() {
         return id;
@@ -72,11 +72,11 @@ public class Item {
         this.description = description;
     }
 
-    public Boolean isDeleted() {
+    public boolean isDeleted() {
         return isDeleted;
     }
 
-    public void setDeleted(Boolean deleted) {
+    public void setDeleted(boolean deleted) {
         isDeleted = deleted;
     }
 

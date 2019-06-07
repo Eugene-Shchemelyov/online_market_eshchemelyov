@@ -22,6 +22,17 @@ public class ArticleRepositoryImpl extends GenericRepositoryImpl<Long, Article> 
         return createdQuery.getResultList();
     }
 
+    @Override
+    public Integer getCountCommentsById(Long id) {
+        String query = "SELECT COUNT(*)" +
+                " FROM " + entityClass.getName() + " A" +
+                " JOIN Comment C ON C.article.id = A.id" +
+                " WHERE A.id =: id";
+        Query createdQuery = entityManager.createQuery(query)
+                .setParameter("id", id);
+        return ((Number) createdQuery.getSingleResult()).intValue();
+    }
+
     private String getOrderByQuery(SortEnum sortEnum) {
         switch (sortEnum) {
             case DATE_DESC:

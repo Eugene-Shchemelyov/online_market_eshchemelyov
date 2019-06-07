@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -22,7 +23,7 @@ import java.util.Objects;
 @Table(name = "T_ARTICLE")
 @SQLDelete(sql = "UPDATE T_ARTICLE SET F_IS_DELETED = 1 WHERE F_ID = ?")
 @Where(clause = "F_IS_DELETED = 0")
-public class Article {
+public class Article implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "F_ID", updatable = false, nullable = false)
@@ -34,21 +35,19 @@ public class Article {
     private String date;
     @Column(name = "F_NAME", nullable = false)
     private String name;
-    @Column(name = "F_ANNOTATION", nullable = false)
-    private String annotation;
     @Column(name = "F_TEXT", nullable = false)
     private String text;
     @Column(name = "F_COUNT_VIEWS", nullable = false, insertable = false)
     private Long countViews;
     @OneToMany(
+            mappedBy = "article",
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    @JoinColumn(name = "F_ARTICLE_ID")
     private List<Comment> comments = new ArrayList<>();
     @Column(name = "F_IS_DELETED", nullable = false)
-    private boolean isDeleted;
+    private boolean isDeleted = false;
 
     public Long getId() {
         return id;
@@ -80,14 +79,6 @@ public class Article {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getAnnotation() {
-        return annotation;
-    }
-
-    public void setAnnotation(String annotation) {
-        this.annotation = annotation;
     }
 
     public String getText() {
@@ -132,7 +123,6 @@ public class Article {
                 Objects.equals(user, article.user) &&
                 Objects.equals(date, article.date) &&
                 Objects.equals(name, article.name) &&
-                Objects.equals(annotation, article.annotation) &&
                 Objects.equals(text, article.text) &&
                 Objects.equals(countViews, article.countViews) &&
                 Objects.equals(comments, article.comments);
@@ -140,6 +130,6 @@ public class Article {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, user, date, name, annotation, text, countViews, comments, isDeleted);
+        return Objects.hash(id, user, date, name, text, countViews, comments, isDeleted);
     }
 }

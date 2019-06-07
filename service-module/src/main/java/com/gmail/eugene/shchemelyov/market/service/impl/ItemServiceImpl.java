@@ -1,12 +1,17 @@
 package com.gmail.eugene.shchemelyov.market.service.impl;
 
 import com.gmail.eugene.shchemelyov.market.repository.ItemRepository;
+import com.gmail.eugene.shchemelyov.market.repository.exception.ExpectedException;
 import com.gmail.eugene.shchemelyov.market.repository.model.Item;
 import com.gmail.eugene.shchemelyov.market.repository.model.Pagination;
 import com.gmail.eugene.shchemelyov.market.service.ItemService;
 import com.gmail.eugene.shchemelyov.market.service.PaginationService;
-import com.gmail.eugene.shchemelyov.market.service.converter.ItemConverter;
-import com.gmail.eugene.shchemelyov.market.service.model.ItemDTO;
+import com.gmail.eugene.shchemelyov.market.service.converter.NewItemConverter;
+import com.gmail.eugene.shchemelyov.market.service.converter.PreviewItemConverter;
+import com.gmail.eugene.shchemelyov.market.service.converter.ViewItemConverter;
+import com.gmail.eugene.shchemelyov.market.service.model.NewItemDTO;
+import com.gmail.eugene.shchemelyov.market.service.model.PreviewItemDTO;
+import com.gmail.eugene.shchemelyov.market.service.model.ViewItemDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,18 +23,24 @@ import java.util.stream.Collectors;
 @Service
 public class ItemServiceImpl implements ItemService {
     private final PaginationService paginationService;
-    private final ItemConverter itemConverter;
+    private final PreviewItemConverter previewItemConverter;
     private final ItemRepository itemRepository;
+    private final ViewItemConverter viewItemConverter;
+    private final NewItemConverter newItemConverter;
 
     @Autowired
     public ItemServiceImpl(
             PaginationService paginationService,
-            ItemConverter itemConverter,
-            ItemRepository itemRepository
+            PreviewItemConverter previewItemConverter,
+            ItemRepository itemRepository,
+            ViewItemConverter viewItemConverter,
+            NewItemConverter newItemConverter
     ) {
         this.paginationService = paginationService;
-        this.itemConverter = itemConverter;
+        this.previewItemConverter = previewItemConverter;
         this.itemRepository = itemRepository;
+        this.viewItemConverter = viewItemConverter;
+        this.newItemConverter = newItemConverter;
     }
 
     @Override
@@ -37,19 +48,19 @@ public class ItemServiceImpl implements ItemService {
     @SuppressWarnings("unchecked")
     public Pagination getLimitItems(Integer page) {
         Pagination pagination = paginationService.getItemPagination(page);
-        List<Item> items = itemRepository.getLimitItems(pagination);
-        List<ItemDTO> itemDTOS = items.stream()
-                .map(itemConverter::toDTO)
+        List<Item> items = itemRepository.getLimitItems(pagination, false);
+        List<PreviewItemDTO> previewItemDTOS = items.stream()
+                .map(previewItemConverter::toDTO)
                 .collect(Collectors.toList());
-        pagination.setEntities(itemDTOS);
+        pagination.setEntities(previewItemDTOS);
         return pagination;
     }
 
     @Override
     @Transactional
-    public ItemDTO getById(Long id) {
+    public ViewItemDTO getById(Long id) {
         Item item = itemRepository.getById(id);
-        return itemConverter.toDTO(item);
+        return viewItemConverter.toDTO(item);
     }
 
     @Override
@@ -68,22 +79,26 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    public List<ItemDTO> getItems() {
-        List<Item> items = itemRepository.getAllEntities();
+    public List<ViewItemDTO> getItems() {
+        List<Item> items = itemRepository.getAllEntities(false);
         return items.stream()
-                .map(itemConverter::toDTO)
+                .map(viewItemConverter::toDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
     @Transactional
-    public ItemDTO add(ItemDTO itemDTO) {
-        Item item = itemConverter.toEntity(itemDTO);
-        if (item.getUniqueNumber() == null) {
-            item.setUniqueNumber(UUID.randomUUID().toString());
+    public NewItemDTO add(NewItemDTO newItemDTO) {
+        if (newItemDTO.getUniqueNumber() == null) {
+            newItemDTO.setUniqueNumber(UUID.randomUUID().toString());
         }
+        if (itemRepository.getCountByUniqueNumber(newItemDTO.getUniqueNumber()) > 0) {
+            throw new ExpectedException(String.format(
+                    "Item exists with unique number: %s.", newItemDTO.getUniqueNumber()));
+        }
+        Item item = newItemConverter.toEntity(newItemDTO);
         itemRepository.create(item);
-        return itemConverter.toDTO(item);
+        return newItemDTO;
     }
 
     private Item clone(Item item) {

@@ -1,39 +1,27 @@
 package com.gmail.eugene.shchemelyov.market.service.model;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
-public class AddUpdateUserDTO {
-    private Long id;
+import static com.gmail.eugene.shchemelyov.market.service.constant.validate.ValidateUserConstant.ADDRESS_PATTERN;
+import static com.gmail.eugene.shchemelyov.market.service.constant.validate.ValidateUserConstant.NAME_PATTERN;
+import static com.gmail.eugene.shchemelyov.market.service.constant.validate.ValidateUserConstant.PASSWORD_PATTERN;
+import static com.gmail.eugene.shchemelyov.market.service.constant.validate.ValidateUserConstant.PHONE_PATTERN;
+import static com.gmail.eugene.shchemelyov.market.service.constant.validate.ValidateUserConstant.SURNAME_PATTERN;
+
+public class UpdateUserDTO {
     @NotNull
-    @Pattern(regexp = "[a-zA-Z]{0,40}")
+    @Pattern(regexp = SURNAME_PATTERN)
     private String surname;
     @NotNull
-    @Pattern(regexp = "[a-zA-Z]{0,20}")
+    @Pattern(regexp = NAME_PATTERN)
     private String name;
-    @NotNull
-    @Size(max = 50)
-    @Email
-    private String email;
-    @Pattern(regexp = "[a-zA-Z0-9]{8,30}")
+    @Pattern(regexp = PASSWORD_PATTERN)
     private String password;
-    private RoleDTO role;
-    @NotNull
-    @Pattern(regexp = "[a-zA-Z0-9.,!?\\s]{0,100}")
+    @Pattern(regexp = ADDRESS_PATTERN)
     private String address;
-    @NotNull
-    @Pattern(regexp = "\\+[0-9]{10,15}")
+    @Pattern(regexp = PHONE_PATTERN)
     private String phone;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getSurname() {
         return surname;
@@ -51,28 +39,12 @@ public class AddUpdateUserDTO {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public RoleDTO getRole() {
-        return role;
-    }
-
-    public void setRole(RoleDTO role) {
-        this.role = role;
     }
 
     public String getAddress() {

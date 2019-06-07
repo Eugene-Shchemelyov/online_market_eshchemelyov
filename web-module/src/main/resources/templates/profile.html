@@ -20,29 +20,24 @@
             <td th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}">Surname Error</td>
         </tr>
         <tr>
-            <td>Email:</td>
-            <td><span th:text="*{email}"></span></td>
-            <input type="hidden" th:field="*{email}" th:value="*{email}"/>
-            <input type="hidden" th:field="*{id}" th:value="*{id}"/>
-            <input type="hidden" th:field="*{role.id}" th:value="*{role.id}"/>
-        </tr>
-        <tr>
             <td>Address:</td>
             <td><input type="text" th:field="*{address}"/></td>
+            <td th:if="${#fields.hasErrors('address')}" th:errors="*{address}">Address Error</td>
         </tr>
         <tr>
             <td>Phone:</td>
             <td><input type="text" th:field="*{phone}"/></td>
+            <td th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}">Phone Error</td>
         </tr>
         <tr>
             <td>Old password:</td>
             <td><input type="password" name="oldPassword"/></td>
+            <td th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</td>
         </tr>
         <tr>
             <td>New password:</td>
             <td><input type="password" name="newPassword"/></td>
-            <td th:if="${passwordError}">Password error or incorrect validation:
-                Only latin characters and numbers, min 8, max 30</td>
+            <td th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</td>
         </tr>
         <tr>
             <td>

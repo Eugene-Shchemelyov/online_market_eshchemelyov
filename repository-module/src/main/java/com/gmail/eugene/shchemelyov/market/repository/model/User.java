@@ -1,7 +1,6 @@
 package com.gmail.eugene.shchemelyov.market.repository.model;
 
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -15,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -22,8 +22,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "T_USER")
 @SQLDelete(sql = "UPDATE T_USER SET F_IS_DELETED = 1 WHERE F_ID = ?")
-@Where(clause = "F_IS_DELETED = 0")
-public class User {
+public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "F_ID", updatable = false, nullable = false)
@@ -32,12 +31,14 @@ public class User {
     private String surname;
     @Column(name = "F_NAME", nullable = false)
     private String name;
-    @Column(name = "F_EMAIL", nullable = false)
+    @Column(name = "F_PATRONYMIC", nullable = false)
+    private String patronymic;
+    @Column(name = "F_EMAIL", unique = true, nullable = false)
     private String email;
     @Column(name = "F_PASSWORD", nullable = false)
     private String password;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "F_ROLE_ID")
+    @JoinColumn(name = "F_ROLE_ID", nullable = false)
     private Role role;
     @OneToOne(
             fetch = FetchType.LAZY,
@@ -48,20 +49,28 @@ public class User {
     private Profile profile;
     @OneToMany(
             mappedBy = "user",
-            fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
+            fetch = FetchType.LAZY
     )
     private List<Article> articles = new ArrayList<>();
+    @OneToMany(
+            mappedBy = "user",
+            fetch = FetchType.LAZY
+    )
+    private List<Review> reviews = new ArrayList<>();
     @OneToMany(
             mappedBy = "user",
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private List<Review> reviews = new ArrayList<>();
+    private List<Comment> comments = new ArrayList<>();
+    @OneToMany(
+            mappedBy = "user",
+            fetch = FetchType.LAZY
+    )
+    private List<Order> orders = new ArrayList<>();
     @Column(name = "F_IS_DELETED", nullable = false)
-    private Boolean isDeleted = false;
+    private boolean isDeleted = false;
 
     public Long getId() {
         return id;
@@ -85,6 +94,14 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getPatronymic() {
+        return patronymic;
+    }
+
+    public void setPatronymic(String patronymic) {
+        this.patronymic = patronymic;
     }
 
     public String getEmail() {
@@ -135,11 +152,27 @@ public class User {
         this.reviews = reviews;
     }
 
-    public Boolean isDeleted() {
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
+
+    public boolean isDeleted() {
         return isDeleted;
     }
 
-    public void setDeleted(Boolean deleted) {
+    public void setDeleted(boolean deleted) {
         isDeleted = deleted;
     }
 
@@ -152,6 +185,7 @@ public class User {
                 Objects.equals(id, user.id) &&
                 Objects.equals(surname, user.surname) &&
                 Objects.equals(name, user.name) &&
+                Objects.equals(patronymic, user.patronymic) &&
                 Objects.equals(email, user.email) &&
                 Objects.equals(password, user.password) &&
                 Objects.equals(role, user.role) &&
@@ -160,6 +194,6 @@ public class User {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, surname, name, email, password, role, profile, isDeleted);
+        return Objects.hash(id, surname, name, patronymic, email, password, role, profile, isDeleted);
     }
 }

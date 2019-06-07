@@ -2,7 +2,8 @@ package com.gmail.eugene.shchemelyov.market.web;
 
 import com.gmail.eugene.shchemelyov.market.repository.model.Pagination;
 import com.gmail.eugene.shchemelyov.market.service.ItemService;
-import com.gmail.eugene.shchemelyov.market.service.model.ItemDTO;
+import com.gmail.eugene.shchemelyov.market.service.model.NewOrderDTO;
+import com.gmail.eugene.shchemelyov.market.service.model.ViewItemDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +27,7 @@ public class ItemController {
     ) {
         Pagination pagination = itemService.getLimitItems(page);
         model.addAttribute("pagination", pagination);
+        model.addAttribute("order", new NewOrderDTO());
         return "item/all";
     }
 
@@ -34,8 +36,8 @@ public class ItemController {
             Model model,
             @PathVariable("id") Long id
     ) {
-        ItemDTO itemDTO = itemService.getById(id);
-        model.addAttribute("item", itemDTO);
+        ViewItemDTO viewItemDTO = itemService.getById(id);
+        model.addAttribute("item", viewItemDTO);
         return "item/current";
     }
 

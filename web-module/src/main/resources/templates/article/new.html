@@ -19,15 +19,11 @@
             <td colspan="3">
                 <input type="datetime-local" th:field="*{date}">
             </td>
-        </tr>
-        <tr>
-            <td>Article annotation:</td>
-            <td colspan="3"><textarea cols="50" rows="4" th:field="*{annotation}">max</textarea></td>
-            <td th:if="${#fields.hasErrors('annotation')}" th:errors="*{annotation}">Annotation Error</td>
+            <td th:if="${#fields.hasErrors('date')}" th:errors="*{date}">Date Error</td>
         </tr>
         <tr>
             <td>Article text:</td>
-            <td colspan="3"><textarea cols="50" rows="20" th:field="*{text}" text="max"></textarea></td>
+            <td colspan="3"><textarea cols="50" rows="20" th:field="*{text}"></textarea></td>
             <td th:if="${#fields.hasErrors('text')}" th:errors="*{text}">Text Error</td>
         </tr>
         <tr>

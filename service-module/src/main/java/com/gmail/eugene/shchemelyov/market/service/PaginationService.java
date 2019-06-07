@@ -11,4 +11,8 @@ public interface PaginationService {
     Pagination getArticlePagination(Integer page, SortEnum sort);
 
     Pagination getItemPagination(Integer page);
+
+    Pagination getOrderPagination(Integer page);
+
+    Pagination getUserOrdersPagination(Integer page, Long userId);
 }

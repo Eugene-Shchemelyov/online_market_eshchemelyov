@@ -15,11 +15,6 @@
             <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</td>
         </tr>
         <tr>
-            <td>Article annotation:</td>
-            <td colspan="3"><textarea cols="50" rows="4" th:field="*{annotation}"></textarea></td>
-            <td th:if="${#fields.hasErrors('annotation')}" th:errors="*{annotation}">Annotation Error</td>
-        </tr>
-        <tr>
             <td>Article text:</td>
             <td colspan="3"><textarea cols="50" rows="20" th:field="*{text}"></textarea></td>
             <td th:if="${#fields.hasErrors('text')}" th:errors="*{text}">Text Error</td>

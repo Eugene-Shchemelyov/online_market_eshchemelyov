@@ -19,11 +19,23 @@
         <td sec:authorize="hasAuthority('Customer User')">
             <a th:href="@{/private/profile}">Profile</a>
         </td>
+        <td sec:authorize="hasAuthority('Customer User')">
+            <a th:href="@{/private/customer/orders}">Orders</a>
+        </td>
+        <td sec:authorize="hasAuthority('Customer User')">
+            <a th:href="@{/private/reviews/review/new}">Send review</a>
+        </td>
         <td sec:authorize="hasAuthority('Sale User')">
             <a th:href="@{/private/articles/article/new}">New article</a>
         </td>
-        <td sec:authorize="hasAuthority('Sale User')">
+        <td sec:authorize="hasAnyAuthority('Customer User','Sale User')">
             <a th:href="@{/private/items}">Items</a>
+        </td>
+        <td sec:authorize="hasAuthority('Sale User')">
+            <a th:href="@{/private/seller/orders}">Orders</a>
+        </td>
+        <td sec:authorize="hasAuthority('Sale User')">
+            <a th:href="@{/private/upload}">Upload items</a>
         </td>
         <td>
             <a th:href="@{/logout}">Logout</a>

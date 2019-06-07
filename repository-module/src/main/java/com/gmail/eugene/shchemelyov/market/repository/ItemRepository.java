@@ -6,5 +6,7 @@ import com.gmail.eugene.shchemelyov.market.repository.model.Pagination;
 import java.util.List;
 
 public interface ItemRepository extends GenericRepository<Long, Item> {
-    List<Item> getLimitItems(Pagination pagination);
+    List<Item> getLimitItems(Pagination pagination, boolean isDeleted);
+
+    int getCountByUniqueNumber(String uniqueNumber);
 }

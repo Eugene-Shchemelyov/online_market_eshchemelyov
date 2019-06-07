@@ -54,6 +54,6 @@ public class AppUserPrincipal implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return !userDTO.isDeleted();
+        return true;
     }
 }

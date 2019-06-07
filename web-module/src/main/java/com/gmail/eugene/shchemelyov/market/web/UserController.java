@@ -4,8 +4,8 @@ import com.gmail.eugene.shchemelyov.market.repository.model.Pagination;
 import com.gmail.eugene.shchemelyov.market.service.AddUpdateUserService;
 import com.gmail.eugene.shchemelyov.market.service.RoleService;
 import com.gmail.eugene.shchemelyov.market.service.UserService;
-import com.gmail.eugene.shchemelyov.market.service.model.AddUpdateUserDTO;
 import com.gmail.eugene.shchemelyov.market.service.model.RoleDTO;
+import com.gmail.eugene.shchemelyov.market.service.model.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,13 +39,22 @@ public class UserController {
     @GetMapping("/private/users")
     public String getUsers(
             Model model,
-            @RequestParam(value = "page", defaultValue = "1", required = false) Integer page,
-            @RequestParam(value = "update", required = false) Boolean update
+            @RequestParam(value = "page", defaultValue = "1", required = false) Integer page
     ) {
         Pagination pagination = userService.getLimitUsers(page);
         model.addAttribute("pagination", pagination);
-        model.addAttribute("update", update);
+        List<RoleDTO> roles = roleService.getAllRoles();
+        model.addAttribute("roles", roles);
         return "user/all";
+    }
+
+    @PostMapping("/private/users/{id}/update/role")
+    public String updateUser(
+            @PathVariable(value = "id") Long userId,
+            @RequestParam(value = "role") Long roleId
+    ) {
+        addUpdateUserService.changeRoleById(userId, roleId);
+        return "redirect:/private/users";
     }
 
     @PostMapping("/private/users/delete")
@@ -61,15 +70,15 @@ public class UserController {
     @GetMapping("/private/users/new")
     public String showPageAddUser(Model model) {
         List<RoleDTO> roles = roleService.getAllRoles();
-        model.addAttribute("user", new AddUpdateUserDTO());
         model.addAttribute("roles", roles);
+        model.addAttribute("user", new UserDTO());
         return "user/new";
     }
 
     @PostMapping("/private/users/new")
     public String addUser(
             Model model,
-            @Valid @ModelAttribute("user") AddUpdateUserDTO addUpdateUserDTO,
+            @Valid @ModelAttribute("user") UserDTO UserDTO,
             BindingResult bindingResult
     ) {
         if (bindingResult.hasErrors()) {
@@ -77,46 +86,15 @@ public class UserController {
             model.addAttribute("roles", roles);
             return "user/new";
         }
-        addUpdateUserService.add(addUpdateUserDTO);
+        addUpdateUserService.add(UserDTO);
         return "redirect:/private/users";
     }
 
-    @GetMapping("/private/users/{id}/update")
-    public String showPageUpdateUser(
-            Model model,
-            @RequestParam(value = "message", required = false) Boolean message,
-            @PathVariable(value = "id") Long id
-    ) {
-        AddUpdateUserDTO addUpdateUserDTO = addUpdateUserService.getById(id);
-        List<RoleDTO> roles = roleService.getAllRoles();
-        model.addAttribute("user", addUpdateUserDTO);
-        model.addAttribute("roles", roles);
-        model.addAttribute("message", message);
-        return "user/update";
-    }
-
-    @PostMapping("/private/users/{id}/update")
-    public String updateUser(
-            Model model,
-            @PathVariable(value = "id") Long id,
-            @Valid @ModelAttribute("user") AddUpdateUserDTO addUpdateUserDTO,
-            BindingResult bindingResult
-    ) {
-        addUpdateUserDTO.setId(id);
-        if (bindingResult.hasErrors()) {
-            List<RoleDTO> roles = roleService.getAllRoles();
-            model.addAttribute("roles", roles);
-            return "user/update";
-        }
-        addUpdateUserService.update(addUpdateUserDTO);
-        return "redirect:/private/users?update=true";
-    }
-
-    @PostMapping("/private/users/{id}/password")
+    @GetMapping("/private/users/{id}/password")
     public String sendMessageToChangePassword(
             @PathVariable(value = "id") Long id
     ) {
         addUpdateUserService.changePasswordById(id);
-        return "redirect:/private/users/" + id + "/update?message=true";
+        return "redirect:/private/users";
     }
 }

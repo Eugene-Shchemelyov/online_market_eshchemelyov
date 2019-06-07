@@ -3,8 +3,11 @@ package com.gmail.eugene.shchemelyov.market.web;
 import com.gmail.eugene.shchemelyov.market.repository.model.Pagination;
 import com.gmail.eugene.shchemelyov.market.repository.model.enums.SortEnum;
 import com.gmail.eugene.shchemelyov.market.service.ArticleService;
+import com.gmail.eugene.shchemelyov.market.service.ViewArticleService;
 import com.gmail.eugene.shchemelyov.market.service.model.AppUserPrincipal;
-import com.gmail.eugene.shchemelyov.market.service.model.ArticleDTO;
+import com.gmail.eugene.shchemelyov.market.service.model.NewArticleDTO;
+import com.gmail.eugene.shchemelyov.market.service.model.UpdateArticleDTO;
+import com.gmail.eugene.shchemelyov.market.service.model.ViewArticleDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -21,10 +24,15 @@ import javax.validation.Valid;
 @Controller
 public class ArticleController {
     private final ArticleService articleService;
+    private final ViewArticleService viewArticleService;
 
     @Autowired
-    public ArticleController(ArticleService articleService) {
+    public ArticleController(
+            ArticleService articleService,
+            ViewArticleService viewArticleService
+    ) {
         this.articleService = articleService;
+        this.viewArticleService = viewArticleService;
     }
 
     @GetMapping("/private/articles")
@@ -33,7 +41,7 @@ public class ArticleController {
             @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
             @RequestParam(value = "sort", required = false, defaultValue = "DATE_DESC") SortEnum sort
     ) {
-        Pagination pagination = articleService.getLimitArticles(page, sort);
+        Pagination pagination = viewArticleService.getLimitArticles(page, sort);
         model.addAttribute("pagination", pagination);
         return "article/all";
     }
@@ -44,8 +52,8 @@ public class ArticleController {
             @PathVariable("id") Long id
     ) {
         articleService.updateCountViews(id);
-        ArticleDTO articleDTO = articleService.getById(id);
-        model.addAttribute("article", articleDTO);
+        ViewArticleDTO viewArticleDTO = viewArticleService.getById(id);
+        model.addAttribute("article", viewArticleDTO);
         return "article/current";
     }
 
@@ -54,43 +62,43 @@ public class ArticleController {
             Model model,
             @PathVariable("id") Long id
     ) {
-        ArticleDTO articleDTO = articleService.getById(id);
-        model.addAttribute("article", articleDTO);
+        UpdateArticleDTO updateArticleDTO = articleService.getById(id);
+        model.addAttribute("article", updateArticleDTO);
         return "article/update";
     }
 
     @PostMapping("/private/articles/{id}/update")
     public String updateArticle(
             @PathVariable("id") Long id,
-            @Valid @ModelAttribute("article") ArticleDTO articleDTO,
+            @Valid @ModelAttribute("article") UpdateArticleDTO updateArticleDTO,
             BindingResult bindingResult
     ) {
-        articleDTO.setId(id);
+        updateArticleDTO.setId(id);
         if (bindingResult.hasErrors()) {
             return "article/update";
         }
-        articleService.update(articleDTO);
+        articleService.update(updateArticleDTO);
         return "redirect:/private/articles";
     }
 
     @GetMapping("/private/articles/article/new")
     public String getNewArticlePage(Model model) {
-        model.addAttribute("article", new ArticleDTO());
+        model.addAttribute("article", new NewArticleDTO());
         return "article/new";
     }
 
     @PostMapping("/private/articles/article/new")
     public String newArticle(
-            @Valid @ModelAttribute("article") ArticleDTO articleDTO,
+            @Valid @ModelAttribute("article") NewArticleDTO newArticleDTO,
             BindingResult bindingResult
     ) {
         if (bindingResult.hasErrors()) {
-            return "article/update";
+            return "article/new";
         }
         AppUserPrincipal appUserPrincipal =
                 (AppUserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long userId = appUserPrincipal.getId();
-        articleService.add(articleDTO, userId);
+        articleService.add(newArticleDTO, userId);
         return "redirect:/private/articles";
     }
 

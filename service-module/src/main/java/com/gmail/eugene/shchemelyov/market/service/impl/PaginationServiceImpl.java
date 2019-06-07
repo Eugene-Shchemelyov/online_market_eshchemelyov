@@ -2,6 +2,7 @@ package com.gmail.eugene.shchemelyov.market.service.impl;
 
 import com.gmail.eugene.shchemelyov.market.repository.ArticleRepository;
 import com.gmail.eugene.shchemelyov.market.repository.ItemRepository;
+import com.gmail.eugene.shchemelyov.market.repository.OrderRepository;
 import com.gmail.eugene.shchemelyov.market.repository.ReviewRepository;
 import com.gmail.eugene.shchemelyov.market.repository.UserRepository;
 import com.gmail.eugene.shchemelyov.market.repository.model.Pagination;
@@ -18,35 +19,38 @@ public class PaginationServiceImpl implements PaginationService {
     private final ReviewRepository reviewRepository;
     private final ArticleRepository articleRepository;
     private final ItemRepository itemRepository;
+    private final OrderRepository orderRepository;
 
     @Autowired
     public PaginationServiceImpl(
             UserRepository userRepository,
             ReviewRepository reviewRepository,
             ArticleRepository articleRepository,
-            ItemRepository itemRepository
+            ItemRepository itemRepository,
+            OrderRepository orderRepository
     ) {
         this.userRepository = userRepository;
         this.reviewRepository = reviewRepository;
         this.articleRepository = articleRepository;
         this.itemRepository = itemRepository;
+        this.orderRepository = orderRepository;
     }
 
     @Override
     public Pagination getUserPagination(Integer page) {
-        Integer countEntities = userRepository.getCountOfEntities();
+        Integer countEntities = userRepository.getCountOfEntities(false);
         return getPagination(countEntities, page);
     }
 
     @Override
     public Pagination getReviewPagination(Integer page) {
-        Integer countEntities = reviewRepository.getCountOfEntities();
+        Integer countEntities = reviewRepository.getCountOfEntities(false);
         return getPagination(countEntities, page);
     }
 
     @Override
     public Pagination getArticlePagination(Integer page, SortEnum sort) {
-        Integer countEntities = articleRepository.getCountOfEntities();
+        Integer countEntities = articleRepository.getCountOfEntities(false);
         Pagination pagination = getPagination(countEntities, page);
         pagination.setSort(sort);
         return pagination;
@@ -54,7 +58,19 @@ public class PaginationServiceImpl implements PaginationService {
 
     @Override
     public Pagination getItemPagination(Integer page) {
-        Integer countEntities = itemRepository.getCountOfEntities();
+        Integer countEntities = itemRepository.getCountOfEntities(false);
+        return getPagination(countEntities, page);
+    }
+
+    @Override
+    public Pagination getOrderPagination(Integer page) {
+        Integer countEntities = orderRepository.getCountOfEntities(false);
+        return getPagination(countEntities, page);
+    }
+
+    @Override
+    public Pagination getUserOrdersPagination(Integer page, Long userId) {
+        Integer countEntities = orderRepository.getCountUserOrders(userId);
         return getPagination(countEntities, page);
     }
 

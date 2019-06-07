@@ -2,6 +2,7 @@ package com.gmail.eugene.shchemelyov.market.service;
 
 import com.gmail.eugene.shchemelyov.market.repository.ArticleRepository;
 import com.gmail.eugene.shchemelyov.market.repository.ItemRepository;
+import com.gmail.eugene.shchemelyov.market.repository.OrderRepository;
 import com.gmail.eugene.shchemelyov.market.repository.ReviewRepository;
 import com.gmail.eugene.shchemelyov.market.repository.UserRepository;
 import com.gmail.eugene.shchemelyov.market.repository.model.Pagination;
@@ -11,7 +12,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.sql.Connection;
 
-@RunWith(MockitoJUnitRunner.class)
 public class GenericServiceTest {
     protected PaginationService paginationService;
     @Mock
@@ -22,6 +22,8 @@ public class GenericServiceTest {
     protected ArticleRepository articleRepository;
     @Mock
     protected ItemRepository itemRepository;
+    @Mock
+    protected OrderRepository orderRepository;
 
     protected Pagination pagination = new Pagination();
 }

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Review</title>
+    <title>Reviews</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <div th:replace="fragments/header :: header"></div>
 </head>
@@ -14,6 +14,7 @@
     <table th:each="review,stat : ${pagination.entities}">
         <tr>
             <td></td>
+            <td>Patronymic</td>
             <td>Name</td>
             <td>Surname</td>
             <td>Date</td>
@@ -23,8 +24,9 @@
         </tr>
         <tr>
             <td><span th:text="${stat.count}"></span></td>
-            <td><span th:text="${review.user.name}"></span></td>
-            <td><span th:text="${review.user.surname}"></span></td>
+            <td><span th:text="${review.userPatronymic}"></span></td>
+            <td><span th:text="${review.userName}"></span></td>
+            <td><span th:text="${review.userSurname}"></span></td>
             <td><span th:text="${review.date}"></span></td>
             <td><span th:text="${review.display}"></span></td>
             <td>
@@ -35,12 +37,13 @@
             </td>
         </tr>
         <tr>
-            <td colspan="7"><span th:text="${review.text}"></span></td>
+            <td>Review:</span></td>
+            <td colspan="6" align="middle"><span th:text="${review.text}"></span></td>
         </tr>
     </table>
     <table>
         <tr>
-            <td colspan="6" align="right">Change display selected reviews:</td>
+            <td>Change display selected reviews:</td>
             <td>
                 <button type="submit">Change</button>
             </td>
