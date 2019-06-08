@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDTO getUserByEmail(String email) {
-        User user = userRepository.loadUserByEmail(email, false);
+        User user = userRepository.loadUserByEmail(email);
         return userConverter.toDTO(user);
     }
 
@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
     @SuppressWarnings("unchecked")
     public Pagination getLimitUsers(Integer page) {
         Pagination pagination = paginationService.getUserPagination(page);
-        List<User> users = userRepository.getLimitUsers(pagination, false);
+        List<User> users = userRepository.getLimitUsers(pagination);
         List<UserDTO> userDTOS = users.stream()
                 .map(userConverter::toDTO)
                 .collect(Collectors.toList());
@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
         for (Long userId : usersIds) {
             User user = userRepository.getById(userId);
             if (user.getRole().getName().equals(ADMINISTRATOR) &&
-                    (userRepository.getCountUsersWithRole(ADMINISTRATOR, false) <= COUNT_ADMINISTRATORS)) {
+                    (userRepository.getCountUsersWithRole(ADMINISTRATOR) <= COUNT_ADMINISTRATORS)) {
                 logger.error("You can't delete the last administrator.");
                 throw new ExpectedException("You can't delete the last administrator.");
             } else {

@@ -28,7 +28,7 @@ public class PaginationServiceTest extends GenericServiceTest {
 
     @Test
     public void shouldGetUserPagination() {
-        when(userRepository.getCountOfEntities(false)).thenReturn(50);
+        when(userRepository.getCountOfEntities()).thenReturn(50);
         Pagination loadedPagination = paginationService.getUserPagination(1);
         Assert.assertEquals(pagination.getCurrentPage(), loadedPagination.getCurrentPage());
         Assert.assertEquals(pagination.getCountPages(), loadedPagination.getCountPages());

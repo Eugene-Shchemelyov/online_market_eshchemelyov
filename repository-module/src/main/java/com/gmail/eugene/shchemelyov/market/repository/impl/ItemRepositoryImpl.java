@@ -12,14 +12,13 @@ import java.util.List;
 public class ItemRepositoryImpl extends GenericRepositoryImpl<Long, Item> implements ItemRepository {
     @Override
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public List<Item> getLimitItems(Pagination pagination, boolean isDeleted) {
+    public List<Item> getLimitItems(Pagination pagination) {
         String query = "FROM " + entityClass.getName() +
-                " WHERE isDeleted =: isDeleted" +
+                " WHERE isDeleted = false" +
                 " ORDER BY name ASC";
         Query createdQuery = entityManager.createQuery(query)
                 .setFirstResult(pagination.getStartLimitPosition())
-                .setMaxResults(pagination.getLimitOnPage())
-                .setParameter("isDeleted", isDeleted);
+                .setMaxResults(pagination.getLimitOnPage());
         return createdQuery.getResultList();
     }
 

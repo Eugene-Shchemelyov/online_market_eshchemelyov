@@ -38,19 +38,19 @@ public class PaginationServiceImpl implements PaginationService {
 
     @Override
     public Pagination getUserPagination(Integer page) {
-        Integer countEntities = userRepository.getCountOfEntities(false);
+        Integer countEntities = userRepository.getCountOfEntities();
         return getPagination(countEntities, page);
     }
 
     @Override
     public Pagination getReviewPagination(Integer page) {
-        Integer countEntities = reviewRepository.getCountOfEntities(false);
+        Integer countEntities = reviewRepository.getCountOfEntities();
         return getPagination(countEntities, page);
     }
 
     @Override
     public Pagination getArticlePagination(Integer page, SortEnum sort) {
-        Integer countEntities = articleRepository.getCountOfEntities(false);
+        Integer countEntities = articleRepository.getCountOfEntities();
         Pagination pagination = getPagination(countEntities, page);
         pagination.setSort(sort);
         return pagination;
@@ -58,13 +58,13 @@ public class PaginationServiceImpl implements PaginationService {
 
     @Override
     public Pagination getItemPagination(Integer page) {
-        Integer countEntities = itemRepository.getCountOfEntities(false);
+        Integer countEntities = itemRepository.getCountOfEntities();
         return getPagination(countEntities, page);
     }
 
     @Override
     public Pagination getOrderPagination(Integer page) {
-        Integer countEntities = orderRepository.getCountOfEntities(false);
+        Integer countEntities = orderRepository.getCountOfEntities();
         return getPagination(countEntities, page);
     }
 

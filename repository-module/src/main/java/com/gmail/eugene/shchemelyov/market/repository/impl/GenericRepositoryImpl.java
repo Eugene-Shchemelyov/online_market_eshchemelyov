@@ -48,17 +48,16 @@ public class GenericRepositoryImpl<I, T> implements GenericRepository<I, T> {
 
     @Override
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public List<T> getAllEntities(boolean isDeleted) {
-        String query = "FROM " + entityClass.getName() + " WHERE isDeleted =: isDeleted";
-        Query createdQuery = entityManager.createQuery(query)
-                .setParameter("isDeleted", isDeleted);
+    public List<T> getAllEntities() {
+        String query = "FROM " + entityClass.getName() + " WHERE isDeleted = false";
+        Query createdQuery = entityManager.createQuery(query);
         return createdQuery.getResultList();
     }
 
     @Override
-    public Integer getCountOfEntities(boolean isDeleted) {
+    public Integer getCountOfEntities() {
         String query = "SELECT COUNT(*) FROM " + entityClass.getName() +
-                " WHERE isDeleted =false";
+                " WHERE isDeleted = false";
         Query createdQuery = entityManager.createQuery(query);
         return ((Number) createdQuery.getSingleResult()).intValue();
     }

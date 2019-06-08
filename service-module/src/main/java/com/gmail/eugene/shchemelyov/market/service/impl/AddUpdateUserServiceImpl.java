@@ -80,7 +80,7 @@ public class AddUpdateUserServiceImpl implements AddUpdateUserService {
     public UserDTO add(UserDTO userDTO) {
         User user = userConverter.toEntity(userDTO);
         String email = userDTO.getEmail();
-        if (userRepository.getCountUsersWithEmail(email, false) == 0) {
+        if (userRepository.getCountUsersWithEmail(email) == 0) {
             if (user.getPassword() == null) {
                 user.setPassword(generatorService.getRandomPassword(PASSWORD_LENGTH, userDTO.getEmail()));
             }
@@ -107,7 +107,7 @@ public class AddUpdateUserServiceImpl implements AddUpdateUserService {
         Role role = roleRepository.getById(roleId);
         if (user.getRole().getName().equals(ADMINISTRATOR) &&
                 !role.getName().equals(ADMINISTRATOR) &&
-                (userRepository.getCountUsersWithRole(ADMINISTRATOR, false) <= COUNT_ADMINISTRATORS)) {
+                (userRepository.getCountUsersWithRole(ADMINISTRATOR) <= COUNT_ADMINISTRATORS)) {
             logger.error("You can't lower privileges to the last administrator.");
             throw new ExpectedException("You can't lower privileges to the last administrator.");
         } else {

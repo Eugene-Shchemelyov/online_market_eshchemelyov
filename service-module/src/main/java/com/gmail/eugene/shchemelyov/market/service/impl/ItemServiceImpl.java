@@ -48,7 +48,7 @@ public class ItemServiceImpl implements ItemService {
     @SuppressWarnings("unchecked")
     public Pagination getLimitItems(Integer page) {
         Pagination pagination = paginationService.getItemPagination(page);
-        List<Item> items = itemRepository.getLimitItems(pagination, false);
+        List<Item> items = itemRepository.getLimitItems(pagination);
         List<PreviewItemDTO> previewItemDTOS = items.stream()
                 .map(previewItemConverter::toDTO)
                 .collect(Collectors.toList());
@@ -80,7 +80,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional
     public List<ViewItemDTO> getItems() {
-        List<Item> items = itemRepository.getAllEntities(false);
+        List<Item> items = itemRepository.getAllEntities();
         return items.stream()
                 .map(viewItemConverter::toDTO)
                 .collect(Collectors.toList());

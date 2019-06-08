@@ -11,48 +11,44 @@ import java.util.List;
 @Repository
 public class UserRepositoryImpl extends GenericRepositoryImpl<Long, User> implements UserRepository {
     @Override
-    public User loadUserByEmail(String email, boolean isDeleted) {
+    public User loadUserByEmail(String email) {
         String query = "FROM " + entityClass.getName() +
                 " WHERE email =: email" +
-                " AND isDeleted =: isDeleted";
+                " AND isDeleted = false";
         Query createdQuery = entityManager.createQuery(query)
-                .setParameter("email", email)
-                .setParameter("isDeleted", isDeleted);
+                .setParameter("email", email);
         return (User) createdQuery.getSingleResult();
     }
 
     @Override
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public List<User> getLimitUsers(Pagination pagination, boolean isDeleted) {
+    public List<User> getLimitUsers(Pagination pagination) {
         String query = "FROM " + entityClass.getName() +
-                " WHERE isDeleted =: isDeleted" +
+                " WHERE isDeleted = false" +
                 " ORDER BY email";
         Query createdQuery = entityManager.createQuery(query)
                 .setFirstResult(pagination.getStartLimitPosition())
-                .setMaxResults(pagination.getLimitOnPage())
-                .setParameter("isDeleted", isDeleted);
+                .setMaxResults(pagination.getLimitOnPage());
         return createdQuery.getResultList();
     }
 
     @Override
-    public Integer getCountUsersWithRole(String roleName, boolean isDeleted) {
+    public Integer getCountUsersWithRole(String roleName) {
         String query = "SELECT COUNT(U) FROM " + entityClass.getName() +
                 " U WHERE U.role.name =: roleName" +
-                " AND U.isDeleted =: isDeleted";
+                " AND U.isDeleted = false";
         Query createdQuery = entityManager.createQuery(query)
-                .setParameter("roleName", roleName)
-                .setParameter("isDeleted", isDeleted);
+                .setParameter("roleName", roleName);
         return ((Number) createdQuery.getSingleResult()).intValue();
     }
 
     @Override
-    public Integer getCountUsersWithEmail(String email, boolean isDeleted) {
+    public Integer getCountUsersWithEmail(String email) {
         String query = "SELECT COUNT(U) FROM " + entityClass.getName() +
                 " U WHERE U.email =: email" +
-                " AND U.isDeleted =: isDeleted";
+                " AND U.isDeleted = false";
         Query createdQuery = entityManager.createQuery(query)
-                .setParameter("email", email)
-                .setParameter("isDeleted", isDeleted);
+                .setParameter("email", email);
         return ((Number) createdQuery.getSingleResult()).intValue();
     }
 }

@@ -65,7 +65,7 @@ public class ViewArticleServiceImpl implements ViewArticleService {
     @Override
     @Transactional
     public List<ViewArticleDTO> getArticles() {
-        List<Article> articles = articleRepository.getAllEntities(false);
+        List<Article> articles = articleRepository.getAllEntities();
         return articles.stream()
                 .map(viewArticleConverter::toDTO)
                 .collect(Collectors.toList());

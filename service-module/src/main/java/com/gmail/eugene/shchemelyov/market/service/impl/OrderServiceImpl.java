@@ -86,7 +86,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public List<ApiViewOrderDTO> getOrders() {
-        List<Order> orders = orderRepository.getAllEntities(false);
+        List<Order> orders = orderRepository.getAllEntities();
         return orders.stream()
                 .map(apiViewOrderConverter::toDTO)
                 .collect(Collectors.toList());

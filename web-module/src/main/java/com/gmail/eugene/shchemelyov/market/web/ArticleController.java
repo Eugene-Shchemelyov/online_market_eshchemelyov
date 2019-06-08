@@ -51,7 +51,7 @@ public class ArticleController {
             Model model,
             @PathVariable("id") Long id
     ) {
-        articleService.updateCountViews(id);
+        articleService.incrementCountViews(id);
         ViewArticleDTO viewArticleDTO = viewArticleService.getById(id);
         model.addAttribute("article", viewArticleDTO);
         return "article/current";

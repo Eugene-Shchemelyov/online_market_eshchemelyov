@@ -10,7 +10,7 @@ public interface ArticleService {
 
     NewArticleDTO add(NewArticleDTO newArticleDTO, Long userId);
 
-    void updateCountViews(Long id);
+    void incrementCountViews(Long id);
 
     void update(UpdateArticleDTO updateArticleDTO);
 }

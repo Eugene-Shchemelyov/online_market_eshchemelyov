@@ -66,9 +66,10 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     @Transactional
-    public void updateCountViews(Long id) {
+    public void incrementCountViews(Long id) {
         Article article = articleRepository.getById(id);
-        article.setCountViews(article.getCountViews() + 1L);
+        Long incrementedCountViews = article.getCountViews() + 1L;
+        article.setCountViews(incrementedCountViews);
         articleRepository.update(article);
     }
 

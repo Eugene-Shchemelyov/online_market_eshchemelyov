@@ -6,11 +6,11 @@ import com.gmail.eugene.shchemelyov.market.repository.model.User;
 import java.util.List;
 
 public interface UserRepository extends GenericRepository<Long, User> {
-    User loadUserByEmail(String email, boolean isDeleted);
+    User loadUserByEmail(String email);
 
-    List<User> getLimitUsers(Pagination pagination, boolean isDeleted);
+    List<User> getLimitUsers(Pagination pagination);
 
-    Integer getCountUsersWithRole(String roleName, boolean isDeleted);
+    Integer getCountUsersWithRole(String roleName);
 
-    Integer getCountUsersWithEmail(String email, boolean isDeleted);
+    Integer getCountUsersWithEmail(String email);
 }
