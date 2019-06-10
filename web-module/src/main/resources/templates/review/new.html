@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>New review</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <div th:replace="fragments/header :: header"></div>
+</head>
+<body>
+<form action="#" th:action="@{/private/reviews/review/new}" method="post">
+    <table>
+        <tr>
+            <td>Review:</td>
+            <td><textarea cols="50" rows="20" name="review"></textarea></td>
+            <td th:unless="${error}==null"><span th:text="${error}"></span></td>
+        </tr>
+        <tr>
+            <td>
+                <button type="submit">Send review</button>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

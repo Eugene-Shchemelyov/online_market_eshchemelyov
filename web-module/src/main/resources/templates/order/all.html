@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Orders</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <div th:replace="fragments/header :: header"></div>
+</head>
+<body>
+<table th:each="order,stat : ${pagination.entities}">
+    <tr>
+        <td></td>
+        <td>Number</td>
+        <td>Status</td>
+        <td>Item name</td>
+        <td>Count items</td>
+        <td>Total price</td>
+    </tr>
+    <tr>
+        <td><span th:text="${stat.count}"></span></td>
+        <td><span th:text="${order.uniqueNumber}"></span></td>
+        <td><span th:text="${order.status.name}"></span></td>
+        <td><span th:text="${order.itemName}"></span></td>
+        <td><span th:text="${order.countItems}"></span></td>
+        <td><span th:text="${order.totalPrice}"></span></td>
+        <td sec:authorize="hasAuthority('Sale User')" align="middle">
+            <a th:href="@{/private/seller/orders/{uniqueNumber}
+            (uniqueNumber=${order.uniqueNumber})}">More</a>
+        </td>
+    </tr>
+</table>
+<div sec:authorize="hasAuthority('Sale User')" th:replace="fragments/paginator :: ordersSellerPaginator"></div>
+<div sec:authorize="hasAuthority('Customer User')" th:replace="fragments/paginator :: ordersCustomerPaginator"></div>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<table th:fragment="header">
+    <tr sec:authorize="isAuthenticated()">
+        <td sec:authorize="hasAuthority('Administrator')">
+            <a th:href="@{/private/users}">Users</a>
+        </td>
+        <td sec:authorize="hasAuthority('Administrator')">
+            <a th:href="@{/private/users/new}">New user</a>
+        </td>
+        <td sec:authorize="hasAuthority('Administrator')">
+            <a th:href="@{/private/reviews}">Reviews</a>
+        </td>
+        <td sec:authorize="hasAnyAuthority('Customer User','Sale User')">
+            <a th:href="@{/private/articles}">Articles</a>
+        </td>
+        <td sec:authorize="hasAuthority('Customer User')">
+            <a th:href="@{/private/profile}">Profile</a>
+        </td>
+        <td sec:authorize="hasAuthority('Customer User')">
+            <a th:href="@{/private/customer/orders}">Orders</a>
+        </td>
+        <td sec:authorize="hasAuthority('Customer User')">
+            <a th:href="@{/private/reviews/review/new}">Send review</a>
+        </td>
+        <td sec:authorize="hasAuthority('Sale User')">
+            <a th:href="@{/private/articles/article/new}">New article</a>
+        </td>
+        <td sec:authorize="hasAnyAuthority('Customer User','Sale User')">
+            <a th:href="@{/private/items}">Items</a>
+        </td>
+        <td sec:authorize="hasAuthority('Sale User')">
+            <a th:href="@{/private/seller/orders}">Orders</a>
+        </td>
+        <td sec:authorize="hasAuthority('Sale User')">
+            <a th:href="@{/private/upload}">Upload items</a>
+        </td>
+        <td>
+            <a th:href="@{/logout}">Logout</a>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

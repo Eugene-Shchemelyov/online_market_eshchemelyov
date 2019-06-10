@@ -1,0 +1,47 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<body>
+<table th:fragment="userPaginator">
+    <tr>
+        <td th:each="page : ${#numbers.sequence(1, pagination.countPages)}">
+            <a th:href="@{/private/users (page=${page})}" th:text="${page}"></a>
+        </td>
+    </tr>
+</table>
+<table th:fragment="reviewPaginator">
+    <tr>
+        <td th:each="page : ${#numbers.sequence(1, pagination.countPages)}">
+            <a th:href="@{/private/reviews (page=${page})}" th:text="${page}"></a>
+        </td>
+    </tr>
+</table>
+<table th:fragment="articlePaginator">
+    <tr>
+        <td th:each="page : ${#numbers.sequence(1, pagination.countPages)}">
+            <a th:href="@{/private/articles (page=${page}, sort=${pagination.sort})}" th:text="${page}"></a>
+        </td>
+    </tr>
+</table>
+<table th:fragment="itemPaginator">
+    <tr>
+        <td th:each="page : ${#numbers.sequence(1, pagination.countPages)}">
+            <a th:href="@{/private/items (page=${page})}" th:text="${page}"></a>
+        </td>
+    </tr>
+</table>
+<table th:fragment="ordersSellerPaginator">
+    <tr>
+        <td th:each="page : ${#numbers.sequence(1, pagination.countPages)}">
+            <a th:href="@{/private/seller/orders (page=${page})}" th:text="${page}"></a>
+        </td>
+    </tr>
+</table>
+<table th:fragment="ordersCustomerPaginator">
+    <tr>
+        <td th:each="page : ${#numbers.sequence(1, pagination.countPages)}">
+            <a th:href="@{/private/customer/orders (page=${page})}" th:text="${page}"></a>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

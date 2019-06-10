@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Items</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <div th:replace="fragments/header :: header"></div>
+</head>
+<body>
+<table>
+    <tr>
+        <td></td>
+        <td>Name</td>
+        <td align="middle">Unique number</td>
+        <td>Price</td>
+        <td>More</td>
+        <td sec:authorize="hasAuthority('Customer User')" align="middle">Count items</td>
+        <td sec:authorize="hasAuthority('Customer User')">New order</td>
+        <td sec:authorize="hasAuthority('Sale User')">Copy</td>
+        <td sec:authorize="hasAuthority('Sale User')">Delete</td>
+    </tr>
+    <tr th:each="item,stat : ${pagination.entities}">
+        <td><span th:text="${stat.count}"></span></td>
+        <td><span th:text="${item.name}"></span></td>
+        <td><span th:text="${item.uniqueNumber}"></span></td>
+        <td><span th:text="${item.price}"></span></td>
+        <td>
+            <a th:href="@{/private/items/{id} (id=${item.id})}">More</a>
+        </td>
+        <td sec:authorize="hasAuthority('Sale User')">
+            <a th:href="@{/private/items/{id}/copy (id=${item.id})}">Copy</a>
+        </td>
+        <td sec:authorize="hasAuthority('Sale User')">
+            <a th:href="@{/private/items/{id}/delete (id=${item.id})}">Delete</a>
+        </td>
+        <form action="#" th:action="@{/private/customer/orders/new (itemId=${item.id})}"
+              sec:authorize="hasAuthority('Customer User')" th:object="${order}" method="post">
+            <td><input type="number" min="1" max="100" th:field="*{countItems}"/></td>
+            <td>
+                <button type="submit">Order</button>
+            </td>
+        </form>
+    </tr>
+</table>
+<div th:replace="fragments/paginator :: itemPaginator"></div>
+</body>
+</html>

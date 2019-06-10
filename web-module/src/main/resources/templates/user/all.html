@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Users</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <div th:replace="fragments/header :: header"></div>
+</head>
+<body>
+<table>
+    <tr>
+        <td></td>
+        <td>Patronymic</td>
+        <td>Name</td>
+        <td>Surname</td>
+        <td>Email</td>
+        <td>Role</td>
+        <td>Change role</td>
+        <td>Delete</td>
+        <td>Change password</td>
+    </tr>
+    <form id="form" action="#" th:action="@{/private/users/delete}" method="post"></form>
+    <tr th:each="user,stat : ${pagination.entities}">
+        <td><span th:text="${stat.count}"></span></td>
+        <td><span th:text="${user.patronymic}"></span></td>
+        <td><span th:text="${user.name}"></span></td>
+        <td><span th:text="${user.surname}"></span></td>
+        <td><span th:text="${user.email}"></span></td>
+        <form action="#" th:action="@{/private/users/{id}/update/role (id=${user.id})}"
+              method="post">
+            <td>
+                <select name="role">
+                    <option th:each="role : ${roles}"
+                            th:value="${role.id}" th:text="${role.name}"
+                            th:selected="${role.id == user.role.id}">
+                    </option>
+                </select>
+            </td>
+            <td>
+                <input type="submit" value="change"/>
+            </td>
+        </form>
+        <td>
+            <label><input form="form" type="checkbox" name="usersIds" th:value="${user.id}"/>delete</label>
+        </td>
+        <td>
+            <a th:href="@{/private/users/{id}/password (id=${user.id})}">Change password</a>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="6"></td>
+        <td>Delete selected users:</td>
+        <td>
+            <input form="form" type="submit" value="delete"/>
+        </td>
+    </tr>
+
+</table>
+<div th:replace="fragments/paginator :: userPaginator"></div>
+</body>
+</html>

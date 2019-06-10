@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Article</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <div th:replace="fragments/header :: header"></div>
+</head>
+<body>
+<table>
+    <tr>
+        <td>Article name:</td>
+        <td colspan="3"><span th:text="${article.name}"></span></td>
+    </tr>
+    <tr>
+        <td>Date</td>
+        <td>Author name</td>
+        <td>Author surname</td>
+        <td>Count views</td>
+        <td>Count comments</td>
+    </tr>
+    <tr>
+        <td><span th:text="${article.date}"></span></td>
+        <td><span th:text="${article.userName}"></span></td>
+        <td><span th:text="${article.userSurname}"></span></td>
+        <td><span th:text="${article.countViews}"></span></td>
+        <td><span th:text="${article.countComments}"></span></td>
+    </tr>
+    <tr>
+        <td>Article text:</td>
+        <td colspan="4"><span th:text="${article.text}"></span></td>
+        <td sec:authorize="hasAuthority('Sale User')">
+            <a th:href="@{/private/articles/{id}/update (id=${article.id})}">Edit</a>
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+        <td colspan="4"><label>=======Comments=======</label></td>
+    </tr>
+    <tr th:each="comment,stat : ${article.comments}">
+        <td sec:authorize="hasAuthority('Sale User')" align="middle" valign="top">
+            <a th:href="@{/private/comments/{id}/delete (id=${comment.id}, articleId=${article.id})}">Delete</a>
+        </td>
+        <td colspan="4">
+            <span th:text="${comment.userName}"></span>
+            <span th:text="${comment.userSurname}"></span>
+            <span th:text="${comment.date}"></span><br>
+            <p><span th:text="${comment.text}"></span></p>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
